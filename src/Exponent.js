@@ -20,6 +20,7 @@ export const Notifications = NativeModules.ExponentNotifications;
 export const Util = NativeModules.ExponentUtil;
 
 export default {
+  Constants,
   Contacts,
   Crypto,
   Fabric,
