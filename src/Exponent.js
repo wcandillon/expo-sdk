@@ -13,7 +13,7 @@ export const FileSystem = NativeModules.ExponentFileSystem;
 export const Location = NativeModules.ExponentLocation;
 export const Crypto = NativeModules.ExponentCrypto;
 export const ImagePicker = NativeModules.UIImagePickerManager;
-export const FacebookLogin = NativeModules.FacebookLoginModule;
+export const Facebook = NativeModules.ExponentFacebook;
 export const Fabric = NativeModules.ExponentFabric;
 export const ImageCropper = NativeModules.ExponentImageCropper;
 
@@ -24,7 +24,7 @@ export default {
   Location,
   Crypto,
   ImagePicker,
-  FacebookLogin,
+  Facebook,
   Fabric,
   ImageCropper,
 };
