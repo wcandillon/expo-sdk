@@ -16,6 +16,7 @@ export const FileSystem = NativeModules.ExponentFileSystem;
 export const ImageCropper = NativeModules.ExponentImageCropper;
 export const ImagePicker = NativeModules.UIImagePickerManager;
 export const Location = NativeModules.ExponentLocation;
+export const Notifications = NativeModules.ExponentNotifications;
 
 export default {
   Contacts,
@@ -26,5 +27,6 @@ export default {
   ImageCropper,
   ImagePicker,
   Location,
+  Notifications,
 };
 
