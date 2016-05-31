@@ -2,7 +2,7 @@
   "name": "exponent",
   "version": "0.0.1",
   "description": "The Exponent SDK",
-  "main": "./src/Exponent.js",
+  "main": "src/Exponent.js",
   "scripts": {},
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "keywords": [
     "exponent"
   ],
-  "author": "Nikhilesh Sigatapu <nikhilesh@exp.host>",
+  "author": "Exponent",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/exponentjs/exponent-sdk/issues"
