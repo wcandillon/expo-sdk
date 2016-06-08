@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/exponentjs/exponent-sdk/issues"
   },
-  "homepage": "https://github.com/exponentjs/exponent-sdk"
+  "homepage": "https://github.com/exponentjs/exponent-sdk",
+  "dependencies": {
+    "uuid-js": "^0.7.5"
+  }
 }

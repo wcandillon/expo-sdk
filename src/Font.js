@@ -2,9 +2,40 @@
 
 import {
   NativeModules,
+  Platform,
 } from 'react-native';
 
+import UUID from 'uuid-js';
+
 const map = {};
+
+// The platform-specific part of loading code: load a font and return the style props
+const loadNativeAsync = Platform.select({
+  async ios(uri) {
+    return {
+      fontFamily: await NativeModules.EXFontLoader.loadFontAsync(uri),
+    };
+  },
+
+  async android(uri) {
+    const detected = await NativeModules.ExponentFontLoader.loadFontWithFamilyNameAsync(
+      UUID.create().toString(),
+      uri,
+    );
+
+    const fontStyle = ['regular', 'bold', 'italic', 'bold-italic'][detected.fontStyle];
+    if (fontStyle) {
+      console.log(`[Exponent.Font] Font at '${uri}' was detected to have style '${fontStyle}'.`);
+    } else {
+      throw new Error(`Style of font at '${uri}' couldn't be detected`);
+    }
+
+    return {
+      fontFamily: detected.fontFamily,
+      fontStyle,
+    };
+  },
+});
 
 export async function loadAsync(name, { uri }) {
   if (map[name]) {
@@ -22,9 +53,7 @@ export async function loadAsync(name, { uri }) {
   try {
     map[name] = {
       uri,
-      style: {
-        fontFamily: await NativeModules.EXFontLoader.loadFontAsync(uri),
-      },
+      style: await loadNativeAsync(uri),
     };
   } catch (e) {
     delete map[name];
