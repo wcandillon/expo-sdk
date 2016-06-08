@@ -19,6 +19,9 @@ export const Location = NativeModules.ExponentLocation;
 export const Notifications = NativeModules.ExponentNotifications;
 export const Util = NativeModules.ExponentUtil;
 
+export * as Font from './Font';
+import * as Font from './Font';
+
 export default {
   Constants,
   Contacts,
@@ -31,5 +34,6 @@ export default {
   Location,
   Notifications,
   Util,
+  Font,
 };
 
