@@ -2,66 +2,30 @@
 
 import {
   NativeModules,
-  Platform,
 } from 'react-native';
 
-import UUID from 'uuid-js';
+const sessionId = NativeModules.ExponentConstants.sessionId;
 
-const map = {};
+const loaded = {};
 
-// The platform-specific part of loading code: load a font and return the style props
-const loadNativeAsync = Platform.select({
-  async ios(uri) {
-    return {
-      fontFamily: await NativeModules.EXFontLoader.loadFontAsync(uri),
-    };
-  },
+function nativeName(name) {
+  return NativeModules.ExponentConstants.sessionId + '-' + name;
+}
 
-  async android(uri) {
-    const detected = await NativeModules.ExponentFontLoader.loadFontWithFamilyNameAsync(
-      UUID.create().toString(),
-      uri,
-    );
-
-    const fontStyle = ['regular', 'bold', 'italic', 'bold-italic'][detected.fontStyle];
-    if (fontStyle) {
-      console.log(`[Exponent.Font] Font at '${uri}' was detected to have style '${fontStyle}'.`);
-    } else {
-      throw new Error(`Style of font at '${uri}' couldn't be detected`);
-    }
-
-    return {
-      fontFamily: detected.fontFamily,
-      fontStyle,
-    };
-  },
-});
-
-export async function loadAsync(name, { uri }) {
-  if (map[name]) {
-    if (map[name].uri === uri) {
-      return;
-    }
-    throw new Error("Different font already loaded for ${name}");
-  }
-
-  map[name] = {
-    loading: true,
-    style: {},
-  };
-
-  try {
-    map[name] = {
-      uri,
-      style: await loadNativeAsync(uri),
-    };
-  } catch (e) {
-    delete map[name];
-    throw e;
-  }
+export async function loadAsync(name, uri) {
+  const result = await NativeModules.ExponentFontLoader.loadAsync(nativeName(name), uri);
+  loaded[name] = true;
+  return result;
 }
 
 export function style(name) {
-  return map[name] ? map[name].style : {};
+  /* if (!loaded[name]) {
+     console.warn(`[Exponent.Font] No font '${name}', or it hasn't been loaded yet`);
+     return {};
+     }
+   */
+  return {
+    fontFamily: 'ExponentFont-' + nativeName(name),
+  };
 }
 

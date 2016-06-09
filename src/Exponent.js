@@ -29,11 +29,11 @@ export default {
   Fabric,
   Facebook,
   FileSystem,
+  Font,
   ImageCropper,
   ImagePicker,
   Location,
   Notifications,
   Util,
-  Font,
 };
 
