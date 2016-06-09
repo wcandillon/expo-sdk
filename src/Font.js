@@ -19,11 +19,9 @@ export async function loadAsync(name, uri) {
 }
 
 export function style(name) {
-  /* if (!loaded[name]) {
-     console.warn(`[Exponent.Font] No font '${name}', or it hasn't been loaded yet`);
-     return {};
-     }
-   */
+  if (!loaded[name]) {
+    console.warn(`[Exponent.Font] No font '${name}', or it hasn't been loaded yet`);
+  }
   return {
     fontFamily: 'ExponentFont-' + nativeName(name),
   };
