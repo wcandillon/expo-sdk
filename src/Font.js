@@ -12,10 +12,15 @@ function nativeName(name) {
   return NativeModules.ExponentConstants.sessionId + '-' + name;
 }
 
-export async function loadAsync(name, uri) {
-  const result = await NativeModules.ExponentFontLoader.loadAsync(nativeName(name), uri);
-  loaded[name] = true;
-  return result;
+export async function loadAsync(nameOrMap, uri) {
+  if (typeof nameOrMap === 'object') {
+    await Promise.all(Object.keys(nameOrMap).map((name) =>
+      loadAsync(name, nameOrMap[name])));
+    return;
+  }
+
+  await NativeModules.ExponentFontLoader.loadAsync(nativeName(nameOrMap), uri);
+  loaded[nameOrMap] = true;
 }
 
 export function style(name) {
