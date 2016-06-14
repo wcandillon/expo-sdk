@@ -20,20 +20,4 @@ export const Notifications = NativeModules.ExponentNotifications;
 export const Util = NativeModules.ExponentUtil;
 
 export * as Font from './Font';
-import * as Font from './Font';
-
-export default {
-  Constants,
-  Contacts,
-  Crypto,
-  Fabric,
-  Facebook,
-  FileSystem,
-  Font,
-  ImageCropper,
-  ImagePicker,
-  Location,
-  Notifications,
-  Util,
-};
 
