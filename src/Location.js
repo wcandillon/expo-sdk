@@ -29,10 +29,7 @@ export async function watchPositionAsync(options, callback) {
 
   const watchId = nextWatchId++; // XXX: thread safe?
   watchCallbacks[watchId] = callback;
-  await NativeModules.ExponentLocation.watchPositionImplAsync(
-    watchId,
-    options,
-  );
+  await NativeModules.ExponentLocation.watchPositionImplAsync(watchId, options);
   return {
     remove() {
       NativeModules.ExponentLocation.removeWatchAsync(watchId);
