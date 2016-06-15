@@ -20,4 +20,5 @@ export const Notifications = NativeModules.ExponentNotifications;
 export const Util = NativeModules.ExponentUtil;
 
 export * as Font from './Font';
+export * as Location from './Location';
 
