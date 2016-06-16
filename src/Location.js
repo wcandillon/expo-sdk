@@ -5,12 +5,29 @@ import {
   NativeModules,
 } from 'react-native';
 
-export const getCurrentPositionAsync = NativeModules.ExponentLocation.getCurrentPositionAsync;
-
 let nextWatchId = 0;
 let watchCallbacks = {};
 
 let deviceEventSubscription;
+
+export function getCurrentPositionAsync(options) {
+  return new Promise(async (resolve, reject) => {
+    let done = false;
+    let subscription;
+    subscription = await watchPositionAsync(options, (location) => {
+      if (!done) {
+        resolve(location);
+        done = true;
+      }
+      if (subscription) {
+        subscription.remove();
+      }
+    });
+    if (done) {
+      subscription.remove();
+    }
+  });
+}
 
 export async function watchPositionAsync(options, callback) {
   if (!deviceEventSubscription) {
@@ -30,10 +47,15 @@ export async function watchPositionAsync(options, callback) {
   const watchId = nextWatchId++; // XXX: thread safe?
   watchCallbacks[watchId] = callback;
   await NativeModules.ExponentLocation.watchPositionImplAsync(watchId, options);
+
+  let removed = false;
   return {
     remove() {
-      NativeModules.ExponentLocation.removeWatchAsync(watchId);
-      delete watchCallbacks[watchId];
+      if (!removed) {
+        NativeModules.ExponentLocation.removeWatchAsync(watchId);
+        delete watchCallbacks[watchId];
+        removed = true;
+      }
     },
   };
 }
