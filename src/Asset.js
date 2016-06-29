@@ -1,24 +1,30 @@
-import resolveAssetSource from 'resolveAssetSource';
-import PixelRatio from 'PixelRatio';
+import AssetRegistry from 'AssetRegistry';
 import AssetSourceResolver from 'AssetSourceResolver';
+import PixelRatio from 'PixelRatio';
+import resolveAssetSource from 'resolveAssetSource';
 
-// Return the hash for the correct scale of an image asset
-const imgFileHash = (asset) => {
+// Construct the CDN uri for an asset, picking the correct scale if it's an
+// image
+const getURI = (asset) => {
   const scale = AssetSourceResolver.pickScale(asset.scales, PixelRatio.get());
   const index = asset.scales.findIndex(s => s === scale);
-  return asset.fileHashes[index] || asset.fileHashes[0];
+  return 'https://d1wp6m56sqw74a.cloudfront.net/~assets/' +
+         (asset.fileHashes[index] || asset.fileHashes[0]);
 };
-
-// Construct the CDN uri for an asset file identified by its hash
-const uriForHash = (hash) =>
-  'https://d1wp6m56sqw74a.cloudfront.net/~assets/' + hash;
 
 // Override react-natives asset resolution for `Image` components
 resolveAssetSource.setCustomSourceTransformer((resolver) => {
-  const uri = uriForHash(imgFileHash(resolver.asset));
-  const source = resolver.fromSource(uri);
-  //const source = resolver.defaultAsset();
-  console.log('source', source);
-  return resolver.fromSource(uri);
+  return resolver.fromSource(getURI(resolver.asset));
 });
+
+export function fromRequire(id) {
+  const asset = AssetRegistry.getAssetByID(id);
+  return {
+    uri: getURI(asset),
+    width: asset.width,
+    height: asset.height,
+    name: asset.name,
+    type: asset.type,
+  };
+}
 
