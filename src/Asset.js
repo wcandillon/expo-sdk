@@ -14,6 +14,9 @@ import { manifest } from './Constants';
 // Construct the CDN URI for an asset from its React Native metadata, picking
 // the correct scale if it's an image
 const getURI = (asset) => {
+  // This logic is based on that in AssetSourceResolver.js, we just do it with
+  // our own tweaks for Exponent
+
   const scale = asset.scales.length > 1 ?
                 AssetSourceResolver.pickScale(asset.scales, PixelRatio.get()) :
                 1;
