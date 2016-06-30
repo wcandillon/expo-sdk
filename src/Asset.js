@@ -36,7 +36,7 @@ const getURI = (asset) => {
          (asset.fileHashes[index] || asset.fileHashes[0]);
 };
 
-// Override react-natives asset resolution for `Image` components
+// Override React Native's asset resolution for `Image` components
 resolveAssetSource.setCustomSourceTransformer((resolver) =>
   resolver.fromSource(getURI(resolver.asset)));
 
