@@ -1,7 +1,7 @@
 'use strict';
 
 import {
-  Platform
+  Platform,
 } from 'react-native';
 
 import AssetRegistry from 'AssetRegistry';
