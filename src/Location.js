@@ -1,16 +1,35 @@
-'use strict';
+// @flow
 
 import {
   DeviceEventEmitter,
   NativeModules,
 } from 'react-native';
 
+type LocationOptions = {
+  enableHighAccuracy: ?bool,
+  timeInterval: ?number,
+  distanceInterval: ?number,
+}
+
+type LocationData = {
+  coords: {
+    latitude: number,
+    longitude: number,
+    altitude: number,
+    accuracy: number,
+    heading: number,
+    speed: number,
+  },
+  timestamp: number,
+}
+
+type LocationCallback = (data: LocationData) => any;
+
 let nextWatchId = 0;
-let watchCallbacks = {};
+let watchCallbacks: { [watchId: number]: LocationCallback } = {};
+let deviceEventSubscription: ?Function;
 
-let deviceEventSubscription;
-
-export function getCurrentPositionAsync(options) {
+export function getCurrentPositionAsync(options: LocationOptions) {
   return new Promise(async (resolve, reject) => {
     let done = false;
     let subscription;
@@ -29,7 +48,7 @@ export function getCurrentPositionAsync(options) {
   });
 }
 
-export async function watchPositionAsync(options, callback) {
+export async function watchPositionAsync(options: LocationOptions, callback: LocationCallback) {
   if (!deviceEventSubscription) {
     deviceEventSubscription = DeviceEventEmitter.addListener(
       'Exponent.locationChanged',

@@ -1,21 +1,22 @@
-'use strict';
+// @flow
 
 import {
   NativeModules,
 } from 'react-native';
 
-const sessionId = NativeModules.ExponentConstants.sessionId;
+type FontUriMap = { [name: string]: string };
 
+const sessionId = NativeModules.ExponentConstants.sessionId;
 const loaded = {};
 
 function nativeName(name) {
-  return NativeModules.ExponentConstants.sessionId + '-' + name;
+  return `${sessionId}-${name}`;
 }
 
-export async function loadAsync(nameOrMap, uri) {
+export async function loadAsync(nameOrMap: string & FontUriMap, uri: string) {
   if (typeof nameOrMap === 'object') {
-    await Promise.all(Object.keys(nameOrMap).map((name) =>
-      loadAsync(name, nameOrMap[name])));
+    const names = Object.keys(nameOrMap);
+    await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));
     return;
   }
 
@@ -23,12 +24,12 @@ export async function loadAsync(nameOrMap, uri) {
   loaded[nameOrMap] = true;
 }
 
-export function style(name) {
+export function style(name: string) {
   if (!loaded[name]) {
     console.warn(`[Exponent.Font] No font '${name}', or it hasn't been loaded yet`);
   }
   return {
-    fontFamily: 'ExponentFont-' + nativeName(name),
+    fontFamily: `ExponentFont-${nativeName(name)}`,
   };
 }
 

@@ -19,5 +19,10 @@
   "homepage": "https://github.com/exponentjs/exponent-sdk",
   "dependencies": {
     "uuid-js": "^0.7.5"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.26.0",
+    "react": "^15.2.0",
+    "react-native": "^0.28.0"
   }
 }

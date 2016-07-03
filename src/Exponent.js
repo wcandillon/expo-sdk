@@ -1,7 +1,7 @@
 /**
  * @providesModule Exponent
+* @flow
  */
-'use strict';
 
 import {
   NativeModules,
