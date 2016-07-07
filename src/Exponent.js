@@ -1,6 +1,6 @@
 /**
  * @providesModule Exponent
-* @flow
+*  @flow
  */
 
 import {
@@ -22,4 +22,3 @@ export * as Contacts from './Contacts';
 export * as Asset from './Asset';
 export * as Font from './Font';
 export * as Location from './Location';
-
