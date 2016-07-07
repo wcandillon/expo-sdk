@@ -4,7 +4,7 @@ import {
   NativeModules,
 } from 'react-native';
 
-type FontUriMap = { [name: string]: string };
+import { fromRequire } from './Asset';
 
 const sessionId = NativeModules.ExponentConstants.sessionId;
 const loaded = {};
@@ -13,13 +13,21 @@ function nativeName(name) {
   return `${sessionId}-${name}`;
 }
 
-export async function loadAsync(nameOrMap: string & FontUriMap, uri: string) {
+type FontUriMap = { [name: string]: string };
+
+export async function loadAsync(nameOrMap: string & FontUriMap, uriOrAssetModule: string & number) {
   if (typeof nameOrMap === 'object') {
     const names = Object.keys(nameOrMap);
     await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));
     return;
   }
 
+  let uri;
+  if (typeof uriOrAssetModule === 'string') {
+    uri = uriOrAssetModule;
+  } else {
+    uri = fromRequire(uriOrAssetModule).uri;
+  }
   await NativeModules.ExponentFontLoader.loadAsync(nativeName(nameOrMap), uri);
   loaded[nameOrMap] = true;
 }
