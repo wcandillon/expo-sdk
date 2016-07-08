@@ -73,8 +73,10 @@ if (Constants.manifest && Constants.manifest.logUrl) {
     };
   }
 
+  // don't use level below info. only use debug for things that
+  // shouldn't be shown to the developer.
   console.log = replaceConsoleFunction(console.log, 'info');
-  console.debug = replaceConsoleFunction(console.debug, 'debug');
+  console.debug = replaceConsoleFunction(console.debug, 'info');
   console.info = replaceConsoleFunction(console.info, 'info');
   console.warn = replaceConsoleFunction(console.warn, 'warn');
   console.error = replaceConsoleFunction(console.error, 'error');
