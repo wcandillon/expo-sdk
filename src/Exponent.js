@@ -21,7 +21,7 @@ import './Logs';
 
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
-export * as Asset from './Asset';
+export Asset from './Asset';
 export * as Font from './Font';
 export * as Location from './Location';
 
