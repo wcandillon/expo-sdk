@@ -4,7 +4,7 @@ import {
   NativeModules,
 } from 'react-native';
 
-import { fromRequire } from './Asset';
+import { fromModule } from './Asset';
 
 const sessionId = NativeModules.ExponentConstants.sessionId;
 const loaded = {};
@@ -42,7 +42,7 @@ export async function loadAsync(nameOrMap: string & FontUriMap, uriOrAssetModule
     if (typeof uriOrAssetModule === 'string') {
       uri = uriOrAssetModule;
     } else {
-      uri = fromRequire(uriOrAssetModule).uri;
+      uri = fromModule(uriOrAssetModule).uri;
     }
 
     await NativeModules.ExponentFontLoader.loadAsync(nativeName(name), uri);

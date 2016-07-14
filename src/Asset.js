@@ -40,7 +40,7 @@ const getURI = (asset) => {
 resolveAssetSource.setCustomSourceTransformer((resolver) =>
   resolver.fromSource(getURI(resolver.asset)));
 
-export function fromRequire(id) {
+export function fromModule(id) {
   const asset = AssetRegistry.getAssetByID(id);
   return {
     uri: getURI(asset),
