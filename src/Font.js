@@ -21,7 +21,7 @@ export function isLoaded(name:string) {
   return !!loaded[name];
 }
 
-export async function loadAsync(nameOrMap: string & FontUriMap, uriOrAssetModule: string | number) {
+export async function loadAsync(nameOrMap: string & FontUriMap, uriOrAssetModule?: string | number) {
   if (typeof nameOrMap === 'object') {
     const names = Object.keys(nameOrMap);
     await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));
