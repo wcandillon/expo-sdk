@@ -100,7 +100,7 @@ export default class Asset {
 
     try {
       const { uri } = await NativeModules.ExponentFileSystem.downloadAsync(
-        this.uri, this.hash, {});
+        this.uri, `${this.hash}.${this.type}`, {});
       this.uri = uri;
       this.preloaded = true;
       this.preloadPromises.forEach(({ resolve }) => resolve());
