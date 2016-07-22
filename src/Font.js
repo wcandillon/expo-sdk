@@ -40,6 +40,7 @@ export async function loadAsync(nameOrMap, uriOrModuleOrAsset) {
 
     let asset;
     if (typeof uriOrModuleOrAsset === 'string') {
+      // TODO(nikki): need to implement Asset.fromUri(...)
       asset = Asset.fromUri(uriOrModuleOrAsset);
     } else if (typeof uriOrModuleOrAsset === 'number') {
       asset = Asset.fromModule(uriOrModuleOrAsset);

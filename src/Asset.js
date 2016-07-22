@@ -69,8 +69,8 @@ export default class Asset {
       return Asset.byModule[moduleId];
     }
 
-    // TODO: Make React Native's AssetRegistry save moduleId so we don't have to
-    //       do this here.
+    // TODO(nikki): Make React Native's AssetRegistry save moduleId so we don't
+    //              have to do this here.
     const meta = AssetRegistry.getAssetByID(moduleId);
     meta.moduleId = moduleId;
     const { uri, hash } = pickScale(meta);
