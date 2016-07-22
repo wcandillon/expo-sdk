@@ -59,9 +59,9 @@ export default class Asset {
       this.height = height;
     }
 
-    this.preloading = false;
-    this.preloaded = false;
-    this.preloadPromises = [];
+    this.downloading = false;
+    this.downloaded = false;
+    this.downloadCallbacks = [];
   }
 
   static fromModule(moduleId) {
@@ -87,28 +87,28 @@ export default class Asset {
     return asset;
   }
 
-  async preloadAsync() {
-    if (this.preloaded) {
+  async downloadAsync() {
+    if (this.downloaded) {
       return;
     }
-    if (this.preloading) {
+    if (this.downloading) {
       await new Promise((resolve, reject) =>
-        this.preloadPromises.push({ resolve, reject }));
+        this.downloadCallbacks.push({ resolve, reject }));
       return;
     }
-    this.preloading = true;
+    this.downloading = true;
 
     try {
       const { uri } = await NativeModules.ExponentFileSystem.downloadAsync(
         this.uri, `${this.hash}.${this.type}`, {});
       this.localUri = uri;
-      this.preloaded = true;
-      this.preloadPromises.forEach(({ resolve }) => resolve());
+      this.downloaded = true;
+      this.downloadCallbacks.forEach(({ resolve }) => resolve());
     } catch (e) {
-      this.preloadPromises.forEach(({ reject }) => reject(e));
+      this.downloadCallbacks.forEach(({ reject }) => reject(e));
     } finally {
-      this.preloading = false;
-      this.preloadPromises = [];
+      this.downloading = false;
+      this.downloadCallbacks = [];
     }
   }
 }
@@ -119,6 +119,6 @@ resolveAssetSource.setCustomSourceTransformer((resolver) => {
     return resolver.fromSource(pickScale(resolver.asset).uri);
   }
   const asset = Asset.fromModule(resolver.asset.moduleId);
-  return resolver.fromSource(asset.preloaded ? asset.localUri : asset.uri);
+  return resolver.fromSource(asset.downloaded ? asset.localUri : asset.uri);
 });
 
