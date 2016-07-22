@@ -101,7 +101,7 @@ export default class Asset {
     try {
       const { uri } = await NativeModules.ExponentFileSystem.downloadAsync(
         this.uri, `${this.hash}.${this.type}`, {});
-      this.uri = uri;
+      this.localUri = uri;
       this.preloaded = true;
       this.preloadPromises.forEach(({ resolve }) => resolve());
     } catch (e) {
@@ -114,8 +114,11 @@ export default class Asset {
 }
 
 // Override React Native's asset resolution for `Image` components
-resolveAssetSource.setCustomSourceTransformer((resolver) =>
-  resolver.fromSource(resolver.asset.moduleId ?
-                      Asset.fromModule(resolver.asset.moduleId).uri :
-                      pickScale(resolver.asset).uri));
+resolveAssetSource.setCustomSourceTransformer((resolver) => {
+  if (!resolver.asset.moduleId) {
+    return resolver.fromSource(pickScale(resolver.asset).uri);
+  }
+  const asset = Asset.fromModule(resolver.asset.moduleId);
+  return resolver.fromSource(asset.preloaded ? asset.localUri : asset.uri);
+});
 
