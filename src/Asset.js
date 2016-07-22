@@ -99,12 +99,13 @@ export default class Asset {
     this.downloading = true;
 
     try {
+      const path = `ExponentAsset-${this.hash}.${this.type}`;
       let exists, uri;
       ({ exists, uri } = await NativeModules.ExponentFileSystem.getInfoAsync(
-        `${this.hash}.${this.type}`, { cache: true }));
+        path, { cache: true }));
       if (!exists) {
         ({ uri } = await NativeModules.ExponentFileSystem.downloadAsync(
-          this.uri, `${this.hash}.${this.type}`, { cache: true }));
+          this.uri, path, { cache: true }));
       }
       this.localUri = uri;
       this.downloaded = true;
