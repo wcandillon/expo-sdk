@@ -46,9 +46,9 @@ export async function loadAsync(nameOrMap, uriOrModuleOrAsset) {
     } else {
       asset = uriOrModuleOrAsset;
     }
+
     await asset.downloadAsync();
     if (asset.downloaded) {
-      console.log('localUri', asset.localUri);
       await NativeModules.ExponentFontLoader.loadAsync(nativeName(name), asset.localUri);
     } else {
       throw new Error(`Couldn't download asset for font '${name}'`);
