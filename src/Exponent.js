@@ -24,6 +24,6 @@ export * as Contacts from './Contacts';
 export Asset from './Asset';
 export * as Font from './Font';
 export * as Location from './Location';
+export * as Permissions from './Permissions';
 
 export * as Components from './Components';
-
