@@ -52,10 +52,10 @@ export default class Asset {
     this.type = type;
     this.hash = hash;
     this.uri = uri;
-    if (width) {
+    if (typeof width === 'number') {
       this.width = width;
     }
-    if (height) {
+    if (typeof height === 'number') {
       this.height = height;
     }
 
