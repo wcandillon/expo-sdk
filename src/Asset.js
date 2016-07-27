@@ -112,6 +112,7 @@ export default class Asset {
       this.downloadCallbacks.forEach(({ resolve }) => resolve());
     } catch (e) {
       this.downloadCallbacks.forEach(({ reject }) => reject(e));
+      throw e;
     } finally {
       this.downloading = false;
       this.downloadCallbacks = [];
