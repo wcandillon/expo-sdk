@@ -3,27 +3,29 @@
 import React from 'react';
 import {
   NativeModules,
-  View,
 } from 'react-native';
 
-let rendered = false;
+let mounted = false;
 
 requestAnimationFrame(() => {
   setTimeout(() => {
-    if (!rendered) {
-      // App hasn't rendered an AppLoading yet, just hide
+    if (!mounted) {
+      // App hasn't mounted an AppLoading component yet, just hide automatically
       NativeModules.ExponentAppLoading.hideAsync();
     }
   }, 200);
 });
 
 export default class AppLoading extends React.Component {
+  componentWillMount() {
+    mounted = true;
+  }
+
   componentWillUnmount() {
     NativeModules.ExponentAppLoading.hideAsync();
   }
 
   render() {
-    rendered = true;
     return null;
   }
 }
