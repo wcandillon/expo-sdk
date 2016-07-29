@@ -2,18 +2,29 @@
 
 import React from 'react';
 import {
-  Text,
+  NativeModules,
   View,
 } from 'react-native';
 
-export default () => (
-  <View
-    style={{ flex: 1,
-             justifyContent: 'center',
-             alignItems: 'center',
-             backgroundColor: '#fff' }}>
-    <Text style={{ fontSize: 14 }}>
-      Loading...
-    </Text>
-  </View>
-);
+let rendered = false;
+
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    if (!rendered) {
+      // App hasn't rendered an AppLoading yet, just hide
+      NativeModules.ExponentAppLoading.hideAsync();
+    }
+  }, 200);
+});
+
+export default class AppLoading extends React.Component {
+  componentWillUnmount() {
+    NativeModules.ExponentAppLoading.hideAsync();
+  }
+
+  render() {
+    rendered = true;
+    return null;
+  }
+}
+
