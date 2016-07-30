@@ -1,32 +1,20 @@
 'use strict';
 
 import React from 'react';
+
 import {
   NativeModules,
+  requireNativeComponent,
 } from 'react-native';
 
-let mounted = false;
-
-requestAnimationFrame(() => {
-  setTimeout(() => {
-    if (!mounted) {
-      // App hasn't mounted an AppLoading component yet, just hide automatically
-      NativeModules.ExponentAppLoading.hideAsync();
-    }
-  }, 200);
-});
+const NativeAppLoading = requireNativeComponent('ExponentAppLoading', null);
 
 export default class AppLoading extends React.Component {
-  componentWillMount() {
-    mounted = true;
-  }
-
   componentWillUnmount() {
-    NativeModules.ExponentAppLoading.hideAsync();
+    NativeModules.ExponentAppLoadingManager.finishedAsync();
   }
 
   render() {
-    return null;
+    return <NativeAppLoading />;
   }
 }
-
