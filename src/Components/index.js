@@ -1,4 +1,5 @@
 'use strict';
 
-export LinearGradient from './LinearGradient';
 export AppLoading from './AppLoading';
+export BlurView from './BlurView';
+export LinearGradient from './LinearGradient';
