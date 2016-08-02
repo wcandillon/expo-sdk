@@ -22,7 +22,7 @@ export function isLoaded(name: string) {
   return !!loaded[name];
 }
 
-export async function loadAsync(nameOrMap, uriOrModuleOrAsset) {
+export async function loadAsync(nameOrMap:any, uriOrModuleOrAsset:any) {
   if (typeof nameOrMap === 'object') {
     const names = Object.keys(nameOrMap);
     await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));

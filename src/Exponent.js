@@ -19,9 +19,9 @@ export const Util = NativeModules.ExponentUtil;
 
 import './Logs';
 
+export Asset from './Asset';
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
-export Asset from './Asset';
 export * as Font from './Font';
 export * as Location from './Location';
 export * as Permissions from './Permissions';

@@ -6,11 +6,24 @@ import {
 
 let { ExponentPermissions: Permissions } = NativeModules;
 
-export async function getAsync(type: string) {
+type PermissionType = 'remoteNotifications' | 'location';
+type PermissionStatus = 'undetermined' | 'granted' | 'denied';
+type PermissionExpires = 'never';
+type PermissionDetailsLocationIOS = {
+  scope: 'whenInUse' | 'always',
+};
+type PermissionResponse = {
+  status: PermissionStatus,
+  expires: PermissionExpires,
+  ios?: PermissionDetailsLocationIOS,
+  android?: any,
+};
+
+export async function getAsync(type: PermissionType):Promise<PermissionResponse> {
   return Permissions.getAsync(type);
 }
 
-export async function askAsync(type: string) {
+export async function askAsync(type: PermissionType):Promise<PermissionResponse> {
   return Permissions.askAsync(type);
 }
 
