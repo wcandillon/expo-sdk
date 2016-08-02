@@ -12,11 +12,14 @@ type PermissionExpires = 'never';
 type PermissionDetailsLocationIOS = {
   scope: 'whenInUse' | 'always',
 };
+type PermissionDetailsLocationAndroid = {
+  scope: 'fine' | 'coarse' | 'none',
+};
 type PermissionResponse = {
   status: PermissionStatus,
   expires: PermissionExpires,
   ios?: PermissionDetailsLocationIOS,
-  android?: any,
+  android?: PermissionDetailsLocationAndroid,
 };
 
 export async function getAsync(type: PermissionType):Promise<PermissionResponse> {
