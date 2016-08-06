@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactNative from 'react-native';
-import keyMirror from 'keymirror';
 
 import Asset from '../Asset';
 

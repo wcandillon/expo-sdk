@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/exponentjs/exponent-sdk",
   "dependencies": {
-    "keymirror": "^0.1.1",
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
