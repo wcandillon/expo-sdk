@@ -41,6 +41,7 @@ export async function loadAsync(nameOrMap:any, uriOrModuleOrAsset:any) {
     let asset;
     if (typeof uriOrModuleOrAsset === 'string') {
       // TODO(nikki): need to implement Asset.fromUri(...)
+      throw new Error("Loading fonts from remote URIs is temporarily not supported. Please download the font file and load it using require. See: https://docs.getexponent.com/versions/v8.0.0/guides/using-custom-fonts.html#downloading-the-font");
       asset = Asset.fromUri(uriOrModuleOrAsset);
     } else if (typeof uriOrModuleOrAsset === 'number') {
       asset = Asset.fromModule(uriOrModuleOrAsset);
