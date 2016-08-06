@@ -2,6 +2,8 @@ import React from 'react';
 import ReactNative from 'react-native';
 import keyMirror from 'keymirror';
 
+import Asset from '../Asset';
+
 const {
   Component,
   PropTypes,
@@ -130,10 +132,15 @@ export default class Video extends Component {
   };
 
   render() {
-    const {
+    let {
       source,
       resizeMode,
     } = this.props;
+
+    // Is it an asset module?
+    if (typeof source === 'number') {
+      source = { uri: Asset.fromModule(source).uri };
+    }
 
     let uri = source.uri;
     if (uri && uri.match(/^\//)) {
@@ -196,7 +203,10 @@ Video.propTypes = {
   fullscreen: PropTypes.bool,
 
   /* Wrapper component */
-  source: PropTypes.object,
+  source: PropTypes.oneOfType([
+    PropTypes.object, // Source object like { uri: 'http//foo/bar.mp4' }
+    PropTypes.number, // Asset module like require('./foo/bar.mp4')
+  ]),
   resizeMode: PropTypes.string,
   repeat: PropTypes.bool,
   paused: PropTypes.bool,
