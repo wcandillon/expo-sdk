@@ -19,7 +19,7 @@ export const Util = NativeModules.ExponentUtil;
 
 import './Logs';
 
-export Asset from './Asset';
+export { default as Asset } from './Asset';
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
 export * as Font from './Font';
