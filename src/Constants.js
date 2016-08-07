@@ -5,9 +5,13 @@ import {
 } from 'react-native';
 
 // On Android we pass the manifest in JSON form so this step is necessary
-let manifest = NativeModules.ExponentConstants.manifest;
-if (typeof manifest === 'string') {
-  manifest = JSON.parse(manifest);
+let manifest;
+if (NativeModules.ExponentConstants) {
+  if (typeof manifest === 'string') {
+    manifest = JSON.parse(NativeModules.ExponentConstants.manifest);
+  } else {
+    manifest = NativeModules.ExponentConstants.manifest;
+  }
 }
 
 module.exports = {
