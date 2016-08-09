@@ -2,7 +2,7 @@
   "name": "exponent",
   "version": "8.0.3",
   "description": "The Exponent SDK",
-  "main": "src/Exponent.js",
+  "main": "src/index.js",
   "scripts": {},
   "repository": {
     "type": "git",
