@@ -100,12 +100,17 @@ export default class Asset {
 
     try {
       const path = `ExponentAsset-${this.hash}.${this.type}`;
-      let exists, uri;
-      ({ exists, uri } = await NativeModules.ExponentFileSystem.getInfoAsync(
-        path, { cache: true }));
-      if (!exists) {
-        ({ uri } = await NativeModules.ExponentFileSystem.downloadAsync(
-          this.uri, path, { cache: true }));
+      let exists, md5, uri;
+      ({ exists, md5, uri } = await NativeModules.ExponentFileSystem.getInfoAsync(
+        path, { cache: true, md5: true }));
+      console.log('md5, hash', md5, this.hash);
+      if (!exists || md5 !== this.hash) {
+        ({ md5, uri } = await NativeModules.ExponentFileSystem.downloadAsync(
+          this.uri, path, { cache: true, md5: true }));
+        if (md5 !== this.hash) {
+          throw new Error(`Downloaded file for asset '${this.name}.${this.type}' ` +
+                          `failed MD5 integrity check`);
+        }
       }
       this.localUri = uri;
       this.downloaded = true;
