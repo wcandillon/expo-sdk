@@ -103,7 +103,6 @@ export default class Asset {
       let exists, md5, uri;
       ({ exists, md5, uri } = await NativeModules.ExponentFileSystem.getInfoAsync(
         path, { cache: true, md5: true }));
-      console.log('md5, hash', md5, this.hash);
       if (!exists || md5 !== this.hash) {
         ({ md5, uri } = await NativeModules.ExponentFileSystem.downloadAsync(
           this.uri, path, { cache: true, md5: true }));
