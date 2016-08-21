@@ -88,7 +88,6 @@ export default class Asset {
   }
 
   async downloadAsync() {
-    console.log('downloading????', this.name);
     if (this.downloaded) {
       return;
     }
