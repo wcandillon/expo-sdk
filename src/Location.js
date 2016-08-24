@@ -33,19 +33,23 @@ let deviceEventSubscription: ?Function;
 
 export function getCurrentPositionAsync(options: LocationOptions) {
   return new Promise(async (resolve, reject) => {
-    let done = false;
-    let subscription;
-    subscription = await watchPositionAsync(options, (location) => {
-      if (!done) {
-        resolve(location);
-        done = true;
-      }
-      if (subscription) {
+    try {
+      let done = false;
+      let subscription;
+      subscription = await watchPositionAsync(options, (location) => {
+        if (!done) {
+          resolve(location);
+          done = true;
+        }
+        if (subscription) {
+          subscription.remove();
+        }
+      });
+      if (done) {
         subscription.remove();
       }
-    });
-    if (done) {
-      subscription.remove();
+    } catch (e) {
+      reject(e);
     }
   });
 }
