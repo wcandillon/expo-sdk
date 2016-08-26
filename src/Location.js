@@ -83,6 +83,7 @@ export async function watchPositionAsync(options: LocationOptions, callback: Loc
         delete watchCallbacks[watchId];
         if (Object.keys(watchCallbacks).length === 0) {
           LocationEventEmitter.removeSubscription(deviceEventSubscription);
+          deviceEventSubscription = null;
         }
         removed = true;
       }
