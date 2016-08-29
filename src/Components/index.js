@@ -3,6 +3,7 @@
 export AppLoading from './AppLoading';
 export BlurView from './BlurView';
 export LinearGradient from './LinearGradient';
+export MapView from 'react-native-maps';
 export Video from './Video';
 
 import * as SvgModules from 'react-native-svg';
