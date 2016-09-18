@@ -24,6 +24,7 @@ import './Logs';
 export { default as registerRootComponent } from './registerRootComponent';
 export { default as takeSnapshotAsync } from './takeSnapshotAsync';
 export { default as Asset } from './Asset';
+export { default as apisAreAvailable } from './apisAreAvailable';
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
 export * as Font from './Font';
