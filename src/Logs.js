@@ -5,81 +5,20 @@ import UUID from 'uuid-js';
 import * as Constants from './Constants';
 import Queue from './lib/Queue';
 
-if (Constants.manifest && Constants.manifest.logUrl) {
-  let logQueue = new Queue();
-  let logCounter = 0;
-  let sessionId = UUID.create().toString();
-  let isSendingLogs = false;
-  let groupDepth = 0;
+let logQueue = new Queue();
+let logCounter = 0;
+let sessionId = UUID.create().toString();
+let isSendingLogs = false;
+let groupDepth = 0;
 
-  async function sendRemoteLogsAsync() {
-    if (isSendingLogs) {
-      return;
-    }
-
-    let logs = [];
-    let currentLog = logQueue.dequeue();
-    if (!currentLog) {
-      return;
-    } else {
-      isSendingLogs = true;
-    }
-
-    while (currentLog) {
-      logs.push(currentLog);
-      currentLog = logQueue.dequeue();
-    }
-
-    try {
-      await fetch(Constants.manifest.logUrl, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Connection': 'keep-alive',
-          'Proxy-Connection': 'keep-alive',
-          'Accept': 'application/json',
-          'Device-Id': Constants.deviceId,
-          'Device-Name': Constants.deviceName,
-          'Session-Id': sessionId,
-        },
-        body: JSON.stringify(logs),
-      });
-    } catch (e) {}
-
-    isSendingLogs = false;
-    sendRemoteLogsAsync();
-  }
-
-  function queueRemoteLog(level, additionalFields, args) {
-    logQueue.enqueue({
-      count: logCounter++,
-      level,
-      groupDepth,
-      body: args,
-      ...additionalFields,
-    });
-
-    // don't block on this
-    sendRemoteLogsAsync();
-  }
-
-  function replaceConsoleFunction(original, level, additionalFields) {
-    return function(...args) {
-      if (original) {
-        original.apply(console, args);
-      }
-
-      queueRemoteLog(level, additionalFields, args);
-    };
-  }
-
-  // don't use level below info. only use debug for things that
+export function enableXDELogging() {
+    // don't use level below info. only use debug for things that
   // shouldn't be shown to the developer.
-  console.log = replaceConsoleFunction(console.log, 'info');
-  console.debug = replaceConsoleFunction(console.debug, 'info');
-  console.info = replaceConsoleFunction(console.info, 'info');
-  console.warn = replaceConsoleFunction(console.warn, 'warn');
-  console.error = replaceConsoleFunction(console.error, 'error');
+  replaceConsoleFunction('log', 'info');
+  replaceConsoleFunction('debug', 'info');
+  replaceConsoleFunction('info', 'info');
+  replaceConsoleFunction('warn', 'warn');
+  replaceConsoleFunction('error', 'error');
 
   // console.group
   let originalGroup = console.group;
@@ -90,6 +29,9 @@ if (Constants.manifest && Constants.manifest.logUrl) {
 
     queueRemoteLog('info', {}, args);
     groupDepth++;
+  };
+  console.group.__restore = function() {
+    console.group = originalGroup;
   };
 
   let originalGroupCollapsed = console.groupCollapsed;
@@ -102,6 +44,9 @@ if (Constants.manifest && Constants.manifest.logUrl) {
       groupCollapsed: true,
     }, args);
     groupDepth++;
+  };
+  console.groupCollapsed.__restore = function() {
+    console.groupCollapsed = originalGroupCollapsed;
   };
 
   let originalGroupEnd = console.groupEnd;
@@ -117,6 +62,9 @@ if (Constants.manifest && Constants.manifest.logUrl) {
       shouldHide: true,
     }, args);
   };
+  console.groupEnd.__restore = function() {
+    console.groupEnd = originalGroupEnd;
+  };
 
   // console.assert
   let originalAssert = console.assert;
@@ -129,6 +77,99 @@ if (Constants.manifest && Constants.manifest.logUrl) {
       queueRemoteLog('error', {}, `Assertion failed: ${errorString}`);
     }
   };
+  console.assert.__restore = function() {
+    console.assert = originalAssert;
+  };
 
   // TODO: support rest of console methods
+}
+
+export function disableXDELogging() {
+  console.log.__restore();
+  console.debug.__restore();
+  console.info.__restore();
+  console.warn.__restore();
+  console.error.__restore();
+
+  console.group.__restore();
+  console.groupCollapsed.__restore();
+  console.groupEnd.__restore();
+
+  console.assert.__restore();
+
+  // TODO: support rest of console methods
+}
+
+/** Helpers **/
+
+async function sendRemoteLogsAsync() {
+  if (isSendingLogs) {
+    return;
+  }
+
+  let logs = [];
+  let currentLog = logQueue.dequeue();
+  if (!currentLog) {
+    return;
+  } else {
+    isSendingLogs = true;
+  }
+
+  while (currentLog) {
+    logs.push(currentLog);
+    currentLog = logQueue.dequeue();
+  }
+
+  try {
+    await fetch(Constants.manifest.logUrl, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Connection': 'keep-alive',
+        'Proxy-Connection': 'keep-alive',
+        'Accept': 'application/json',
+        'Device-Id': Constants.deviceId,
+        'Device-Name': Constants.deviceName,
+        'Session-Id': sessionId,
+      },
+      body: JSON.stringify(logs),
+    });
+  } catch (e) {}
+
+  isSendingLogs = false;
+  sendRemoteLogsAsync();
+}
+
+function queueRemoteLog(level, additionalFields, args) {
+  logQueue.enqueue({
+    count: logCounter++,
+    level,
+    groupDepth,
+    body: args,
+    ...additionalFields,
+  });
+
+  // don't block on this
+  sendRemoteLogsAsync();
+}
+
+function replaceConsoleFunction(consoleFunc, level, additionalFields) {
+  const original = console[consoleFunc];
+  const newConsoleFunc = function(...args) {
+    if (original) {
+      original.apply(console, args);
+    }
+    queueRemoteLog(level, additionalFields, args);
+  };
+
+  newConsoleFunc.__restore = function() {
+    console[consoleFunc] = original;
+  };
+
+  console[consoleFunc] = newConsoleFunc;
+}
+
+// Enable by default
+if (Constants.manifest && Constants.manifest.logUrl) {
+  enableXDELogging();
 }

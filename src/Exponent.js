@@ -21,6 +21,8 @@ export const Util = NativeModules.ExponentUtil;
 
 import './Logs';
 
+export * as Logs from './Logs';
+
 export { default as registerRootComponent } from './registerRootComponent';
 export { default as takeSnapshotAsync } from './takeSnapshotAsync';
 export { default as Asset } from './Asset';
