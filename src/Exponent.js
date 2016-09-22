@@ -14,7 +14,6 @@ export const Facebook = NativeModules.ExponentFacebook;
 export const FileSystem = NativeModules.ExponentFileSystem;
 export const ImageCropper = NativeModules.ExponentImageCropper;
 export const ImagePicker = NativeModules.ExponentImagePicker;
-export const Location = NativeModules.ExponentLocation;
 export const Notifications = NativeModules.ExponentNotifications;
 export const Segment = NativeModules.ExponentSegment;
 export const Util = NativeModules.ExponentUtil;
