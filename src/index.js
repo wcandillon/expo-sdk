@@ -5,5 +5,5 @@ import * as Exponent from './Exponent';
 export default Exponent;
 
 if (global) {
-  global.__exponent = !!NativeModules.ExponentConstants;
+  global.__exponent = Exponent;
 }
