@@ -1,6 +1,5 @@
-'use strict';
-
 export AppLoading from './AppLoading';
+export BarCodeScanner from './BarCodeScanner';
 export BlurView from './BlurView';
 export LinearGradient from './LinearGradient';
 export MapView from 'react-native-maps';
