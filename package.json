@@ -7,10 +7,7 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "jest-react-native",
-    "setupFiles": [
-      "<rootDir>/jest/setupNativeModuleMocks.js"
-    ]
+    "preset": "jest-exponent"
   },
   "repository": {
     "type": "git",
@@ -35,13 +32,9 @@
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
-    "babel-jest": "^16.0.0",
-    "babel-preset-react-native": "^1.9.0",
     "flow-bin": "^0.30.0",
-    "jest": "^16.0.1",
-    "jest-react-native": "^16.0.0",
+    "jest-exponent": "^0.1.0",
     "react": "15.3.1",
-    "react-native": "github:exponentjs/react-native#exp-latest",
-    "react-test-renderer": "^15.3.2"
+    "react-native": "github:exponentjs/react-native#exp-latest"
   }
 }
