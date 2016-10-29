@@ -34,3 +34,6 @@ export * as Location from './Location';
 export * as Permissions from './Permissions';
 
 export * as Components from './Components';
+
+export { default as GLView } from './GLView';
+
