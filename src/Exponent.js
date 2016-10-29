@@ -36,4 +36,5 @@ export * as Permissions from './Permissions';
 export * as Components from './Components';
 
 export { default as GLView } from './GLView';
+export { default as createTHREEViewClass } from './createTHREEViewClass';
 
