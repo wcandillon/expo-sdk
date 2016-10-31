@@ -29,6 +29,7 @@ export { default as Notifications } from './Notifications';
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
 export * as Font from './Font';
+export * as Google from './Google';
 export * as Location from './Location';
 export * as Permissions from './Permissions';
 
