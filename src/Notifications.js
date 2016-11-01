@@ -37,7 +37,7 @@ function _emitNotification(notification) {
     notification.data = JSON.parse(notification.data);
   }
 
-  _emitter.emit('notification', notification)
+  _emitter.emit('notification', notification);
 }
 
 export default {
@@ -63,4 +63,4 @@ export default {
 
     return _emitter.addListener('notification', listener);
   },
-}
+};

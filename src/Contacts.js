@@ -4,7 +4,9 @@ import {
   NativeModules,
 } from 'react-native';
 
-export async function getContactsAsync(fields: ['phone_number' | 'email'] = []) {
+type FieldType = 'phone_number' | 'email';
+
+export async function getContactsAsync(fields: FieldType[] = []) {
   return await NativeModules.ExponentContacts.getContactsAsync(fields);
 }
 
