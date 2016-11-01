@@ -1,6 +1,6 @@
 /**
  * @providesModule Exponent
-*  @flow
+ * @flow
  */
 
 import {
@@ -13,7 +13,6 @@ export const Fabric = NativeModules.ExponentFabric;
 export const Facebook = NativeModules.ExponentFacebook;
 export const FileSystem = NativeModules.ExponentFileSystem;
 export const ImageCropper = NativeModules.ExponentImageCropper;
-export const ImagePicker = NativeModules.ExponentImagePicker;
 export const Segment = NativeModules.ExponentSegment;
 export const Util = NativeModules.ExponentUtil;
 
@@ -30,6 +29,7 @@ export * as Constants from './Constants';
 export * as Contacts from './Contacts';
 export * as Font from './Font';
 export * as Google from './Google';
+export * as ImagePicker from './ImagePicker';
 export * as Location from './Location';
 export * as Permissions from './Permissions';
 
@@ -37,4 +37,3 @@ export * as Components from './Components';
 
 export { default as GLView } from './GLView';
 export { default as createTHREEViewClass } from './createTHREEViewClass';
-
