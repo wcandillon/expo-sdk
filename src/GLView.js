@@ -45,10 +45,14 @@ export default class GLView extends React.Component {
 }
 
 
+// Class of `gl` objects
+global.WebGLRenderingContext = class { };
+
 // Get the GL interface from an EXGLContextID and do JS-side setup
 const getGl = (exglCtxId) => {
   const gl = global.__EXGLContexts[exglCtxId];
   delete global.__EXGLContexts[exglCtxId];
+  Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
 
   // No canvas yet...
   gl.canvas = null;
