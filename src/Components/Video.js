@@ -138,7 +138,8 @@ export default class Video extends Component {
 
     // Is it an asset module?
     if (typeof source === 'number') {
-      source = { uri: Asset.fromModule(source).uri };
+      let asset = Asset.fromModule(source);
+      source = { uri: asset.localUri || asset.uri };
     }
 
     let uri = source.uri;
