@@ -52,7 +52,11 @@ global.WebGLRenderingContext = class { };
 const getGl = (exglCtxId) => {
   const gl = global.__EXGLContexts[exglCtxId];
   delete global.__EXGLContexts[exglCtxId];
-  Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
+  } else {
+    gl.__proto__ = global.WebGLRenderingContext.prototype;
+  }
 
   // No canvas yet...
   gl.canvas = null;
