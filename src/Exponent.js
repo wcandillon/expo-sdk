@@ -25,6 +25,8 @@ export { default as takeSnapshotAsync } from './takeSnapshotAsync';
 export { default as Asset } from './Asset';
 export { default as apisAreAvailable } from './apisAreAvailable';
 export { default as Notifications } from './Notifications';
+export { default as Accelerometer } from './Accelerometer';
+export { default as Gyroscope } from './Gyroscope';
 export * as Constants from './Constants';
 export * as Contacts from './Contacts';
 export * as Font from './Font';
