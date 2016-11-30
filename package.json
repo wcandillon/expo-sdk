@@ -28,7 +28,7 @@
     "fbemitter": "^2.1.1",
     "md5-file": "^3.1.1",
     "react-native-maps": "git+https://github.com/exponentjs/react-native-maps#12853f0",
-    "react-native-svg": "git+https://github.com/exponentjs/react-native-svg#afadb19",
+    "react-native-svg": "git+https://github.com/exponentjs/react-native-svg#f566381",
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
