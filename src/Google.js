@@ -9,8 +9,10 @@ import * as Constants from './Constants';
 const Google = NativeModules.ExponentGoogle;
 
 type LogInConfig = {
-  webClientId: string,
+  androidClientId?: string,
+  androidStandaloneAppClientId?: string,
   iosClientId?: string,
+  iosStandaloneAppClientId?: string,
   behavior?: 'system' | 'web',
   scopes?: Array<string>,
 };
@@ -43,14 +45,23 @@ export async function logInAsync(
   if (behavior === 'system' && Constants.appOwnership !== 'standalone') {
     behavior = 'web';
   }
+  behavior = 'system';
 
   let scopes = config.scopes;
   if (!scopes) {
     scopes = ['profile', 'email'];
   }
 
+  const androidClientId = Constants.appOwnership === 'standalone' ?
+    config.androidStandaloneAppClientId :
+    config.androidClientId;
+  const iosClientId = Constants.appOwnership === 'standalone' ?
+    config.iosStandaloneAppClientId :
+    config.iosClientId;
+
   const logInResult = await Google.logInAsync({
-    ...config,
+    androidClientId,
+    iosClientId,
     behavior,
     scopes,
   });
