@@ -1,17 +1,19 @@
 // @flow
 
 import React from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, StyleSheet } from 'react-native';
 
+import Constants from './Constants';
+import { processFontFamily } from './Font';
 import Notifications from './Notifications';
 
 function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
   class ExponentRootComponent extends React.Component {
     componentWillMount() {
-      let { exp } = this.props;
+      StyleSheet.setStyleAttributePreprocessor('fontFamily', processFontFamily);
 
-      if (exp.notification) {
-        Notifications._setInitialNotification(exp.notification);
+      if (this.props.exp.notification) {
+        Notifications._setInitialNotification(this.props.exp.notification);
       }
     }
 

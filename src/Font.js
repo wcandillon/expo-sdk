@@ -5,22 +5,41 @@ import {
 } from 'react-native';
 
 import Asset from './Asset';
-
-let sessionId;
-if (NativeModules.ExponentConstants) {
-  sessionId = NativeModules.ExponentConstants.sessionId;
-} else {
-  sessionId = 'NOT-EXPONENT';
-}
+import Constants from './Constants';
 
 function nativeName(name) {
-  return `${sessionId}-${name}`;
+  return `${Constants.sessionId}-${name}`;
 }
-
 
 const loaded = {};
 const loading = {};
 const onLoadPromises = {};
+
+export function processFontFamily(name: ?string) {
+  if (!name || Constants.systemFonts.includes(name)) {
+    return name;
+  }
+
+  if (name.includes(Constants.sessionId)) {
+    return name;
+  }
+
+  if (!isLoaded(name)) {
+    if (__DEV__) {
+      console.error(
+        `fontFamily '${name}' is not a system font and has not been loaded through ` +
+        `Exponent.Font.loadAsync.\n\n` +
+        `- If you intended to use a system font, make sure you typed the name ` +
+        `correctly and that it is supported by your device operating system.\n\n` +
+        `- If this is a custom font, be sure to load it with Exponent.Font.loadAsync.`
+      );
+    }
+
+    return 'system';
+  }
+
+  return `ExponentFont-${nativeName(name)}`;
+}
 
 export function isLoaded(name: string) {
   return !!loaded[name];
