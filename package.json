@@ -1,6 +1,6 @@
 {
   "name": "exponent",
-  "version": "11.0.3-rc.2",
+  "version": "12.0.0-rc.1",
   "description": "The Exponent SDK",
   "main": "src/index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "fbemitter": "^2.1.1",
     "md5-file": "^3.1.1",
     "react-native-maps": "git+https://github.com/exponentjs/react-native-maps#12853f0",
-    "react-native-svg": "git+https://github.com/exponentjs/react-native-svg#f566381",
+    "react-native-svg": "git+https://github.com/exponentjs/react-native-svg#51ff90cc",
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
