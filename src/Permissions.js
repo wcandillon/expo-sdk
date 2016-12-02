@@ -6,7 +6,7 @@ import {
 
 let { ExponentPermissions: Permissions } = NativeModules;
 
-type PermissionType = 'localNotifications' | 'remoteNotifications' | 'location' | 'camera';
+type PermissionType = 'remoteNotifications' | 'location' | 'camera';
 type PermissionStatus = 'undetermined' | 'granted' | 'denied';
 type PermissionExpires = 'never';
 type PermissionDetailsLocationIOS = {
@@ -31,6 +31,6 @@ export async function askAsync(type: PermissionType):Promise<PermissionResponse>
 }
 
 export const CAMERA = 'camera';
-export const LOCAL_NOTIFICATIONS = 'localNotifications';
 export const LOCATION = 'location';
 export const REMOTE_NOTIFICATIONS = 'remoteNotifications';
+export const NOTIFICATIONS = REMOTE_NOTIFICATIONS;

@@ -1,15 +1,19 @@
 // @flow
 
 import {
+  EventEmitter,
+  EventSubscription,
+} from 'fbemitter';
+
+import {
   DeviceEventEmitter,
   NativeModules,
   Platform,
 } from 'react-native';
 
-import {
-  EventEmitter,
-  EventSubscription,
-} from 'fbemitter';
+const {
+  ExponentNotifications,
+} = NativeModules;
 
 type Notification = {
   origin: 'selected' | 'received';
@@ -57,7 +61,11 @@ function _emitNotification(notification) {
   notification = { ...notification };
 
   if (typeof notification.data === 'string') {
-    notification.data = JSON.parse(notification.data);
+    try {
+      notification.data = JSON.parse(notification.data);
+    } catch(e) {
+      // It's actually just a string, that's fine
+    }
   }
 
   _emitter.emit('notification', notification);
@@ -70,7 +78,7 @@ export default {
   },
 
   /* Re-export, we can add flow here if we want as well */
-  getExponentPushTokenAsync: NativeModules.ExponentNotifications.getExponentPushTokenAsync,
+  getExponentPushTokenAsync: ExponentNotifications.getExponentPushTokenAsync,
 
   /* Shows a notification instantly */
   presentLocalNotification(notification: LocalNotification): Promise<LocalNotificationId> {
@@ -78,24 +86,31 @@ export default {
       notification = {...notification, data: {}};
     }
 
-    return NativeModules.ExponentNotifications.presentLocalNotification(notification);
+    return ExponentNotifications.presentLocalNotification(notification);
   },
 
   /* Schedule a notification at a later date */
   async scheduleLocalNotification(
     notification: LocalNotification,
-    opts: {
-      time?: Date;
+    options: {
+      time?: Date | number;
       repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
     }
   ): Promise<LocalNotificationId> {
-    return NativeModules.ExponentNotifications.scheduleLocalNotification(notification, opts);
+    if (options.time && options.time instanceof Date) {
+      options = {
+        ...options,
+        time: options.time.getTime(),
+      };
+    }
+
+    return ExponentNotifications.scheduleLocalNotification(notification, options);
   },
 
   /* Dismiss currently shown notification with ID (Android only) */
   async dismissNotification(notificationId: LocalNotificationId): Promise<void> {
     if (Platform.OS === 'android') {
-      return NativeModules.ExponentNotifications.dismissNotification(notificationId);
+      return ExponentNotifications.dismissNotification(notificationId);
     } else {
       return Promise.reject('Dismissing notifications is not supported on iOS');
     }
@@ -104,7 +119,7 @@ export default {
   /* Dismiss all currently shown notifications (Android only) */
   async dismissAllNotifications(): Promise<void> {
     if (Platform.OS === 'android') {
-      return NativeModules.ExponentNotifications.dismissAllNotifications();
+      return ExponentNotifications.dismissAllNotifications();
     } else {
       return Promise.reject('Dismissing notifications is not supported on iOS');
     }
@@ -112,12 +127,12 @@ export default {
 
   /* Cancel scheduled notification notification with ID */
   async cancelScheduledNotification(notificationId: LocalNotificationId): Promise<void> {
-    return NativeModules.ExponentNotifications.cancelScheduledNotification(notificationId);
+    return ExponentNotifications.cancelScheduledNotification(notificationId);
   },
 
   /* Cancel all scheduled notifications */
   async cancelAllScheduledNotifications(): Promise<void> {
-    return NativeModules.ExponentNotifications.cancelAllScheduledNotifications();
+    return ExponentNotifications.cancelAllScheduledNotifications();
   },
 
   /* Primary public api */
