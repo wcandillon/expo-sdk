@@ -30,6 +30,9 @@ type LocalNotification = {
   data?: any;
   silent?: boolean;
 
+  // This is iOS specific in order to vibrate / play a sound.
+  sound?: boolean;
+
   // This are Android specific, not supported/ on iOS. We should consider
   // renaming them.
   icon?: string;
