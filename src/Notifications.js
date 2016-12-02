@@ -5,6 +5,8 @@ import {
   EventSubscription,
 } from 'fbemitter';
 
+import invariant from 'invariant';
+
 import {
   DeviceEventEmitter,
   NativeModules,
@@ -26,7 +28,6 @@ type LocalNotification = {
   body?: string;
   data?: any;
   silent?: boolean;
-  count?: number;
 
   // This are Android specific, not supported
   // on iOS. We should consider renaming them.
@@ -71,6 +72,34 @@ function _emitNotification(notification) {
   _emitter.emit('notification', notification);
 }
 
+function _processNotification(notification) {
+  notification = Object.assign({}, notification);
+
+  if (!notification.data) {
+    notification.data = {};
+  }
+
+  if (notification.hasOwnProperty('count')) {
+    delete notification.count;
+  }
+
+  return notification;
+}
+
+function _validateNotification(notification) {
+  if (Platform.OS === 'ios') {
+    invariant(
+      !!notification.title && !!notification.body,
+      'Local notifications on iOS require both a title and a body'
+    );
+  } else if (Platform.OS === 'android') {
+    invariant(
+      !!notification.title,
+      'Local notifications on Android require a title'
+    );
+  }
+}
+
 export default {
   /* Only used internally to initialize the notification from top level props */
   _setInitialNotification(notification: Notification) {
@@ -82,9 +111,8 @@ export default {
 
   /* Shows a notification instantly */
   presentLocalNotification(notification: LocalNotification): Promise<LocalNotificationId> {
-    if (!notification.data) {
-      notification = {...notification, data: {}};
-    }
+    _validateNotification(notification);
+    notification = _processNotification(notification);
 
     return ExponentNotifications.presentLocalNotification(notification);
   },
@@ -97,6 +125,9 @@ export default {
       repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
     }
   ): Promise<LocalNotificationId> {
+    _validateNotification(notification);
+    notification = _processNotification(notification);
+
     if (options.time && options.time instanceof Date) {
       options = {
         ...options,
