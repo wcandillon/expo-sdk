@@ -74,6 +74,10 @@ export default {
 
   /* Shows a notification instantly */
   presentLocalNotification(notification: LocalNotification): Promise<LocalNotificationId> {
+    if (!notification.data) {
+      notification = {...notification, data: {}};
+    }
+
     return NativeModules.ExponentNotifications.presentLocalNotification(notification);
   },
 
