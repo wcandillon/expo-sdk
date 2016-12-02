@@ -25,12 +25,13 @@ type Notification = {
 
 type LocalNotification = {
   title: string;
+  // How should we deal with body being required on iOS but not on Android?
   body?: string;
   data?: any;
   silent?: boolean;
 
-  // This are Android specific, not supported
-  // on iOS. We should consider renaming them.
+  // This are Android specific, not supported/ on iOS. We should consider
+  // renaming them.
   icon?: string;
   color?: string;
   priority?: string;
