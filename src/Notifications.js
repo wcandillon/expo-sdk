@@ -29,18 +29,17 @@ type LocalNotification = {
   body?: string;
   data?: any;
   silent?: boolean;
-
-  // This is iOS specific in order to vibrate / play a sound.
-  sound?: boolean;
-
-  // This are Android specific, not supported/ on iOS. We should consider
-  // renaming them.
-  icon?: string;
-  color?: string;
-  priority?: string;
-  sticky?: boolean;
-  vibrate?: Array<number>;
-  link?: string;
+  ios?: {
+    sound?: boolean;
+  };
+  android?: {
+    icon?: string;
+    color?: string;
+    priority?: string;
+    sticky?: boolean;
+    vibrate?: Array<number>;
+    link?: string;
+  };
 }
 
 // Android assigns unique number to each notification natively.
@@ -87,6 +86,32 @@ function _processNotification(notification) {
     delete notification.count;
   }
 
+  // Delete any Android properties on iOS and merge the iOS properties on root
+  // notification object
+  if (Platform.OS === 'ios') {
+    if (notification.android) {
+      delete notification.android;
+    }
+
+    if (notification.ios) {
+      notification = Object.assign(notification, notification.ios);
+      delete notification.ios;
+    }
+  }
+
+  // Delete any iOS properties on Android and merge the Android properties on
+  // root notification object
+  if (Platform.OS === 'android') {
+    if (notification.ios) {
+      delete notification.ios;
+    }
+
+    if (notification.android) {
+      notification = Object.assign(notification, notification.android);
+      delete notification.android;
+    }
+  }
+
   return notification;
 }
 
@@ -114,7 +139,7 @@ export default {
   getExponentPushTokenAsync: ExponentNotifications.getExponentPushTokenAsync,
 
   /* Shows a notification instantly */
-  presentLocalNotification(notification: LocalNotification): Promise<LocalNotificationId> {
+  presentLocalNotificationAsync(notification: LocalNotification): Promise<LocalNotificationId> {
     _validateNotification(notification);
     notification = _processNotification(notification);
 
@@ -122,7 +147,7 @@ export default {
   },
 
   /* Schedule a notification at a later date */
-  async scheduleLocalNotification(
+  async scheduleLocalNotificationAsync(
     notification: LocalNotification,
     options: {
       time?: Date | number;
@@ -132,18 +157,27 @@ export default {
     _validateNotification(notification);
     notification = _processNotification(notification);
 
-    if (options.time && options.time instanceof Date) {
-      options = {
-        ...options,
-        time: options.time.getTime(),
-      };
+    if (Platform.OS === 'ios') {
+      if (options.time && options.time instanceof Date) {
+        options = {
+          ...options,
+          time: options.time.getTime(),
+        };
+      }
+    } else {
+      if (options.time && typeof options.time === 'number') {
+        options = {
+          ...options,
+          time: new Date(options.time),
+        };
+      }
     }
 
     return ExponentNotifications.scheduleLocalNotification(notification, options);
   },
 
   /* Dismiss currently shown notification with ID (Android only) */
-  async dismissNotification(notificationId: LocalNotificationId): Promise<void> {
+  async dismissNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissNotification(notificationId);
     } else {
@@ -152,7 +186,7 @@ export default {
   },
 
   /* Dismiss all currently shown notifications (Android only) */
-  async dismissAllNotifications(): Promise<void> {
+  async dismissAllNotificationsAsync(): Promise<void> {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissAllNotifications();
     } else {
@@ -161,12 +195,12 @@ export default {
   },
 
   /* Cancel scheduled notification notification with ID */
-  async cancelScheduledNotification(notificationId: LocalNotificationId): Promise<void> {
+  async cancelScheduledNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
     return ExponentNotifications.cancelScheduledNotification(notificationId);
   },
 
   /* Cancel all scheduled notifications */
-  async cancelAllScheduledNotifications(): Promise<void> {
+  async cancelAllScheduledNotificationsAsync(): Promise<void> {
     return ExponentNotifications.cancelAllScheduledNotifications();
   },
 
