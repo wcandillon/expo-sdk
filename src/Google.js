@@ -41,11 +41,11 @@ export async function logInAsync(
   if (!behavior) {
     behavior = 'system';
   }
+
   // Only standalone apps can use system login.
   if (behavior === 'system' && Constants.appOwnership !== 'standalone') {
     behavior = 'web';
   }
-  behavior = 'system';
 
   let scopes = config.scopes;
   if (!scopes) {
