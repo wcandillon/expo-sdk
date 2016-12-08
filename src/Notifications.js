@@ -37,7 +37,7 @@ type LocalNotification = {
     color?: string;
     priority?: string;
     sticky?: boolean;
-    vibrate?: Array<number>;
+    vibrate?: boolean | Array<number>;
     link?: string;
   };
 }
