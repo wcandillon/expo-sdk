@@ -28,11 +28,11 @@ type LocalNotification = {
   // How should we deal with body being required on iOS but not on Android?
   body?: string;
   data?: any;
-  silent?: boolean;
   ios?: {
     sound?: boolean;
   };
   android?: {
+    sound?: boolean;
     icon?: string;
     color?: string;
     priority?: string;
