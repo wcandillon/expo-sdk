@@ -9,19 +9,25 @@ import {
   View,
 } from 'react-native';
 
+import deprecatedPropType from 'react-native/Libraries/Utilities/deprecatedPropType';
+
 export default class BlurView extends Component {
   static propTypes = {
-    tintEffect: PropTypes.oneOf(['light', 'default', 'dark']),
+    tintEffect: deprecatedPropType(
+      PropTypes.string,
+      'Use the `tint` prop instead.'
+    ),
+    tint: PropTypes.oneOf(['light', 'default', 'dark']),
     ...View.propTypes,
   };
 
   render() {
-    let { tintEffect } = this.props;
+    let { tint } = this.props;
 
     let backgroundColor;
-    if (tintEffect === 'dark') {
+    if (tint === 'dark') {
       backgroundColor = 'rgba(0,0,0,0.5)';
-    } else if (tintEffect === 'light') {
+    } else if (tint === 'light') {
       backgroundColor = 'rgba(255,255,255,0.7)';
     } else {
       backgroundColor = 'rgba(255,255,255,0.4)';
