@@ -7,35 +7,43 @@ import {
   NativeModules,
 } from 'react-native';
 
-export const Amplitude = NativeModules.ExponentAmplitude;
-export const Crypto = NativeModules.ExponentCrypto;
-export const Fabric = NativeModules.ExponentFabric;
-export const Facebook = NativeModules.ExponentFacebook;
-export const FileSystem = NativeModules.ExponentFileSystem;
-export const ImageCropper = NativeModules.ExponentImageCropper;
-export const Segment = NativeModules.ExponentSegment;
-export const Util = NativeModules.ExponentUtil;
-
+// this is done for the side effects
 import './Logs';
 
-export * as Logs from './Logs';
+module.exports = {
+  // constants
+  get Amplitude() { return NativeModules.ExponentAmplitude; },
+  get Crypto() { return NativeModules.ExponentCrypto; },
+  get Fabric() { return NativeModules.ExponentFabric; },
+  get Facebook() { return NativeModules.ExponentFacebook; },
+  get FileSystem() { return NativeModules.ExponentFileSystem; },
+  get ImageCropper() { return NativeModules.ExponentImageCropper; },
+  get Segment() { return NativeModules.ExponentSegment; },
+  get Util() { return NativeModules.ExponentUtil; },
 
-export { default as registerRootComponent } from './registerRootComponent';
-export { default as takeSnapshotAsync } from './takeSnapshotAsync';
-export { default as Asset } from './Asset';
-export { default as apisAreAvailable } from './apisAreAvailable';
-export { default as Notifications } from './Notifications';
-export { default as Accelerometer } from './Accelerometer';
-export { default as Gyroscope } from './Gyroscope';
-export * as Constants from './Constants';
-export * as Contacts from './Contacts';
-export * as Font from './Font';
-export * as Google from './Google';
-export * as ImagePicker from './ImagePicker';
-export * as Location from './Location';
-export * as Permissions from './Permissions';
+  // defaults
+  get apisAreAvailable() { return require('./apisAreAvailable').default; },
+  get createTHREEViewClass() { return require('./createTHREEViewClass').default; },
+  get registerRootComponent() { return require('./registerRootComponent').default; },
+  get takeSnapshotAsync() { return require('./takeSnapshotAsync').default; },
+  get Asset() { return require('./Asset').default; },
+  get Accelerometer() { return require('./Accelerometer').default; },
+  get GLView() { return require('./GLView').default; },
+  get Gyroscope() { return require('./Gyroscope').default; },
+  get Notifications() { return require('./Notifications').default; },
 
-export * as Components from './Components';
+  // globs
+  get Components() { return require('./Components'); },
+  get Constants() { return require('./Constants'); },
+  get Contacts() { return require('./Contacts'); },
+  get Font() { return require('./Font'); },
+  get Google() { return require('./Google'); },
+  get ImagePicker() { return require('./ImagePicker'); },
+  get Location() { return require('./Location'); },
+  get Logs() { return require('./Logs'); },
+  get Permissions() { return require('./Permissions'); },
+};
 
-export { default as GLView } from './GLView';
-export { default as createTHREEViewClass } from './createTHREEViewClass';
+if (global) {
+  global.__exponent = module.exports;
+}
