@@ -90,6 +90,10 @@ export async function loadAsync(nameOrMap:any, uriOrModuleOrAsset:any) {
 
 
 export function style(name: string, options:{ignoreWarning: bool} = {ignoreWarning: false}) {
+  if (!name) {
+    return;
+  }
+
   if (!loaded[name] && !options.ignoreWarning) {
     console.warn(`[Exponent.Font] No font '${name}', or it hasn't been loaded yet`);
   }
