@@ -91,7 +91,9 @@ export async function loadAsync(nameOrMap:any, uriOrModuleOrAsset:any) {
 
 export function style(name: string, options:{ignoreWarning: bool} = {ignoreWarning: false}) {
   if (!name) {
-    return;
+    return {
+      fontFamily: undefined,
+    };
   }
 
   if (!loaded[name] && !options.ignoreWarning) {
