@@ -21,9 +21,9 @@ type LogInResult = {
   type: 'cancel',
 } | {
   type: 'success',
-  accessToken?: ?string,
-  idToken?: ?string,
-  serverAuthCode?: ?string,
+  accessToken: string,
+  idToken: ?string,
+  serverAuthCode: ?string,
   user: {
     id: string,
     name: string,
