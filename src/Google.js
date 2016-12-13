@@ -23,6 +23,7 @@ type LogInResult = {
   type: 'success',
   accessToken: string,
   idToken: ?string,
+  refreshToken: ?string,
   serverAuthCode: ?string,
   user: {
     id: string,
