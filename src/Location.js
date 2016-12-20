@@ -3,6 +3,7 @@
 import {
   NativeEventEmitter,
   NativeModules,
+  Platform,
 } from 'react-native';
 
 type LocationOptions = {
@@ -32,9 +33,18 @@ let watchCallbacks: { [watchId: number]: LocationCallback } = {};
 let deviceEventSubscription: ?Function;
 
 export function getCurrentPositionAsync(options: LocationOptions) {
+  // On Android we have a native method for this case.
+  if (Platform.OS === 'android') {
+    return NativeModules.ExponentLocation.getCurrentPositionAsync(options);
+  }
+
+  // On iOS we implement it in terms of `.watchPositionAsync(...)`
+  // TODO: Use separate native method for iOS too?
   return new Promise(async (resolve, reject) => {
     try {
-      let done = false;
+
+      let done = false; // To make sure we only resolve once.
+
       let subscription;
       subscription = await watchPositionAsync(options, (location) => {
         if (!done) {
@@ -45,6 +55,8 @@ export function getCurrentPositionAsync(options: LocationOptions) {
           subscription.remove();
         }
       });
+
+      // In case the callback is fired before we get here.
       if (done) {
         subscription.remove();
       }
