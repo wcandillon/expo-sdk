@@ -1,6 +1,6 @@
 {
   "name": "exponent",
-  "version": "12.0.4",
+  "version": "12.0.5",
   "description": "The Exponent SDK",
   "main": "src/Exponent.js",
   "scripts": {
