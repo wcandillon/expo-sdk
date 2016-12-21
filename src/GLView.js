@@ -61,6 +61,15 @@ global.WebGLRenderbuffer = class WebGLRenderbuffer extends WebGLObject {}
 global.WebGLShader = class WebGLShader extends WebGLObject {}
 global.WebGLTexture = class WebGLTexture extends WebGLObject {}
 
+const idToObject = {};
+const wrapObject = (type, id) => {
+  const found = idToObject[id];
+  if (found) {
+    return found;
+  }
+  return idToObject[id] = new type(id);
+}
+
 global.WebGLUniformLocation = class WebGLUniformLocation {
   constructor (id) {
     this.id = id; // Native GL object id
@@ -99,14 +108,14 @@ const wrapMethods = (gl) => {
   wrap('getParameter', (orig) => (pname) => {
     const ret = orig.call(gl, pname);
     const type = getParameterTypes[pname];
-    return type ? new type(ret) : ret;
+    return type ? wrapObject(type, ret) : ret;
   });
 
   // Buffers
   wrap('bindBuffer', (orig) => (target, buffer) =>
     orig.call(gl, target, buffer && buffer.id));
   wrap('createBuffer', (orig) => () =>
-    new WebGLBuffer(orig.call(gl)));
+    wrapObject(WebGLBuffer, orig.call(gl)));
   wrap('deleteBuffer', (orig) => (buffer) =>
     orig.call(gl, buffer && buffer.id));
 
@@ -114,7 +123,7 @@ const wrapMethods = (gl) => {
   wrap('bindFramebuffer', (orig) => (target, framebuffer) =>
     orig.call(gl, target, framebuffer && framebuffer.id));
   wrap('createFramebuffer', (orig) => () =>
-    new WebGLFramebuffer(orig.call(gl)));
+    wrapObject(WebGLFramebuffer, orig.call(gl)));
   wrap('deleteFramebuffer', (orig) => (framebuffer) =>
     orig.call(gl, framebuffer && framebuffer.id));
   wrap('framebufferRenderbuffer', (orig) => (target, attachment, rbtarget, rb) =>
@@ -126,7 +135,7 @@ const wrapMethods = (gl) => {
   wrap('bindRenderbuffer', (orig) => (target, renderbuffer) =>
     orig.call(gl, target, renderbuffer && renderbuffer.id));
   wrap('createRenderbuffer', (orig) => () =>
-    new WebGLRenderbuffer(orig.call(gl)));
+    wrapObject(WebGLRenderbuffer, orig.call(gl)));
   wrap('deleteRenderbuffer', (orig) => (renderbuffer) =>
     orig.call(gl, renderbuffer && renderbuffer.id));
 
@@ -134,7 +143,7 @@ const wrapMethods = (gl) => {
   wrap('bindTexture', (orig) => (target, texture) =>
     orig.call(gl, target, texture && texture.id));
   wrap('createTexture', (orig) => () =>
-    new WebGLTexture(orig.call(gl)));
+    wrapObject(WebGLTexture, orig.call(gl)));
   wrap('deleteTexture', (orig) => (texture) =>
     orig.call(gl, texture && texture.id));
 
@@ -146,9 +155,9 @@ const wrapMethods = (gl) => {
   wrap('compileShader', (orig) => (shader) =>
     orig.call(gl, shader && shader.id));
   wrap('createProgram', (orig) => () =>
-    new WebGLProgram(orig.call(gl)));
+    wrapObject(WebGLProgram, orig.call(gl)));
   wrap('createShader', (orig) => (type) =>
-    new WebGLShader(orig.call(gl, type)));
+    wrapObject(WebGLShader, orig.call(gl, type)));
   wrap('deleteProgram', (orig) => (program) =>
     orig.call(gl, program && program.id));
   wrap('deleteShader', (orig) => (shader) =>
@@ -156,7 +165,7 @@ const wrapMethods = (gl) => {
   wrap('detachShader', (orig) => (program, shader) =>
     orig.call(gl, program && program.id, shader && shader.id));
   wrap('getAttachedShaders', (orig) => (program) =>
-    orig.call(gl, program && program.id).map((id) => new WebGLShader(id)));
+    orig.call(gl, program && program.id).map((id) => wrapObject(WebGLShader, id)));
   wrap('getProgramParameter', (orig) => (program, pname) =>
     orig.call(gl, program && program.id, pname));
   wrap('getProgramInfoLog', (orig) => (program) =>
@@ -179,10 +188,10 @@ const wrapMethods = (gl) => {
     orig.call(gl, program && program.id));
 
   // Uniforms and attributes
-  wrap('getActiveAttrib', (orig) => (program, index) => new WebGLActiveInfo(
-    orig.call(gl, program && program.id, index)));
-  wrap('getActiveUniform', (orig) => (program, index) => new WebGLActiveInfo(
-    orig.call(gl, program && program.id, index)));
+  wrap('getActiveAttrib', (orig) => (program, index) =>
+    new WebGLActiveInfo(orig.call(gl, program && program.id, index)));
+  wrap('getActiveUniform', (orig) => (program, index) =>
+    new WebGLActiveInfo(orig.call(gl, program && program.id, index)));
   wrap('getAttribLocation', (orig) => (program, name) =>
     orig.call(gl, program && program.id, name));
   wrap('getUniform', (orig) => (program, location) =>
