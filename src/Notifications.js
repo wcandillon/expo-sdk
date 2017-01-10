@@ -21,6 +21,7 @@ type Notification = {
   origin: 'selected' | 'received';
   data: any;
   remote: boolean;
+  isMultiple: boolean;
 }
 
 type LocalNotification = {
