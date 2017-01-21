@@ -26,13 +26,22 @@ export function processFontFamily(name: ?string) {
 
   if (!isLoaded(name)) {
     if (__DEV__) {
-      console.error(
-        `fontFamily '${name}' is not a system font and has not been loaded through ` +
-        `Exponent.Font.loadAsync.\n\n` +
-        `- If you intended to use a system font, make sure you typed the name ` +
-        `correctly and that it is supported by your device operating system.\n\n` +
-        `- If this is a custom font, be sure to load it with Exponent.Font.loadAsync.`
-      );
+      if (isLoading(name)) {
+        console.error(
+          `You started loading '${name}', but used it before it finished loading\n\n` +
+          `- You need to wait for Exponent.Font.loadAsync to complete before using the font.\n\n` +
+          `- We recommend loading all fonts before rendering the app, and rendering only ` +
+          `Exponent.Components.AppLoading while waiting for loading to complete.`
+        );
+      } else {
+        console.error(
+          `fontFamily '${name}' is not a system font and has not been loaded through ` +
+          `Exponent.Font.loadAsync.\n\n` +
+          `- If you intended to use a system font, make sure you typed the name ` +
+          `correctly and that it is supported by your device operating system.\n\n` +
+          `- If this is a custom font, be sure to load it with Exponent.Font.loadAsync.`
+        );
+      }
     }
 
     return 'system';
@@ -43,6 +52,10 @@ export function processFontFamily(name: ?string) {
 
 export function isLoaded(name: string) {
   return !!loaded[name];
+}
+
+export function isLoading(name: string) {
+  return !!onLoadPromises[name];
 }
 
 export async function loadAsync(nameOrMap:any, uriOrModuleOrAsset:any) {
