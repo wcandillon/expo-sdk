@@ -229,4 +229,18 @@ export default {
 
     return _emitter.addListener('notification', listener);
   },
+
+  async getBadgeNumberAsync(): Promise<number> {
+    if (!ExponentNotifications.getBadgeNumberAsync) {
+      return 0;
+    }
+    return ExponentNotifications.getBadgeNumberAsync();
+  },
+
+  async setBadgeNumberAsync(number: number): Promise<void> {
+    if (!ExponentNotifications.setBadgeNumberAsync) {
+      return;
+    }
+    return ExponentNotifications.setBadgeNumberAsync(number);
+  },
 };

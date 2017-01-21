@@ -31,6 +31,8 @@
 .*/node_modules/react-native/Libraries/EventEmitter/EmitterSubscription.js
 .*/node_modules/react-native/Libraries/EventEmitter/EventSubscription.js
 
+.*/node_modules/jest-resolve/.*
+
 [include]
 
 [libs]
@@ -63,4 +65,4 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 unsafe.enable_getters_and_setters=true
 
 [version]
-^0.33.0
+^0.36.0
