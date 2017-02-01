@@ -53,6 +53,9 @@ global.WebGLObject = class WebGLObject {
   constructor (id) {
     this.id = id; // Native GL object id
   }
+  toString() {
+    return `[WebGLObject ${this.id}]`;
+  }
 }
 global.WebGLBuffer = class WebGLBuffer extends WebGLObject {}
 global.WebGLFramebuffer = class WebGLFramebuffer extends WebGLObject {}
@@ -118,6 +121,8 @@ const wrapMethods = (gl) => {
     wrapObject(WebGLBuffer, orig.call(gl)));
   wrap('deleteBuffer', (orig) => (buffer) =>
     orig.call(gl, buffer && buffer.id));
+  wrap('isBuffer', (orig) => (buffer) =>
+    buffer instanceof WebGLBuffer && orig.call(gl, buffer.id));
 
   // Framebuffers
   wrap('bindFramebuffer', (orig) => (target, framebuffer) =>
@@ -130,6 +135,8 @@ const wrapMethods = (gl) => {
     orig.call(gl, target, attachment, rbtarget, rb && rb.id));
   wrap('framebufferTexture2D', (orig) => (target, attachment, textarget, tex, level) =>
     orig.call(gl, target, attachment, textarget, tex && tex.id, level));
+  wrap('isFramebuffer', (orig) => (framebuffer) =>
+    framebuffer instanceof WebGLFramebuffer && orig.call(gl, framebuffer.id));
 
   // Renderbuffers
   wrap('bindRenderbuffer', (orig) => (target, renderbuffer) =>
@@ -138,6 +145,8 @@ const wrapMethods = (gl) => {
     wrapObject(WebGLRenderbuffer, orig.call(gl)));
   wrap('deleteRenderbuffer', (orig) => (renderbuffer) =>
     orig.call(gl, renderbuffer && renderbuffer.id));
+  wrap('isRenderbuffer', (orig) => (renderbuffer) =>
+    renderbuffer instanceof WebGLRenderbuffer && orig.call(gl, renderbuffer.id));
 
   // Textures
   wrap('bindTexture', (orig) => (target, texture) =>
@@ -146,6 +155,8 @@ const wrapMethods = (gl) => {
     wrapObject(WebGLTexture, orig.call(gl)));
   wrap('deleteTexture', (orig) => (texture) =>
     orig.call(gl, texture && texture.id));
+  wrap('isTexture', (orig) => (texture) =>
+    texture instanceof WebGLTexture && orig.call(gl, texture.id));
 
   // Programs and shaders
   wrap('attachShader', (orig) => (program, shader) =>
@@ -186,6 +197,10 @@ const wrapMethods = (gl) => {
     orig.call(gl, program && program.id));
   wrap('validateProgram', (orig) => (program) =>
     orig.call(gl, program && program.id));
+  wrap('isShader', (orig) => (shader) =>
+    shader instanceof WebGLShader && orig.call(gl, shader.id));
+  wrap('isProgram', (orig) => (program) =>
+    program instanceof WebGLProgram && orig.call(gl, program.id));
 
   // Uniforms and attributes
   wrap('getActiveAttrib', (orig) => (program, index) =>
