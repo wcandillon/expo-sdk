@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View, requireNativeComponent } from 'react-native';
+import { View, Platform, requireNativeComponent } from 'react-native';
 
 
 // A component that acts as an OpenGL render target.
@@ -13,12 +13,19 @@ export default class GLView extends React.Component {
     // WebGLRenderingContext.
     onContextCreate: PropTypes.func,
 
+    // [iOS only] Number of samples for Apple's built-in multisampling.
+    msaaSamples: PropTypes.number,
+
     ...View.propTypes,
   }
 
+  static defaultProps = {
+    msaaSamples: 4,
+  };
+
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { onContextCreate, ...viewProps } = this.props;
+    const { onContextCreate, msaaSamples, ...viewProps } = this.props;
 
     // NOTE: Removing `backgroundColor: 'transparent'` causes a performance
     //       regression. Not sure why yet...
@@ -27,6 +34,7 @@ export default class GLView extends React.Component {
         <GLView.NativeView
           style={{ flex: 1, backgroundColor: 'transparent' }}
           onSurfaceCreate={this._onSurfaceCreate}
+          msaaSamples={Platform.OS === 'ios' ? msaaSamples : undefined}
         />
       </View>
     );
