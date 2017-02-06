@@ -1,6 +1,7 @@
 export AppLoading from './AppLoading';
 export BarCodeScanner from './BarCodeScanner';
 export BlurView from './BlurView';
+export KeepAwake from './KeepAwake';
 export LinearGradient from './LinearGradient';
 export MapView from 'react-native-maps';
 export Video from './Video';
