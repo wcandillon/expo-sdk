@@ -111,16 +111,6 @@ function _processNotification(notification) {
       notification = Object.assign(notification, notification.android);
       delete notification.android;
     }
-
-    // TODO: Remove this in SDK13, pending native changes from
-    // https://git.io/v1wGX
-    if (notification.silent === false) {
-      if (!notification.hasOwnProperty('sound')) {
-        notification.sound = true;
-      }
-
-      delete notification.silent;
-    }
   }
 
   return notification;
