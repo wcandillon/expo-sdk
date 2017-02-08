@@ -36,6 +36,7 @@ module.exports = {
   get Components() { return require('./Components'); },
   get Constants() { return require('./Constants'); },
   get Contacts() { return require('./Contacts'); },
+  get DangerZone() { return require('./DangerZone'); },
   get Font() { return require('./Font'); },
   get Google() { return require('./Google'); },
   get ImagePicker() { return require('./ImagePicker'); },

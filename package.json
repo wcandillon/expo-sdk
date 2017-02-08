@@ -24,8 +24,10 @@
   },
   "homepage": "https://github.com/exponent/exponent-sdk",
   "dependencies": {
+    "babel-preset-airbnb": "^2.2.3",
     "babel-preset-exponent": "1.0.0",
     "fbemitter": "^2.1.1",
+    "lottie-react-native": "1.0.1",
     "md5-file": "^3.1.1",
     "react-native-maps": "git+https://github.com/exponent/react-native-maps#v0.12.2-exp.1",
     "react-native-svg": "git+https://github.com/exponent/react-native-svg#4.4.1",
