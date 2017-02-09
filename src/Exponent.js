@@ -18,6 +18,7 @@ module.exports = {
   get Facebook() { return NativeModules.ExponentFacebook; },
   get FileSystem() { return NativeModules.ExponentFileSystem; },
   get ImageCropper() { return NativeModules.ExponentImageCropper; },
+  get WebBrowser() { return NativeModules.ExponentWebBrowser; },
   get Segment() { return NativeModules.ExponentSegment; },
   get Util() { return NativeModules.ExponentUtil; },
 
