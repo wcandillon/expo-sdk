@@ -34,6 +34,7 @@ module.exports = {
   get Notifications() { return require('./Notifications').default; },
 
   // globs
+  get Audio() { return require('./Audio'); },
   get Components() { return require('./Components'); },
   get Constants() { return require('./Constants'); },
   get Contacts() { return require('./Contacts'); },
