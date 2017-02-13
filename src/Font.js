@@ -16,7 +16,7 @@ const loading = {};
 const onLoadPromises = {};
 
 export function processFontFamily(name: ?string) {
-  if (!name || Constants.systemFonts.includes(name)) {
+  if (!name || Constants.systemFonts.includes(name) || name === 'System') {
     return name;
   }
 
@@ -44,7 +44,7 @@ export function processFontFamily(name: ?string) {
       }
     }
 
-    return 'system';
+    return 'System';
   }
 
   return `ExponentFont-${nativeName(name)}`;
