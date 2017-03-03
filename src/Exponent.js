@@ -45,6 +45,7 @@ module.exports = {
   get Location() { return require('./Location'); },
   get Logs() { return require('./Logs'); },
   get Permissions() { return require('./Permissions'); },
+  get FacebookAds() { return require('./FacebookAds'); },
 };
 
 if (global) {

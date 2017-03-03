@@ -31,6 +31,7 @@
     "md5-file": "^3.1.1",
     "react-native-maps": "https://github.com/exponent/react-native-maps/archive/v0.12.2-exp.1.tar.gz",
     "react-native-svg": "https://github.com/exponent/react-native-svg/archive/4.4.1.tar.gz",
+    "react-native-fbads": "https://github.com/callstack-io/react-native-fbads/tarball/v4.1.0",
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
