@@ -1,7 +1,7 @@
-Exponent SDK
-============
+Expo SDK
+========
 
-The Exponent SDK provides access to system functionality such as contacts,
-camera, location for Exponent apps.
+The Expo SDK provides access to system functionality such as contacts,
+camera, location for Expo apps.
 
-[Read the full Exponent SDK docs](https://docs.getexponent.com/versions/latest/sdk/index.html).
+[Read the full Expo SDK docs](https://docs.expo.io/versions/latest/sdk/index.html).

@@ -1,31 +1,31 @@
 {
-  "name": "exponent",
-  "version": "14.0.0",
-  "description": "The Exponent SDK",
-  "main": "src/Exponent.js",
+  "name": "expo",
+  "version": "14.0.2",
+  "description": "The Expo SDK",
+  "main": "src/Expo.js",
   "scripts": {
     "flow": "flow",
     "test": "node_modules/jest/bin/jest.js"
   },
   "jest": {
-    "preset": "jest-exponent"
+    "preset": "jest-expo"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/exponent/exponent-sdk.git"
+    "url": "https://github.com/expo/expo-sdk.git"
   },
   "keywords": [
-    "exponent"
+    "expo"
   ],
   "author": "Exponent",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/exponent/exponent-sdk/issues"
+    "url": "https://github.com/expo/expo-sdk/issues"
   },
-  "homepage": "https://github.com/exponent/exponent-sdk",
+  "homepage": "https://github.com/expo/expo-sdk",
   "dependencies": {
     "babel-preset-airbnb": "^2.2.3",
-    "babel-preset-exponent": "1.0.0",
+    "babel-preset-expo": "1.0.0",
     "fbemitter": "^2.1.1",
     "lottie-react-native": "1.0.1",
     "md5-file": "^3.1.1",
@@ -37,7 +37,8 @@
   "devDependencies": {
     "flow-bin": "^0.39.0",
     "jest": "^19.0.2",
-    "jest-exponent": "^0.3.0-beta.0",
+    "jest-expo": "^0.3.0-beta.0",
+    "flow-bin": "^0.37.0",
     "react": "~15.4.2",
     "react-native": "exponent/react-native#sdk-15"
   }
