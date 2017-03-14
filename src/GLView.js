@@ -3,6 +3,8 @@
 import React, { PropTypes } from 'react';
 import { View, Platform, requireNativeComponent } from 'react-native';
 
+import * as Constants from './Constants';
+
 
 // A component that acts as an OpenGL render target.
 
@@ -117,7 +119,11 @@ const wrapMethods = (gl) => {
     [gl.TEXTURE_BINDING_CUBE_MAP]: WebGLTexture,
   };
   wrap('getParameter', (orig) => (pname) => {
-    const ret = orig.call(gl, pname);
+    let ret = orig.call(gl, pname);
+    if (pname === gl.VERSION) {
+      // Wrap native version name
+      ret = `WebGL 1.0 (Expo-${Platform.OS}-${Constants.expoVersion}) (${ret})`;
+    }
     const type = getParameterTypes[pname];
     return type ? wrapObject(type, ret) : ret;
   });
