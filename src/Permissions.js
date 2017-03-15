@@ -6,7 +6,7 @@ import {
 
 let { ExponentPermissions: Permissions } = NativeModules;
 
-type PermissionType = 'remoteNotifications' | 'location' | 'camera';
+type PermissionType = 'remoteNotifications' | 'location' | 'camera' | 'contacts';
 type PermissionStatus = 'undetermined' | 'granted' | 'denied';
 type PermissionExpires = 'never';
 type PermissionDetailsLocationIOS = {
@@ -34,3 +34,4 @@ export const CAMERA = 'camera';
 export const LOCATION = 'location';
 export const REMOTE_NOTIFICATIONS = 'remoteNotifications';
 export const NOTIFICATIONS = REMOTE_NOTIFICATIONS;
+export const CONTACTS = 'contacts';
