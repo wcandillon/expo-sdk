@@ -67,12 +67,34 @@ module.exports = {
     return require('./Notifications').default;
   },
 
+  get AppLoading() {
+    return require('./AppLoading').default;
+  },
+  get BarCodeScanner() {
+    return require('./BarCodeScanner').default;
+  },
+  get BlurView() {
+    return require('./BlurView').default;
+  },
+  get KeepAwake() {
+    return require('./KeepAwake').default;
+  },
+  get LinearGradient() {
+    return require('./LinearGradient').default;
+  },
+  get MapView() {
+    return require('react-native-maps');
+  },
+  get Video() {
+    return require('./Video').default;
+  },
+  get Svg() {
+    return require('./Svg').default;
+  },
+
   // globs
   get Audio() {
     return require('./Audio');
-  },
-  get Components() {
-    return require('./Components');
   },
   get Constants() {
     return require('./Constants');
@@ -108,6 +130,30 @@ module.exports = {
     return require('./FacebookAds');
   },
 };
+
+// add deprecated `Components` module
+let Components;
+Object.defineProperty(module.exports, 'Components', {
+  get() {
+    if (!Components) {
+      console.warn(
+        "Components under `Expo.Components` have been moved to the root `Expo` namespace. " +
+        "For example, `Expo.Components.Video` is now `Expo.Video`. The `Expo.Components` " +
+        "namespace is now deprecated and will be removed in version 17.0.0 of 'expo'.");
+      Components = {
+        AppLoading: module.exports.AppLoading,
+        BarCodeScanner: module.exports.BarCodeScanner,
+        BlurView: module.exports.BlurView,
+        KeepAwake: module.exports.KeepAwake,
+        LinearGradient: module.exports.LinearGradient,
+        MapView: module.exports.MapView,
+        Video: module.exports.Video,
+        Svg: module.exports.Svg,
+      };
+    }
+    return Components;
+  }
+})
 
 if (global) {
   global.__exponent = module.exports;

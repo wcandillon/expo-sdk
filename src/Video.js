@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactNative from 'react-native';
 
-import Asset from '../Asset';
+import Asset from './Asset';
 
 const {
   Component,
