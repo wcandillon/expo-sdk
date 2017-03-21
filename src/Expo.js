@@ -4,9 +4,14 @@
  */
 
 import { NativeModules } from 'react-native';
+import Constants from './Constants';
 
 // this is done for the side effects
 import './Logs';
+
+if (Constants.manifest && typeof Constants.manifest.env === 'object') {
+  Object.assign(process.env, Constants.manifest.env);
+}
 
 module.exports = {
   // constants
