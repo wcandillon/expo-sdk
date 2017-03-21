@@ -6,8 +6,9 @@
 import { NativeModules } from 'react-native';
 import Constants from './Constants';
 
-// this is done for the side effects
-import './Logs';
+// These are done for the side effects
+import './Logs'; // set up Expo logging infra
+import './Location'; // polyfill navigator.geolocation
 
 if (Constants.manifest && typeof Constants.manifest.env === 'object') {
   Object.assign(process.env, Constants.manifest.env);
@@ -142,9 +143,10 @@ Object.defineProperty(module.exports, 'Components', {
   get() {
     if (!Components) {
       console.warn(
-        "Components under `Expo.Components` have been moved to the root `Expo` namespace. " +
-        "For example, `Expo.Components.Video` is now `Expo.Video`. The `Expo.Components` " +
-        "namespace is now deprecated and will be removed in version 17.0.0 of 'expo'.");
+        'Components under `Expo.Components` have been moved to the root `Expo` namespace. ' +
+          'For example, `Expo.Components.Video` is now `Expo.Video`. The `Expo.Components` ' +
+          "namespace is now deprecated and will be removed in version 17.0.0 of 'expo'."
+      );
       Components = {
         AppLoading: module.exports.AppLoading,
         BarCodeScanner: module.exports.BarCodeScanner,
@@ -157,9 +159,10 @@ Object.defineProperty(module.exports, 'Components', {
       };
     }
     return Components;
-  }
-})
+  },
+});
 
 if (global) {
   global.__exponent = module.exports;
+  global.__expo = module.exports;
 }
