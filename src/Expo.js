@@ -124,7 +124,7 @@ module.exports = {
     return require('./ImagePicker');
   },
   get Location() {
-    return require('./Location');
+    return require('./Location').default;
   },
   get Logs() {
     return require('./Logs');

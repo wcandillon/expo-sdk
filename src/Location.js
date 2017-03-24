@@ -1,9 +1,11 @@
 // @flow
-
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import * as Permissions from './Permissions';
 import invariant from 'invariant';
 
+const LocationEventEmitter = new NativeEventEmitter(
+  NativeModules.ExponentLocation
+);
 type LocationOptions = {
   enableHighAccuracy: ?boolean,
   timeInterval: ?number,
@@ -25,13 +27,20 @@ type LocationData = {
 type LocationCallback = (data: LocationData) => any;
 
 const { ExponentLocation } = NativeModules;
-const LocationEventEmitter = new NativeEventEmitter(ExponentLocation);
 
 let nextWatchId = 0;
+function _getNextWatchId() {
+  nextWatchId++;
+  return nextWatchId;
+}
+function _getCurrentWatchId() {
+  return nextWatchId;
+}
+
 let watchCallbacks: { [watchId: number]: LocationCallback } = {};
 let deviceEventSubscription: ?Function;
 
-export function getCurrentPositionAsync(options: LocationOptions) {
+function getCurrentPositionAsync(options: LocationOptions) {
   // On Android we have a native method for this case.
   if (Platform.OS === 'android') {
     return ExponentLocation.getCurrentPositionAsync(options);
@@ -42,7 +51,6 @@ export function getCurrentPositionAsync(options: LocationOptions) {
   return new Promise(async (resolve, reject) => {
     try {
       let done = false; // To make sure we only resolve once.
-
       let subscription;
       subscription = await watchPositionAsync(options, location => {
         if (!done) {
@@ -99,21 +107,20 @@ function watchPosition(
 ) {
   _maybeInitializeEmitterSubscription();
 
-  const watchId = nextWatchId++;
+  const watchId = _getNextWatchId();
   watchCallbacks[watchId] = success;
-
   _askPermissionForWatchAsync(success, error, options, watchId);
 
   return watchId;
 }
 
-export async function watchPositionAsync(
+async function watchPositionAsync(
   options: LocationOptions,
   callback: LocationCallback
 ) {
   _maybeInitializeEmitterSubscription();
 
-  const watchId = nextWatchId++;
+  const watchId = _getNextWatchId();
   watchCallbacks[watchId] = callback;
   await ExponentLocation.watchPositionImplAsync(watchId, options);
 
@@ -125,7 +132,7 @@ export async function watchPositionAsync(
 }
 
 // Polyfill: navigator.geolocation.clearWatch
-function clearWatch(watchId) {
+function clearWatch(watchId: number) {
   _removeWatcher(watchId);
 }
 
@@ -174,7 +181,7 @@ async function _getCurrentPositionAsyncWrapper(
       );
     }
 
-    let result = await getCurrentPositionAsync(options);
+    let result = await Location.getCurrentPositionAsync(options);
     success(result);
   } catch (e) {
     error(e);
@@ -183,7 +190,7 @@ async function _getCurrentPositionAsyncWrapper(
 
 // Polyfill navigator.geolocation for interop with the core react-native and
 // web API approach to geolocation
-window.navigator.geolocation = {
+const _polyfill = {
   getCurrentPosition,
   watchPosition,
   clearWatch,
@@ -192,3 +199,16 @@ window.navigator.geolocation = {
   // should not even exist in react-native docs
   stopObserving: () => {},
 };
+window.navigator.geolocation = _polyfill;
+
+const Location = {
+  getCurrentPositionAsync,
+  watchPositionAsync,
+
+  // For internal purposes  LocationEventEmitter,
+  EventEmitter: LocationEventEmitter,
+  _polyfill,
+  _getCurrentWatchId,
+};
+
+export default Location;

@@ -1,11 +1,13 @@
-jest.doMock('RCTDeviceEventEmitter', () => new (require('fbemitter').EventEmitter));
+jest.doMock(
+  'RCTDeviceEventEmitter',
+  () => new (require('fbemitter').EventEmitter)()
+);
 jest.useFakeTimers();
-
 import Notifications from '../Notifications';
 import { EventEmitter } from 'fbemitter';
 
-const mockNotificationObject = {origin: 'selected', data: {}};
-const mockNotificationString = JSON.stringify({origin: 'received', data: {}});
+const mockNotificationObject = { origin: 'selected', data: {} };
+const mockNotificationString = JSON.stringify({ origin: 'received', data: {} });
 
 describe('Notifications', () => {
   it('emits the initial notification to listeners', () => {
@@ -17,7 +19,6 @@ describe('Notifications', () => {
     jest.runAllTimers();
     expect(callback).toHaveBeenCalledWith(mockNotificationObject);
   });
-
 
   it('only emits the initial notification once', () => {
     Notifications._setInitialNotification(mockNotificationObject);
@@ -65,11 +66,14 @@ describe('Notifications', () => {
     const callback = jest.fn();
     Notifications.addListener(callback);
 
-    const data = JSON.stringify({a: 'b'});
-    const mockNotificationObjectWithDataString = {origin: 'selected', data};
+    const data = JSON.stringify({ a: 'b' });
+    const mockNotificationObjectWithDataString = { origin: 'selected', data };
     emitNativeNotification(mockNotificationObjectWithDataString);
 
-    let expectedResult = {...mockNotificationObjectWithDataString, data: JSON.parse(data)};
+    let expectedResult = {
+      ...mockNotificationObjectWithDataString,
+      data: JSON.parse(data),
+    };
     expect(callback).toHaveBeenCalledWith(expectedResult);
   });
 
