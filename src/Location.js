@@ -87,9 +87,6 @@ function _maybeInitializeEmitterSubscription() {
 }
 
 async function _askPermissionForWatchAsync(success, error, options, watchId) {
-  // TODO: test what happens when permission hasn't been requested yet
-  // what do we return here? do we just init the watchId and then
-  // remove it?
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status === 'granted') {
     ExponentLocation.watchPositionImplAsync(watchId, options);
