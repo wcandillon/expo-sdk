@@ -72,6 +72,9 @@ module.exports = {
   get Notifications() {
     return require('./Notifications').default;
   },
+  get SQLite() {
+    return require('./SQLite').default;
+  },
 
   get AppLoading() {
     return require('./AppLoading').default;
