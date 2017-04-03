@@ -7,10 +7,8 @@ import {
   View,
 } from 'react-native';
 
-const BarCodeScannerManager = (
-  NativeModules.ExponentBarCodeScannerManager ||
-  NativeModules.ExponentBarCodeScannerModule
-);
+const BarCodeScannerManager = NativeModules.ExponentBarCodeScannerManager ||
+  NativeModules.ExponentBarCodeScannerModule;
 
 function convertNativeProps(props) {
   const newProps = { ...props };
@@ -31,21 +29,15 @@ export default class BarCodeScanner extends React.Component {
   static Constants = {
     BarCodeType: BarCodeScannerManager.BarCodeType,
     Type: BarCodeScannerManager.Type,
-    TorchMode: BarCodeScannerManager.TorchMode
+    TorchMode: BarCodeScannerManager.TorchMode,
   };
 
   static propTypes = {
     ...View.propTypes,
     onBarCodeRead: PropTypes.func,
     barCodeTypes: PropTypes.array,
-    torchMode: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    type: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ])
+    torchMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
   static defaultProps = {
@@ -69,15 +61,17 @@ export default class BarCodeScanner extends React.Component {
     );
   }
 
-  _onBarCodeRead = ({nativeEvent}) => {
-    if (this._lastEvent &&
-        JSON.stringify(nativeEvent) === this._lastEvent &&
-        (new Date() - this._lastEventTime) < EventThrottleMs) {
+  _onBarCodeRead = ({ nativeEvent }) => {
+    if (
+      this._lastEvent &&
+      JSON.stringify(nativeEvent) === this._lastEvent &&
+      new Date() - this._lastEventTime < EventThrottleMs
+    ) {
       return;
     }
 
     if (this.props.onBarCodeRead) {
-      this.props.onBarCodeRead(nativeEvent)
+      this.props.onBarCodeRead(nativeEvent);
       this._lastEvent = JSON.stringify(nativeEvent);
       this._lastEventTime = new Date();
     }
@@ -86,8 +80,12 @@ export default class BarCodeScanner extends React.Component {
 
 export const Constants = BarCodeScanner.Constants;
 
-const ExponentBarCodeScanner = requireNativeComponent('ExponentBarCodeScanner', BarCodeScanner, {
-  nativeOnly: {
-    onBarCodeRead: true,
-  },
-});
+const ExponentBarCodeScanner = requireNativeComponent(
+  'ExponentBarCodeScanner',
+  BarCodeScanner,
+  {
+    nativeOnly: {
+      onBarCodeRead: true,
+    },
+  }
+);

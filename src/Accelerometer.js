@@ -3,4 +3,7 @@ import createSensorWrapper from './lib/createSensorWrapper';
 
 const { ExponentAccelerometer } = NativeModules;
 
-export default createSensorWrapper(ExponentAccelerometer, 'accelerometerDidUpdate');
+export default createSensorWrapper(
+  ExponentAccelerometer,
+  'accelerometerDidUpdate'
+);

@@ -44,18 +44,15 @@ class NativeAdsManager {
    * callers will be notified of a change
    */
   _listenForStateChanges() {
-    nativeAdEmitter.addListener(
-      'CTKNativeAdsManagersChanged',
-      managers => {
-        const isValidNew = managers[this.placementId];
-        const isValid = this.isValid;
+    nativeAdEmitter.addListener('CTKNativeAdsManagersChanged', managers => {
+      const isValidNew = managers[this.placementId];
+      const isValid = this.isValid;
 
-        if (isValid !== isValidNew && isValidNew) {
-          this.isValid = true;
-          this.eventEmitter.emit(EVENT_DID_BECOME_VALID);
-        }
-      },
-    );
+      if (isValid !== isValidNew && isValidNew) {
+        this.isValid = true;
+        this.eventEmitter.emit(EVENT_DID_BECOME_VALID);
+      }
+    });
   }
 
   /**

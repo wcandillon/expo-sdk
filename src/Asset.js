@@ -1,27 +1,25 @@
 'use strict';
 
-import {
-  NativeModules,
-  PixelRatio,
-  Platform,
-} from 'react-native';
+import { NativeModules, PixelRatio, Platform } from 'react-native';
 
 import AssetRegistry from 'react-native/Libraries/Image/AssetRegistry';
-import AssetSourceResolver from  'react-native/Libraries/Image/AssetSourceResolver';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import AssetSourceResolver
+  from 'react-native/Libraries/Image/AssetSourceResolver';
+import resolveAssetSource
+  from 'react-native/Libraries/Image/resolveAssetSource';
 
 import { manifest } from './Constants';
 
 // Return { uri, hash } for an asset's file, picking the correct scale, based on
 // its React Native metadata. If the asset isn't an image just picks the first
 // file.
-const pickScale = (meta) => {
+const pickScale = meta => {
   // This logic is based on that in AssetSourceResolver.js, we just do it with
   // our own tweaks for Exponent
 
-  const scale = meta.scales.length > 1 ?
-                AssetSourceResolver.pickScale(meta.scales, PixelRatio.get()) :
-                1;
+  const scale = meta.scales.length > 1
+    ? AssetSourceResolver.pickScale(meta.scales, PixelRatio.get())
+    : 1;
   const index = meta.scales.findIndex(s => s === scale);
   const hash = meta.fileHashes[index] || meta.fileHashes[0];
 
@@ -30,9 +28,16 @@ const pickScale = (meta) => {
     const suffix = scale === 1 ? '' : '@' + scale + 'x';
     return {
       uri: manifest.bundleUrl.match(/^https?:\/\/.*?\//)[0] +
-           meta.httpServerLocation.replace(/^\/?/, '') +
-           '/' + meta.name + suffix + '.' + meta.type +
-           '?platform=' + Platform.OS + '&hash=' + meta.hash,
+        meta.httpServerLocation.replace(/^\/?/, '') +
+        '/' +
+        meta.name +
+        suffix +
+        '.' +
+        meta.type +
+        '?platform=' +
+        Platform.OS +
+        '&hash=' +
+        meta.hash,
       hash,
     };
   }
@@ -101,14 +106,28 @@ export default class Asset {
     try {
       const path = `ExponentAsset-${this.hash}.${this.type}`;
       let exists, md5, uri;
-      ({ exists, md5, uri } = await NativeModules.ExponentFileSystem.getInfoAsync(
-        path, { cache: true, md5: true }));
+      ({
+        exists,
+        md5,
+        uri,
+      } = await NativeModules.ExponentFileSystem.getInfoAsync(path, {
+        cache: true,
+        md5: true,
+      }));
       if (!exists || md5 !== this.hash) {
-        ({ md5, uri } = await NativeModules.ExponentFileSystem.downloadAsync(
-          this.uri, path, { cache: true, md5: true }));
+        ({
+          md5,
+          uri,
+        } = await NativeModules.ExponentFileSystem.downloadAsync(
+          this.uri,
+          path,
+          { cache: true, md5: true }
+        ));
         if (md5 !== this.hash) {
-          throw new Error(`Downloaded file for asset '${this.name}.${this.type}' ` +
-                          `failed MD5 integrity check`);
+          throw new Error(
+            `Downloaded file for asset '${this.name}.${this.type}' ` +
+              `failed MD5 integrity check`
+          );
         }
       }
       this.localUri = uri;
@@ -125,11 +144,10 @@ export default class Asset {
 }
 
 // Override React Native's asset resolution for `Image` components
-resolveAssetSource.setCustomSourceTransformer((resolver) => {
+resolveAssetSource.setCustomSourceTransformer(resolver => {
   if (!resolver.asset.moduleId) {
     return resolver.fromSource(pickScale(resolver.asset).uri);
   }
   const asset = Asset.fromModule(resolver.asset.moduleId);
   return resolver.fromSource(asset.downloaded ? asset.localUri : asset.uri);
 });
-

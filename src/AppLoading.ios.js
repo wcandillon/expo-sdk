@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-import {
-  NativeModules,
-  requireNativeComponent,
-} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
 const NativeAppLoading = requireNativeComponent('ExponentAppLoading', null);
 

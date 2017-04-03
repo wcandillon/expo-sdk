@@ -1,47 +1,40 @@
 // @flow
 
-import {
-  EventEmitter,
-  EventSubscription,
-} from 'fbemitter';
+import { EventEmitter, EventSubscription } from 'fbemitter';
 
 import invariant from 'invariant';
 
-import {
-  DeviceEventEmitter,
-  NativeModules,
-  Platform,
-} from 'react-native';
+import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
 
 const {
   ExponentNotifications,
 } = NativeModules;
 
 type Notification = {
-  origin: 'selected' | 'received';
-  data: any;
-  remote: boolean;
-  isMultiple: boolean;
-}
+  origin: 'selected' | 'received',
+  data: any,
+  remote: boolean,
+  isMultiple: boolean,
+};
 
 type LocalNotification = {
-  title: string;
+  title: string,
   // How should we deal with body being required on iOS but not on Android?
-  body?: string;
-  data?: any;
+  body?: string,
+  data?: any,
   ios?: {
-    sound?: boolean;
-  };
+    sound?: boolean,
+  },
   android?: {
-    sound?: boolean;
-    icon?: string;
-    color?: string;
-    priority?: string;
-    sticky?: boolean;
-    vibrate?: boolean | Array<number>;
-    link?: string;
-  };
-}
+    sound?: boolean,
+    icon?: string,
+    color?: string,
+    priority?: string,
+    sticky?: boolean,
+    vibrate?: boolean | Array<number>,
+    link?: string,
+  },
+};
 
 // Android assigns unique number to each notification natively.
 // Since that's not supported on iOS, we generate an unique string.
@@ -68,7 +61,7 @@ function _emitNotification(notification) {
   if (typeof notification.data === 'string') {
     try {
       notification.data = JSON.parse(notification.data);
-    } catch(e) {
+    } catch (e) {
       // It's actually just a string, that's fine
     }
   }
@@ -140,7 +133,9 @@ export default {
   getExponentPushTokenAsync: ExponentNotifications.getExponentPushTokenAsync,
 
   /* Shows a notification instantly */
-  presentLocalNotificationAsync(notification: LocalNotification): Promise<LocalNotificationId> {
+  presentLocalNotificationAsync(
+    notification: LocalNotification
+  ): Promise<LocalNotificationId> {
     _validateNotification(notification);
     notification = _processNotification(notification);
 
@@ -151,8 +146,8 @@ export default {
   async scheduleLocalNotificationAsync(
     notification: LocalNotification,
     options: {
-      time?: Date | number;
-      repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
+      time?: Date | number,
+      repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year',
     }
   ): Promise<LocalNotificationId> {
     _validateNotification(notification);
@@ -174,11 +169,16 @@ export default {
       }
     }
 
-    return ExponentNotifications.scheduleLocalNotification(notification, options);
+    return ExponentNotifications.scheduleLocalNotification(
+      notification,
+      options
+    );
   },
 
   /* Dismiss currently shown notification with ID (Android only) */
-  async dismissNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
+  async dismissNotificationAsync(
+    notificationId: LocalNotificationId
+  ): Promise<void> {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissNotification(notificationId);
     } else {
@@ -196,7 +196,9 @@ export default {
   },
 
   /* Cancel scheduled notification notification with ID */
-  async cancelScheduledNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
+  async cancelScheduledNotificationAsync(
+    notificationId: LocalNotificationId
+  ): Promise<void> {
     return ExponentNotifications.cancelScheduledNotification(notificationId);
   },
 
@@ -212,9 +214,12 @@ export default {
     if (_initialNotification) {
       const initialNotification = _initialNotification;
       _initialNotification = null;
-      setTimeout(() => {
-        _emitNotification(initialNotification);
-      }, 0);
+      setTimeout(
+        () => {
+          _emitNotification(initialNotification);
+        },
+        0
+      );
     }
 
     return _emitter.addListener('notification', listener);

@@ -1,9 +1,6 @@
 'use strict';
 
-import React, {
-  Component,
-  PropTypes,
-} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import {
   StyleSheet,
@@ -29,11 +26,13 @@ export default class LinearGradient extends Component {
       locations,
       start,
       style,
-      ...otherProps,
+      ...otherProps
     } = this.props;
 
-    if ((colors && locations) && (colors.length !== locations.length)) {
-      console.warn('LinearGradient colors and locations props should be arrays of the same length');
+    if (colors && locations && colors.length !== locations.length) {
+      console.warn(
+        'LinearGradient colors and locations props should be arrays of the same length'
+      );
     }
 
     // inherit container borderRadius until this issue is resolved:
@@ -57,7 +56,7 @@ export default class LinearGradient extends Component {
     return (
       <View {...otherProps} style={style}>
         <NativeLinearGradient
-          style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}
+          style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
           colors={colors.map(processColor)}
           start={start}
           end={end}
@@ -70,4 +69,7 @@ export default class LinearGradient extends Component {
   }
 }
 
-const NativeLinearGradient = requireNativeComponent('ExponentLinearGradient', null);
+const NativeLinearGradient = requireNativeComponent(
+  'ExponentLinearGradient',
+  null
+);

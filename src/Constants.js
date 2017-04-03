@@ -1,8 +1,6 @@
 // @flow
 
-import {
-  NativeModules,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 
 // On Android we pass the manifest in JSON form so this step is necessary
 let { ExponentConstants } = NativeModules;

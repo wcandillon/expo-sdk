@@ -1,15 +1,8 @@
 'use strict';
 
-import React, {
-  Component,
-  PropTypes,
-} from 'react';
+import React, { Component, PropTypes } from 'react';
 
-import {
-  View,
-  processColor,
-  requireNativeComponent,
-} from 'react-native';
+import { View, processColor, requireNativeComponent } from 'react-native';
 
 export default class LinearGradient extends Component {
   static propTypes = {
@@ -24,10 +17,12 @@ export default class LinearGradient extends Component {
     const {
       colors,
       locations,
-      ...otherProps,
+      ...otherProps
     } = this.props;
-    if ((colors && locations) && (colors.length !== locations.length)) {
-      console.warn('LinearGradient colors and locations props should be arrays of the same length');
+    if (colors && locations && colors.length !== locations.length) {
+      console.warn(
+        'LinearGradient colors and locations props should be arrays of the same length'
+      );
     }
 
     return (
@@ -40,4 +35,7 @@ export default class LinearGradient extends Component {
   }
 }
 
-const NativeLinearGradient = requireNativeComponent('ExponentLinearGradient', null);
+const NativeLinearGradient = requireNativeComponent(
+  'ExponentLinearGradient',
+  null
+);

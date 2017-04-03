@@ -12,7 +12,7 @@ let isSendingLogs = false;
 let groupDepth = 0;
 
 export function enableXDELogging() {
-    // don't use level below info. only use debug for things that
+  // don't use level below info. only use debug for things that
   // shouldn't be shown to the developer.
   replaceConsoleFunction('log', 'info');
   replaceConsoleFunction('debug', 'info');
@@ -40,9 +40,13 @@ export function enableXDELogging() {
       originalGroupCollapsed.apply(console, args);
     }
 
-    queueRemoteLog('info', {
-      groupCollapsed: true,
-    }, args);
+    queueRemoteLog(
+      'info',
+      {
+        groupCollapsed: true,
+      },
+      args
+    );
     groupDepth++;
   };
   console.groupCollapsed.__restore = function() {
@@ -58,9 +62,13 @@ export function enableXDELogging() {
     if (groupDepth > 0) {
       groupDepth--;
     }
-    queueRemoteLog('info', {
-      shouldHide: true,
-    }, args);
+    queueRemoteLog(
+      'info',
+      {
+        shouldHide: true,
+      },
+      args
+    );
   };
   console.groupEnd.__restore = function() {
     console.groupEnd = originalGroupEnd;
@@ -125,9 +133,9 @@ async function sendRemoteLogsAsync() {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
         'Proxy-Connection': 'keep-alive',
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Device-Id': Constants.deviceId,
         'Device-Name': Constants.deviceName,
         'Session-Id': sessionId,

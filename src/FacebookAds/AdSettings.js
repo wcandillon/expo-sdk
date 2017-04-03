@@ -13,12 +13,12 @@ type SDKLogLevel =
   | 'notification';
 
 export default {
-   /**
+  /**
     * Contains hash of the device id
     */
-   get currentDeviceHash(): string {
-     return CTKAdSettingsManager.currentDeviceHash;
-   },
+  get currentDeviceHash(): string {
+    return CTKAdSettingsManager.currentDeviceHash;
+  },
 
   /**
    * Registers given device with `deviceHash` to receive test Facebook ads.

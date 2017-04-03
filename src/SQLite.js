@@ -7,7 +7,7 @@ import { NativeModules, Platform } from 'react-native';
 const { ExponentSQLite } = NativeModules;
 
 if (!process.nextTick) {
-  process.nextTick = (callback) => setTimeout(callback, 0);
+  process.nextTick = callback => setTimeout(callback, 0);
 }
 
 function SQLiteResult(error, insertId, rowsAffected, rows) {
@@ -54,7 +54,7 @@ function arrayifyQuery(query) {
 }
 
 // for avoiding strings truncated with '\u0000'
-function escapeForAndroid (args) {
+function escapeForAndroid(args) {
   if (Platform.OS === 'android') {
     return JSON.stringify(args);
   } else {
@@ -72,13 +72,11 @@ SQLiteDatabase.prototype.exec = function exec(queries, readOnly, callback) {
     callback(massageError(err));
   }
 
-  ExponentSQLite.exec(
-    this._name,
-    map(queries, arrayifyQuery),
-    readOnly
-  ).then(onSuccess, onError);
+  ExponentSQLite.exec(this._name, map(queries, arrayifyQuery), readOnly).then(
+    onSuccess,
+    onError
+  );
 };
-
 
 const openDB = customOpenDatabase(SQLiteDatabase);
 
@@ -108,4 +106,4 @@ function openDatabase(name, version, description, size, callback) {
 
 export default {
   openDatabase,
-}
+};

@@ -5,8 +5,7 @@ import { View } from 'react-native';
 
 import GLView from './GLView';
 
-
-export default (THREE) => class THREEView extends React.Component {
+export default THREE => class THREEView extends React.Component {
   static propTypes = {
     // Parameters to http://threejs.org/docs/?q=webgl#Reference/Renderers/WebGLRenderer.render
     scene: PropTypes.object,
@@ -27,12 +26,13 @@ export default (THREE) => class THREEView extends React.Component {
     autoAspect: true,
   };
 
-
   // Get a three.js texture from an Exponent Asset
   static textureFromAsset(asset) {
     if (!asset.localUri) {
-      throw new Error(`Asset '${asset.name}' needs to be downloaded before ` +
-                      `being used as an OpenGL texture.`);
+      throw new Error(
+        `Asset '${asset.name}' needs to be downloaded before ` +
+          `being used as an OpenGL texture.`
+      );
     }
     const texture = new THREE.Texture();
     texture.image = {
@@ -45,8 +45,7 @@ export default (THREE) => class THREEView extends React.Component {
     return texture;
   }
 
-
-  _onContextCreate = (gl) => {
+  _onContextCreate = gl => {
     const renderer = new THREE.WebGLRenderer({
       canvas: {
         width: gl.drawingBufferWidth,
@@ -67,9 +66,9 @@ export default (THREE) => class THREEView extends React.Component {
       this._requestAnimationFrameID = requestAnimationFrame(animate);
 
       const now = 0.001 * global.nativePerformanceNow();
-      const dt = typeof lastFrameTime !== 'undefined' ?
-                 now - lastFrameTime :
-                 0.16666;
+      const dt = typeof lastFrameTime !== 'undefined'
+        ? now - lastFrameTime
+        : 0.16666;
 
       if (this.props.tick) {
         this.props.tick(dt);
@@ -100,16 +99,9 @@ export default (THREE) => class THREEView extends React.Component {
     }
   }
 
-
   render() {
     // eslint-disable-next-line no-unused-vars
     const { scene, camera, autoAspect, tick, ...viewProps } = this.props;
-    return (
-      <GLView
-        {...viewProps}
-        onContextCreate={this._onContextCreate}
-      />
-    );
+    return <GLView {...viewProps} onContextCreate={this._onContextCreate} />;
   }
 };
-

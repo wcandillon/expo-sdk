@@ -30,7 +30,7 @@ export default class Video extends Component {
     this._root.setNativeProps(nativeProps);
   }
 
-  seek = (time) => {
+  seek = time => {
     this.setNativeProps({ seek: time });
   };
 
@@ -42,89 +42,89 @@ export default class Video extends Component {
     this.setNativeProps({ fullscreen: false });
   };
 
-  _assignRoot = (component) => {
+  _assignRoot = component => {
     this._root = component;
   };
 
-  _onLoadStart = (event) => {
+  _onLoadStart = event => {
     if (this.props.onLoadStart) {
       this.props.onLoadStart(event.nativeEvent);
     }
   };
 
-  _onLoad = (event) => {
+  _onLoad = event => {
     if (this.props.onLoad) {
       this.props.onLoad(event.nativeEvent);
     }
   };
 
-  _onError = (event) => {
+  _onError = event => {
     if (this.props.onError) {
       this.props.onError(event.nativeEvent);
     }
   };
 
-  _onProgress = (event) => {
+  _onProgress = event => {
     if (this.props.onProgress) {
       this.props.onProgress(event.nativeEvent);
     }
   };
 
-  _onSeek = (event) => {
+  _onSeek = event => {
     if (this.props.onSeek) {
       this.props.onSeek(event.nativeEvent);
     }
   };
 
-  _onEnd = (event) => {
+  _onEnd = event => {
     if (this.props.onEnd) {
       this.props.onEnd(event.nativeEvent);
     }
   };
 
-  _onFullscreenPlayerWillPresent = (event) => {
+  _onFullscreenPlayerWillPresent = event => {
     if (this.props.onFullscreenPlayerWillPresent) {
       this.props.onFullscreenPlayerWillPresent(event.nativeEvent);
     }
   };
 
-  _onFullscreenPlayerDidPresent = (event) => {
+  _onFullscreenPlayerDidPresent = event => {
     if (this.props.onFullscreenPlayerDidPresent) {
       this.props.onFullscreenPlayerDidPresent(event.nativeEvent);
     }
   };
 
-  _onFullscreenPlayerWillDismiss = (event) => {
+  _onFullscreenPlayerWillDismiss = event => {
     if (this.props.onFullscreenPlayerWillDismiss) {
       this.props.onFullscreenPlayerWillDismiss(event.nativeEvent);
     }
   };
 
-  _onFullscreenPlayerDidDismiss = (event) => {
+  _onFullscreenPlayerDidDismiss = event => {
     if (this.props.onFullscreenPlayerDidDismiss) {
       this.props.onFullscreenPlayerDidDismiss(event.nativeEvent);
     }
   };
 
-  _onReadyForDisplay = (event) => {
+  _onReadyForDisplay = event => {
     if (this.props.onReadyForDisplay) {
       this.props.onReadyForDisplay(event.nativeEvent);
     }
   };
 
-  _onPlaybackStalled = (event) => {
+  _onPlaybackStalled = event => {
     if (this.props.onPlaybackStalled) {
       this.props.onPlaybackStalled(event.nativeEvent);
     }
   };
 
-  _onPlaybackResume = (event) => {
+  _onPlaybackResume = event => {
     if (this.props.onPlaybackResume) {
       this.props.onPlaybackResume(event.nativeEvent);
     }
   };
 
-  _onPlaybackRateChange = (event) => {
+  _onPlaybackRateChange = event => {
     if (this.props.onPlaybackRateChange) {
       this.props.onPlaybackRateChange(event.nativeEvent);
     }
@@ -187,12 +187,7 @@ export default class Video extends Component {
       onPlaybackRateChange: this._onPlaybackRateChange,
     });
 
-    return (
-      <ExponentVideo
-        ref={this._assignRoot}
-        {...nativeProps}
-      />
-    );
+    return <ExponentVideo ref={this._assignRoot} {...nativeProps} />;
   }
 }
 

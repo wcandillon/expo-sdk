@@ -1,8 +1,6 @@
 // @flow
 
-import {
-  NativeModules,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 
 const { ExponentImagePicker } = NativeModules;
 
@@ -12,10 +10,7 @@ type ImageInfo = {|
   height: number,
 |};
 
-type ImageResult =
-  {| cancelled: true |} |
-  {| cancelled: false |} & ImageInfo;
-
+type ImageResult = {| cancelled: true |} | ({| cancelled: false |} & ImageInfo);
 
 type ImageLibraryOptions = {
   allowsEditing?: boolean,
@@ -24,14 +19,13 @@ type ImageLibraryOptions = {
 };
 
 export async function launchImageLibraryAsync(
-  options?: ImageLibraryOptions,
+  options?: ImageLibraryOptions
 ): Promise<ImageResult> {
   if (!options || typeof options !== 'object') {
     options = {};
   }
   return ExponentImagePicker.launchImageLibraryAsync(options);
 }
-
 
 type CameraOptions = {
   allowsEditing?: boolean,
@@ -40,7 +34,7 @@ type CameraOptions = {
 };
 
 export async function launchCameraAsync(
-  options?: CameraOptions,
+  options?: CameraOptions
 ): Promise<ImageResult> {
   if (!options || typeof options !== 'object') {
     options = {};

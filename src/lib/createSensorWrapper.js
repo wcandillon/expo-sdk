@@ -1,7 +1,4 @@
-import {
-  Platform,
-  NativeEventEmitter,
-} from 'react-native';
+import { Platform, NativeEventEmitter } from 'react-native';
 
 export default function createSensorWrapper(NativeSensorModule, eventName) {
   const SensorEventEmitter = new NativeEventEmitter(NativeSensorModule);
@@ -22,12 +19,15 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
         }
       }
 
-      let emitterSubscription = SensorEventEmitter.addListener(eventName, listener);
+      let emitterSubscription = SensorEventEmitter.addListener(
+        eventName,
+        listener
+      );
       let originalRemove = emitterSubscription.remove;
 
       emitterSubscription.remove = () => {
         return this.removeSubscription(emitterSubscription);
-      }
+      };
 
       return emitterSubscription;
     }
@@ -55,5 +55,5 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
     }
   }
 
-  return new SensorWrapper;
+  return new SensorWrapper();
 }

@@ -2,10 +2,8 @@
 *  @flow
  */
 
-import {
-  NativeModules,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 
-export default function apisAreAvailable():bool {
+export default function apisAreAvailable(): boolean {
   return !!NativeModules.ExponentConstants;
 }

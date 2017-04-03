@@ -1,8 +1,6 @@
 // @flow
 
-import {
-  NativeModules,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import * as Constants from './Constants';
 
@@ -17,27 +15,27 @@ type LogInConfig = {
   scopes?: Array<string>,
 };
 
-type LogInResult = {
-  type: 'cancel',
-} | {
-  type: 'success',
-  accessToken: string,
-  idToken: ?string,
-  refreshToken: ?string,
-  serverAuthCode: ?string,
-  user: {
-    id: string,
-    name: string,
-    givenName: string,
-    familyName: string,
-    photoUrl?: ?string,
-    email?: ?string,
-  },
-};
+type LogInResult =
+  | {
+      type: 'cancel',
+    }
+  | {
+      type: 'success',
+      accessToken: string,
+      idToken: ?string,
+      refreshToken: ?string,
+      serverAuthCode: ?string,
+      user: {
+        id: string,
+        name: string,
+        givenName: string,
+        familyName: string,
+        photoUrl?: ?string,
+        email?: ?string,
+      },
+    };
 
-export async function logInAsync(
-  config: LogInConfig
-): Promise<LogInResult> {
+export async function logInAsync(config: LogInConfig): Promise<LogInResult> {
   let behavior = config.behavior;
   if (!behavior) {
     behavior = 'system';
@@ -53,12 +51,12 @@ export async function logInAsync(
     scopes = ['profile', 'email'];
   }
 
-  const androidClientId = Constants.appOwnership === 'standalone' ?
-    config.androidStandaloneAppClientId :
-    config.androidClientId;
-  const iosClientId = Constants.appOwnership === 'standalone' ?
-    config.iosStandaloneAppClientId :
-    config.iosClientId;
+  const androidClientId = Constants.appOwnership === 'standalone'
+    ? config.androidStandaloneAppClientId
+    : config.androidClientId;
+  const iosClientId = Constants.appOwnership === 'standalone'
+    ? config.iosStandaloneAppClientId
+    : config.iosClientId;
 
   const logInResult = await Google.logInAsync({
     androidClientId,
@@ -70,9 +68,12 @@ export async function logInAsync(
   if (behavior === 'web') {
     // Web login only returns an accessToken so use it to fetch the same info
     // as the native login does.
-    let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-      headers: { Authorization: `Bearer ${logInResult.accessToken}`},
-    });
+    let userInfoResponse = await fetch(
+      'https://www.googleapis.com/userinfo/v2/me',
+      {
+        headers: { Authorization: `Bearer ${logInResult.accessToken}` },
+      }
+    );
     userInfoResponse = await userInfoResponse.json();
     return {
       ...logInResult,
