@@ -3,6 +3,7 @@
 import { EventEmitter, EventSubscription } from 'fbemitter';
 
 import invariant from 'invariant';
+import warning from 'fbjs/lib/warning';
 
 import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
 
@@ -148,24 +149,71 @@ export default {
     options: {
       time?: Date | number,
       repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year',
-    }
+    } = {}
   ): Promise<LocalNotificationId> {
+    // set now at the beginning of the method, to prevent potential
+    // weird warnings when we validate options.time later on
+    const now = Date.now();
+
+    // Validate and process the notification data
     _validateNotification(notification);
     notification = _processNotification(notification);
 
-    if (Platform.OS === 'ios') {
-      if (options.time && options.time instanceof Date) {
+    // Validate `options.time`
+    if (options.time) {
+      let timeAsDateObj = null;
+      if (options.time && typeof options.time === 'number') {
+        timeAsDateObj = new Date(options.time);
+        // god, JS is the worst
+        if (((timeAsDateObj: any): string) == 'Invalid Date') {
+          timeAsDateObj = null;
+        }
+      } else if (options.time && options.time instanceof Date) {
+        timeAsDateObj = options.time;
+      }
+
+      // If we couldn't convert properly, throw an error
+      if (!timeAsDateObj) {
+        throw new Error(
+          `Provided value for "time" is invalid. Please verify that it's either a number representing Unix Epoch time in milliseconds, or a valid date object.`
+        );
+      }
+
+      // If someone passes in a value that is too small, say, by an order of 1000
+      // (it's common to accidently pass seconds instead of ms), display a warning.
+      warning(
+        timeAsDateObj < now,
+        `Provided value for "time" is before the current date. Did you possibly pass number of seconds since Unix Epoch instead of number of milliseconds?`
+      );
+
+      // If iOS, pass time as milliseconds
+      if (Platform.OS === 'ios') {
         options = {
           ...options,
-          time: options.time.getTime(),
+          time: timeAsDateObj.getTime(),
+        };
+      } else {
+        options = {
+          ...options,
+          time: timeAsDateObj,
         };
       }
-    } else {
-      if (options.time && typeof options.time === 'number') {
-        options = {
-          ...options,
-          time: new Date(options.time),
-        };
+    }
+
+    // Validate options.repeat
+    if (options.repeat) {
+      const validOptions = new Set([
+        'minute',
+        'hour',
+        'day',
+        'week',
+        'month',
+        'year',
+      ]);
+      if (!validOptions.has(options.repeat)) {
+        throw new Error(
+          `Please pass one of ['minute', 'hour', 'day', 'week', 'month', 'year'] as the value for the "repeat" option`
+        );
       }
     }
 
