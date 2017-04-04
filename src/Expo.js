@@ -138,6 +138,9 @@ module.exports = {
   get FacebookAds() {
     return require('./FacebookAds');
   },
+  get LegacyAsyncStorage() {
+    return require('./LegacyAsyncStorage');
+  }
 };
 
 // add deprecated `Components` module
