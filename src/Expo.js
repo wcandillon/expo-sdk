@@ -22,6 +22,9 @@ module.exports = {
   get Crypto() {
     return NativeModules.ExponentCrypto;
   },
+  get DocumentPicker() {
+    return NativeModules.ExponentDocumentPicker;
+  },
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
