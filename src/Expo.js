@@ -25,6 +25,9 @@ module.exports = {
   get DocumentPicker() {
     return NativeModules.ExponentDocumentPicker;
   },
+  get ErrorRecovery() {
+    return NativeModules.ExponentErrorRecovery;
+  },
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
