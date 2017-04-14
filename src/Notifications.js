@@ -180,7 +180,7 @@ export default {
       // If someone passes in a value that is too small, say, by an order of 1000
       // (it's common to accidently pass seconds instead of ms), display a warning.
       warning(
-        timeAsDateObj < now,
+        timeAsDateObj >= now,
         `Provided value for "time" is before the current date. Did you possibly pass number of seconds since Unix Epoch instead of number of milliseconds?`
       );
 

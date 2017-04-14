@@ -234,7 +234,7 @@ a number representing Unix Epoch time in milliseconds, or a valid date object.`
     );
 
     expect(warning).toBeCalledWith(
-      true,
+      false,
       `Provided value for "time" is before the current date. Did you possibly \
 pass number of seconds since Unix Epoch instead of number of milliseconds?`
     );

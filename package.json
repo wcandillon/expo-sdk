@@ -9,6 +9,7 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "clearMocks": true,
     "testRegex": "/__tests__/.*-tests\\.js$"
   },
   "repository": {
