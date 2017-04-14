@@ -131,8 +131,7 @@ class StatusHandler<T: Object> {
     shouldPollAfterStatus: (status: T) => boolean,
   }) {
     this.areOperationsAllowed = areOperationsAllowed;
-    this
-      .getExtraStatusFieldsWhenOperationsAreAllowed = getExtraStatusFieldsWhenOperationsAreAllowed;
+    this.getExtraStatusFieldsWhenOperationsAreAllowed = getExtraStatusFieldsWhenOperationsAreAllowed;
     this.operationsDisallowedError = operationsDisallowedError;
     this.getStatusAsync = getStatusAsync;
     this.shouldPollAfterStatus = shouldPollAfterStatus;
