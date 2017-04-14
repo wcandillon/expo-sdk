@@ -42,7 +42,7 @@
   "devDependencies": {
     "flow-bin": "^0.40.0",
     "jest": "^19.0.2",
-    "jest-expo": "^0.3.0",
+    "jest-expo": "0.4.0-alpha.0",
     "react": "16.0.0-alpha.6",
     "react-native": "exponent/react-native#sdk-16"
   }
