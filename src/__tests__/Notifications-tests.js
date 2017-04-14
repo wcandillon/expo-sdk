@@ -7,10 +7,9 @@ const mockNotificationObject = { origin: 'selected', data: {} };
 const mockNotificationString = JSON.stringify({ origin: 'received', data: {} });
 
 jest.mock('fbjs/lib/warning');
-jest.mock(
-  'RCTDeviceEventEmitter',
-  () => new (require('fbemitter').EventEmitter)()
-);
+jest.mock('RCTDeviceEventEmitter', () => {
+  return new (require('fbemitter').EventEmitter)();
+});
 jest.useFakeTimers();
 
 describe('Notifications', () => {

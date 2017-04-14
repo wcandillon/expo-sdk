@@ -117,23 +117,22 @@ class StatusHandler<T: Object> {
   _shouldPoll: boolean;
   _pollingTimeoutVariable: ?number;
 
-  constructor(
-    {
-      areOperationsAllowed,
-      getExtraStatusFieldsWhenOperationsAreAllowed,
-      operationsDisallowedError,
-      getStatusAsync,
-      shouldPollAfterStatus,
-    }: {
-      areOperationsAllowed: () => boolean,
-      getExtraStatusFieldsWhenOperationsAreAllowed: () => Object,
-      operationsDisallowedError: Error,
-      getStatusAsync: () => Promise<T>,
-      shouldPollAfterStatus: (status: T) => boolean,
-    }
-  ) {
+  constructor({
+    areOperationsAllowed,
+    getExtraStatusFieldsWhenOperationsAreAllowed,
+    operationsDisallowedError,
+    getStatusAsync,
+    shouldPollAfterStatus,
+  }: {
+    areOperationsAllowed: () => boolean,
+    getExtraStatusFieldsWhenOperationsAreAllowed: () => Object,
+    operationsDisallowedError: Error,
+    getStatusAsync: () => Promise<T>,
+    shouldPollAfterStatus: (status: T) => boolean,
+  }) {
     this.areOperationsAllowed = areOperationsAllowed;
-    this.getExtraStatusFieldsWhenOperationsAreAllowed = getExtraStatusFieldsWhenOperationsAreAllowed;
+    this
+      .getExtraStatusFieldsWhenOperationsAreAllowed = getExtraStatusFieldsWhenOperationsAreAllowed;
     this.operationsDisallowedError = operationsDisallowedError;
     this.getStatusAsync = getStatusAsync;
     this.shouldPollAfterStatus = shouldPollAfterStatus;
@@ -316,8 +315,8 @@ export class Sound {
   getStatusAsync = async (): Promise<SoundStatus> => {
     // Automatically calls the callback.
     if (this._loaded) {
-      return this._statusHandler.performOperationAndHandleStatusAsync(
-        () => NativeModules.ExponentAudio.getStatus(this._key)
+      return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+        NativeModules.ExponentAudio.getStatus(this._key)
       );
     }
     const status: SoundStatus = {
@@ -373,26 +372,26 @@ export class Sound {
   // Playback API
 
   async playAsync(): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.play(this._key)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.play(this._key)
     );
   }
 
   async pauseAsync(): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.pause(this._key)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.pause(this._key)
     );
   }
 
   async stopAsync(): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.stop(this._key)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.stop(this._key)
     );
   }
 
   async setPositionAsync(millis: number): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.setPosition(this._key, millis)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.setPosition(this._key, millis)
     );
   }
 
@@ -403,13 +402,8 @@ export class Sound {
     if (value < 0.0 || value > 32.0) {
       throw new Error('Rate value must be between 0.0 and 32.0.');
     }
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () =>
-        NativeModules.ExponentAudio.setRate(
-          this._key,
-          value,
-          shouldCorrectPitch
-        )
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.setRate(this._key, value, shouldCorrectPitch)
     );
   }
 
@@ -417,20 +411,20 @@ export class Sound {
     if (value < 0.0 || value > 1.0) {
       throw new Error('Volume value must be between 0.0 and 1.0.');
     }
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.setVolume(this._key, value)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.setVolume(this._key, value)
     );
   }
 
   async setIsMutedAsync(value: boolean): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.setIsMuted(this._key, value)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.setIsMuted(this._key, value)
     );
   }
 
   async setIsLoopingAsync(value: boolean): Promise<SoundStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.setIsLooping(this._key, value)
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.setIsLooping(this._key, value)
     );
   }
 }
@@ -473,8 +467,8 @@ export class Recording {
   getStatusAsync = async (): Promise<RecordingStatus> => {
     // Automatically calls the callback.
     if (this._canRecord) {
-      return this._statusHandler.performOperationAndHandleStatusAsync(
-        () => NativeModules.ExponentAudio.getRecordingStatus()
+      return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+        NativeModules.ExponentAudio.getRecordingStatus()
       );
     }
     const status: RecordingStatus = this._isDoneRecording
@@ -535,14 +529,14 @@ export class Recording {
   }
 
   async startAsync(): Promise<RecordingStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.startRecording()
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.startRecording()
     );
   }
 
   async pauseAsync(): Promise<RecordingStatus> {
-    return this._statusHandler.performOperationAndHandleStatusAsync(
-      () => NativeModules.ExponentAudio.pauseRecording()
+    return this._statusHandler.performOperationAndHandleStatusAsync(() =>
+      NativeModules.ExponentAudio.pauseRecording()
     );
   }
 

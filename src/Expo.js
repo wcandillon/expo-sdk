@@ -146,7 +146,7 @@ module.exports = {
   },
   get LegacyAsyncStorage() {
     return require('./LegacyAsyncStorage');
-  }
+  },
 };
 
 // add deprecated `Components` module

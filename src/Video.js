@@ -3,17 +3,9 @@ import ReactNative from 'react-native';
 
 import Asset from './Asset';
 
-const {
-  Component,
-  PropTypes,
-} = React;
+const { Component, PropTypes } = React;
 
-const {
-  StyleSheet,
-  requireNativeComponent,
-  NativeModules,
-  View,
-} = ReactNative;
+const { StyleSheet, requireNativeComponent, NativeModules, View } = ReactNative;
 
 const styles = StyleSheet.create({
   base: {
@@ -131,10 +123,7 @@ export default class Video extends Component {
   };
 
   render() {
-    let {
-      source,
-      resizeMode,
-    } = this.props;
+    let { source, resizeMode } = this.props;
 
     // Is it an asset module?
     if (typeof source === 'number') {
@@ -152,13 +141,17 @@ export default class Video extends Component {
 
     let nativeResizeMode;
     if (resizeMode === Video.RESIZE_MODE_STRETCH) {
-      nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleToFill;
+      nativeResizeMode =
+        NativeModules.UIManager.ExponentVideo.Constants.ScaleToFill;
     } else if (resizeMode === Video.RESIZE_MODE_CONTAIN) {
-      nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFit;
+      nativeResizeMode =
+        NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFit;
     } else if (resizeMode === Video.RESIZE_MODE_COVER) {
-      nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFill;
+      nativeResizeMode =
+        NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFill;
     } else {
-      nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
+      nativeResizeMode =
+        NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
     }
 
     const nativeProps = Object.assign({}, this.props);

@@ -98,7 +98,8 @@ export default class Asset {
     }
     if (this.downloading) {
       await new Promise((resolve, reject) =>
-        this.downloadCallbacks.push({ resolve, reject }));
+        this.downloadCallbacks.push({ resolve, reject })
+      );
       return;
     }
     this.downloading = true;

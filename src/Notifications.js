@@ -7,9 +7,7 @@ import warning from 'fbjs/lib/warning';
 
 import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
 
-const {
-  ExponentNotifications,
-} = NativeModules;
+const { ExponentNotifications } = NativeModules;
 
 type Notification = {
   origin: 'selected' | 'received',
@@ -262,12 +260,9 @@ export default {
     if (_initialNotification) {
       const initialNotification = _initialNotification;
       _initialNotification = null;
-      setTimeout(
-        () => {
-          _emitNotification(initialNotification);
-        },
-        0
-      );
+      setTimeout(() => {
+        _emitNotification(initialNotification);
+      }, 0);
     }
 
     return _emitter.addListener('notification', listener);

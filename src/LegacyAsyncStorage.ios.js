@@ -78,8 +78,9 @@ var LegacyAsyncStorage = {
     const newValuesArray = await AsyncStorage.multiGet(items);
     const newValuesMap = {};
     newValuesArray.forEach(([k, v]) => newValuesMap[k] = v);
-    const valuesToSet = oldValuesArray.filter(([k, v]) =>
-      v !== null && newValuesMap[k] == null);
+    const valuesToSet = oldValuesArray.filter(
+      ([k, v]) => v !== null && newValuesMap[k] == null
+    );
 
     await AsyncStorage.multiSet(valuesToSet);
   },
@@ -99,7 +100,7 @@ var LegacyAsyncStorage = {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiGet([key], function(errors, result) {
         // Unpack result to get value from [[key,value]]
-        var value = (result && result[0] && result[0][1]) ? result[0][1] : null;
+        var value = result && result[0] && result[0][1] ? result[0][1] : null;
         var errs = convertErrors(errors);
         callback && callback(errs && errs[0], value);
         if (errs) {
@@ -119,7 +120,9 @@ var LegacyAsyncStorage = {
    *
    * Example: see the `multiGet` example.
    */
-  getAllKeys: function(callback?: ?(error: ?Error, keys: ?Array<string>) => void): Promise {
+  getAllKeys: function(
+    callback?: ?(error: ?Error, keys: ?Array<string>) => void
+  ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.getAllKeys(function(error, keys) {
         callback && callback(convertError(error), keys);
@@ -158,7 +161,11 @@ var LegacyAsyncStorage = {
       // Is there a way to avoid using the map but fix the bug in this breaking test?
       // https://github.com/facebook/react-native/commit/8dd8ad76579d7feef34c014d387bf02065692264
       const map = {};
-      result && result.forEach(([key, value]) => { map[key] = value; return value; });
+      result &&
+        result.forEach(([key, value]) => {
+          map[key] = value;
+          return value;
+        });
       const reqLength = getRequests.length;
       for (let i = 0; i < reqLength; i++) {
         const request = getRequests[i];
@@ -239,7 +246,7 @@ function convertErrors(errs) {
   if (!errs) {
     return null;
   }
-  return (Array.isArray(errs) ? errs : [errs]).map((e) => convertError(e));
+  return (Array.isArray(errs) ? errs : [errs]).map(e => convertError(e));
 }
 
 function convertError(error) {

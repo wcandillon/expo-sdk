@@ -14,11 +14,7 @@ export default class LinearGradient extends Component {
   };
 
   render() {
-    const {
-      colors,
-      locations,
-      ...otherProps
-    } = this.props;
+    const { colors, locations, ...otherProps } = this.props;
     if (colors && locations && colors.length !== locations.length) {
       console.warn(
         'LinearGradient colors and locations props should be arrays of the same length'

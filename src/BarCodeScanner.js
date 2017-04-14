@@ -7,7 +7,8 @@ import {
   View,
 } from 'react-native';
 
-const BarCodeScannerManager = NativeModules.ExponentBarCodeScannerManager ||
+const BarCodeScannerManager =
+  NativeModules.ExponentBarCodeScannerManager ||
   NativeModules.ExponentBarCodeScannerModule;
 
 function convertNativeProps(props) {
