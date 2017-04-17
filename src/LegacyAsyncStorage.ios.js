@@ -71,7 +71,13 @@ var LegacyAsyncStorage = {
   _getKeys: ([]: Array<string>),
   _immediate: (null: ?number),
 
-  async migrateItems(items) {
+  async migrateItems(items, { force = false } = {}) {
+    // Skip if already migrated and not forcing
+    if (!force && (await RCTAsyncStorage.isMigrationDone())) {
+      return;
+    }
+
+    // Get the old values
     const oldValuesArray = await LegacyAsyncStorage.multiGet(items);
 
     // Skip missing or newly set values
@@ -82,7 +88,9 @@ var LegacyAsyncStorage = {
       ([k, v]) => v !== null && newValuesMap[k] == null
     );
 
+    // Migrate!
     await AsyncStorage.multiSet(valuesToSet);
+    await RCTAsyncStorage.setMigrationDone();
   },
 
   /**
