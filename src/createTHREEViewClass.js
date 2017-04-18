@@ -15,6 +15,10 @@ export default THREE => class THREEView extends React.Component {
     // the viewport. Defaults to `true`.
     autoAspect: PropTypes.bool,
 
+    // NOTE: 0x000000 is considered a PropType.number, while '#000000' is considered a PropType.string.
+    backgroundColor: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    backgroundColorAlpha: PropTypes.number,
+
     // Called every animation frame with one parameter `dt` which is the
     // time in seconds since the last animation frame
     tick: PropTypes.func,
@@ -24,6 +28,8 @@ export default THREE => class THREEView extends React.Component {
 
   static defaultProps = {
     autoAspect: true,
+    backgroundColor: 0x000000,
+    backgroundColorAlpha: 1,
   };
 
   // Get a three.js texture from an Exponent Asset
@@ -57,9 +63,12 @@ export default THREE => class THREEView extends React.Component {
       },
       context: gl,
     });
-    renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-    renderer.setClearColor(0x000000, 1);
+    renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
+    renderer.setClearColor(
+      this.props.backgroundColor,
+      this.props.backgroundColorAlpha
+    );
 
     let lastFrameTime;
     const animate = () => {
