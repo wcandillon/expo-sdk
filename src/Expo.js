@@ -22,9 +22,6 @@ module.exports = {
   get Crypto() {
     return NativeModules.ExponentCrypto;
   },
-  get DocumentPicker() {
-    return NativeModules.ExponentDocumentPicker;
-  },
   get ErrorRecovery() {
     return NativeModules.ExponentErrorRecovery;
   },
@@ -119,6 +116,9 @@ module.exports = {
   },
   get DangerZone() {
     return require('./DangerZone');
+  },
+  get DocumentPicker() {
+    return require('./DocumentPicker');
   },
   get Font() {
     return require('./Font');
