@@ -57,22 +57,22 @@ export default class GLView extends React.Component {
 
 global.WebGLRenderingContext = class WebGLRenderingContext {};
 
+const idToObject = {};
+
 global.WebGLObject = class WebGLObject {
   constructor(id) {
+    if (idToObject[id]) {
+      throw new Error(
+        `WebGL object with underlying EXGLObjectId '${id}' already exists!`
+      );
+    }
     this.id = id; // Native GL object id
   }
   toString() {
     return `[WebGLObject ${this.id}]`;
   }
 };
-global.WebGLBuffer = class WebGLBuffer extends WebGLObject {};
-global.WebGLFramebuffer = class WebGLFramebuffer extends WebGLObject {};
-global.WebGLProgram = class WebGLProgram extends WebGLObject {};
-global.WebGLRenderbuffer = class WebGLRenderbuffer extends WebGLObject {};
-global.WebGLShader = class WebGLShader extends WebGLObject {};
-global.WebGLTexture = class WebGLTexture extends WebGLObject {};
 
-const idToObject = {};
 const wrapObject = (type, id) => {
   const found = idToObject[id];
   if (found) {
@@ -80,6 +80,18 @@ const wrapObject = (type, id) => {
   }
   return (idToObject[id] = new type(id));
 };
+
+global.WebGLBuffer = class WebGLBuffer extends WebGLObject {};
+
+global.WebGLFramebuffer = class WebGLFramebuffer extends WebGLObject {};
+
+global.WebGLProgram = class WebGLProgram extends WebGLObject {};
+
+global.WebGLRenderbuffer = class WebGLRenderbuffer extends WebGLObject {};
+
+global.WebGLShader = class WebGLShader extends WebGLObject {};
+
+global.WebGLTexture = class WebGLTexture extends WebGLObject {};
 
 global.WebGLUniformLocation = class WebGLUniformLocation {
   constructor(id) {
@@ -92,6 +104,7 @@ global.WebGLActiveInfo = class WebGLActiveInfo {
     Object.assign(this, obj);
   }
 };
+
 global.WebGLShaderPrecisionFormat = class WebGLShaderPrecisionFormat {
   constructor(obj) {
     Object.assign(this, obj);
@@ -260,6 +273,7 @@ const wrapMethods = gl => {
 // Get the GL interface from an EXGLContextID and do JS-side setup
 const getGl = exglCtxId => {
   const gl = global.__EXGLContexts[exglCtxId];
+  gl.__exglCtxId = exglCtxId;
   delete global.__EXGLContexts[exglCtxId];
   if (Object.setPrototypeOf) {
     Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
