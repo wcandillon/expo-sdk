@@ -135,6 +135,9 @@ module.exports = {
   get Logs() {
     return require('./Logs');
   },
+  get Pedometer() {
+    return require('./Pedometer');
+  },
   get Permissions() {
     return require('./Permissions');
   },
