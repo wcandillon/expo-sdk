@@ -28,9 +28,6 @@ module.exports = {
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
-  get Facebook() {
-    return NativeModules.ExponentFacebook;
-  },
   get FileSystem() {
     return NativeModules.ExponentFileSystem;
   },
@@ -140,6 +137,9 @@ module.exports = {
   },
   get Permissions() {
     return require('./Permissions');
+  },
+  get Facebook() {
+    return require('./Facebook');
   },
   get FacebookAds() {
     return require('./FacebookAds');
