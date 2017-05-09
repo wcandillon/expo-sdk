@@ -35,8 +35,8 @@
     "lottie-react-native": "1.1.1",
     "md5-file": "^3.1.1",
     "react-native-fbads": "https://github.com/callstack-io/react-native-fbads/tarball/v4.1.0",
-    "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.12.2-exp.1.tar.gz",
-    "react-native-svg": "https://github.com/expo/react-native-svg/archive/4.4.1.tar.gz",
+    "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.14.0.tar.gz",
+    "react-native-svg": "https://github.com/expo/react-native-svg/archive/5.1.8-exp.0.tar.gz",
     "uuid-js": "^0.7.5",
     "websql": "^0.4.4"
   },
@@ -45,6 +45,6 @@
     "jest": "^19.0.2",
     "jest-expo": "0.4.0-alpha.0",
     "react": "16.0.0-alpha.6",
-    "react-native": "exponent/react-native#sdk-16"
+    "react-native": "expo/react-native#sdk-17"
   }
 }
