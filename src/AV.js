@@ -52,7 +52,7 @@ export type PlaybackStatusToSet = {
   isLooping?: boolean,
 };
 
-export const _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS: number = 100;
+export const _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS: number = 500;
 export const _DEFAULT_INITIAL_PLAYBACK_STATUS: PlaybackStatusToSet = {
   positionMillis: 0,
   progressUpdateIntervalMillis: _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS,
