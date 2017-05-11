@@ -149,11 +149,17 @@ async function sendRemoteLogsAsync() {
 }
 
 function queueRemoteLog(level, additionalFields, args) {
+  let argsToLog = args;
+  //Since we call 'JSON.stringify' before sending the logs, functions will output
+  // null, so we need to format them as String beforehand.
+  if (typeof args[0] === 'function') {
+    argsToLog = functionToString(args[0]);
+  }
   logQueue.enqueue({
     count: logCounter++,
     level,
     groupDepth,
-    body: args,
+    body: argsToLog,
     ...additionalFields,
   });
 
@@ -175,6 +181,30 @@ function replaceConsoleFunction(consoleFunc, level, additionalFields) {
   };
 
   console[consoleFunc] = newConsoleFunc;
+}
+
+// Function formatting
+
+// From: https://davidwalsh.name/javascript-arguments
+function getFunctionArgs(func) {
+  // First match everything inside the function argument parens.
+  var args = func.toString().match(/function\s.*?\(([^)]*)\)/)[1];
+
+  // Split the arguments string into an array comma delimited.
+  return args
+    .split(',')
+    .map(function(arg) {
+      // Ensure no inline comments are parsed and trim the whitespace.
+      return arg.replace(/\/\*.*\*\//, '').trim();
+    })
+    .filter(function(arg) {
+      // Ensure no undefined values are added.
+      return arg;
+    });
+}
+
+function functionToString(func) {
+  return `function ${func.name}(${getFunctionArgs(func).join(', ')}) {}`;
 }
 
 // Enable by default
