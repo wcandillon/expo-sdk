@@ -4,6 +4,7 @@ import UUID from 'uuid-js';
 
 import * as Constants from './Constants';
 import Queue from './lib/Queue';
+import stringifyObject from 'stringify-object';
 
 let logQueue = new Queue();
 let logCounter = 0;
@@ -149,17 +150,12 @@ async function sendRemoteLogsAsync() {
 }
 
 function queueRemoteLog(level, additionalFields, args) {
-  let argsToLog = args;
-  //Since we call 'JSON.stringify' before sending the logs, functions will output
-  // null, so we need to format them as String beforehand.
-  if (typeof args[0] === 'function') {
-    argsToLog = functionToString(args[0]);
-  }
+  let argsToSend = preprocessArgs(args);
   logQueue.enqueue({
     count: logCounter++,
     level,
     groupDepth,
-    body: argsToLog,
+    body: argsToSend,
     ...additionalFields,
   });
 
@@ -183,30 +179,16 @@ function replaceConsoleFunction(consoleFunc, level, additionalFields) {
   console[consoleFunc] = newConsoleFunc;
 }
 
-// Function formatting
-
-// From: https://davidwalsh.name/javascript-arguments
-function getFunctionArgs(func) {
-  // First match everything inside the function argument parens.
-  var args = func.toString().match(/function\s.*?\(([^)]*)\)/)[1];
-
-  // Split the arguments string into an array comma delimited.
-  return args
-    .split(',')
-    .map(function(arg) {
-      // Ensure no inline comments are parsed and trim the whitespace.
-      return arg.replace(/\/\*.*\*\//, '').trim();
-    })
-    .filter(function(arg) {
-      // Ensure no undefined values are added.
+// Arguments processing
+function preprocessArgs(args) {
+  return args.map(arg => {
+    if (typeof arg === 'function' || typeof arg === 'object') {
+      return stringifyObject(arg, { indent: '  ', singleQuotes: false });
+    } else {
       return arg;
-    });
+    }
+  });
 }
-
-function functionToString(func) {
-  return `function ${func.name}(${getFunctionArgs(func).join(', ')}) {}`;
-}
-
 // Enable by default
 if (Constants.manifest && Constants.manifest.logUrl) {
   // Checks if the app is running in Chrome. If it is, we do not enable XDE and display a message on the XDE.
