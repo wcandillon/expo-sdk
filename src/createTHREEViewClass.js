@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
+import { View, ViewPropTypes } from 'react-native';
 
 import GLView from './GLView';
 
@@ -23,7 +23,7 @@ export default THREE => class THREEView extends React.Component {
     // time in seconds since the last animation frame
     tick: PropTypes.func,
 
-    ...View.propTypes,
+    ...ViewPropTypes,
   };
 
   static defaultProps = {

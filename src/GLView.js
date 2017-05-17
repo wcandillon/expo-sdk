@@ -1,7 +1,12 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View, Platform, requireNativeComponent } from 'react-native';
+import {
+  View,
+  ViewPropTypes,
+  Platform,
+  requireNativeComponent,
+} from 'react-native';
 
 import * as Constants from './Constants';
 
@@ -17,7 +22,7 @@ export default class GLView extends React.Component {
     // [iOS only] Number of samples for Apple's built-in multisampling.
     msaaSamples: PropTypes.number,
 
-    ...View.propTypes,
+    ...ViewPropTypes,
   };
 
   static defaultProps = {

@@ -9,6 +9,7 @@ import {
   requireNativeComponent,
   StyleSheet,
   View,
+  ViewPropTypes,
 } from 'react-native';
 
 import Asset from './Asset';
@@ -414,7 +415,7 @@ Video.propTypes = {
   translateX: React.PropTypes.number,
   translateY: React.PropTypes.number,
   rotation: React.PropTypes.number,
-  ...View.propTypes,
+  ...ViewPropTypes,
 };
 
 const ExponentVideo = requireNativeComponent('ExponentVideo', Video, {

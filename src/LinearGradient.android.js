@@ -7,6 +7,7 @@ import {
   View,
   processColor,
   requireNativeComponent,
+  ViewPropTypes,
 } from 'react-native';
 
 export default class LinearGradient extends Component {
@@ -15,7 +16,7 @@ export default class LinearGradient extends Component {
     end: PropTypes.arrayOf(PropTypes.number),
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     locations: PropTypes.arrayOf(PropTypes.number),
-    ...View.propTypes,
+    ...ViewPropTypes,
   };
 
   render() {
