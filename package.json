@@ -42,9 +42,9 @@
     "websql": "^0.4.4"
   },
   "devDependencies": {
-    "flow-bin": "^0.40.0",
-    "jest": "^19.0.2",
-    "jest-expo": "0.4.0-alpha.0",
+    "flow-bin": "0.42.0",
+    "jest": "^20.0.0",
+    "jest-expo": "1.0.0",
     "react": "16.0.0-alpha.6",
     "react-native": "expo/react-native#sdk-17"
   }
