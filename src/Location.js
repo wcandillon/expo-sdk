@@ -6,6 +6,14 @@ import invariant from 'invariant';
 const LocationEventEmitter = new NativeEventEmitter(
   NativeModules.ExponentLocation
 );
+
+type ProviderStatus = {
+  locationServicesEnabled: boolean,
+  gpsAvailable: boolean,
+  networkAvailable: boolean,
+  passiveAvailable: boolean,
+};
+
 type LocationOptions = {
   enableHighAccuracy: ?boolean,
   timeInterval: ?number,
@@ -39,6 +47,10 @@ function _getCurrentWatchId() {
 
 let watchCallbacks: { [watchId: number]: LocationCallback } = {};
 let deviceEventSubscription: ?Function;
+
+function getProviderStatusAsync(): Promise<ProviderStatus> {
+  return ExponentLocation.getProviderStatus();
+}
 
 function getCurrentPositionAsync(options: LocationOptions) {
   // On Android we have a native method for this case.
@@ -199,6 +211,13 @@ const _polyfill = {
 window.navigator.geolocation = _polyfill;
 
 const Location = {
+  getProviderStatusAsync: () => {
+    if (Platform.OS === 'android') {
+      return getProviderStatusAsync();
+    } else {
+      Promise.reject(new Error('Unsupported platform'));
+    }
+  },
   getCurrentPositionAsync,
   watchPositionAsync,
 
