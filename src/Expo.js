@@ -150,6 +150,9 @@ module.exports = {
   get LegacyAsyncStorage() {
     return require('./LegacyAsyncStorage');
   },
+  get IntentLauncherAndroid() {
+    return require('./IntentLauncherAndroid');
+  },
 };
 
 // add deprecated `Components` module
