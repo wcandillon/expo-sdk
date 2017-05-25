@@ -179,5 +179,14 @@ function replaceConsoleFunction(consoleFunc, level, additionalFields) {
 
 // Enable by default
 if (Constants.manifest && Constants.manifest.logUrl) {
-  enableXDELogging();
+  // Checks if the app is running in Chrome. If it is, we do not enable XDE and display a message on the XDE.
+  if (!navigator.userAgent) {
+    enableXDELogging();
+  } else {
+    queueRemoteLog(
+      'info',
+      {},
+      "You are now debugging remotely, check Chrome's console for your logs!"
+    );
+  }
 }
