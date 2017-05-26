@@ -2,6 +2,11 @@
 
 import { Platform, NativeModules } from 'react-native';
 
+/**
+ * Constants are from the source code of Settings:
+ * https://developer.android.com/reference/android/provider/Settings.html
+ */
+
 export const ACTION_ACCESSIBILITY_SETTINGS =
   'android.settings.ACCESSIBILITY_SETTINGS';
 export const ACTION_APP_NOTIFICATION_REDACTION =
