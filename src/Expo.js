@@ -153,6 +153,9 @@ module.exports = {
   get IntentLauncherAndroid() {
     return require('./IntentLauncherAndroid');
   },
+  get ScreenOrientation() {
+    return require('./ScreenOrientation');
+  },
 };
 
 // add deprecated `Components` module
