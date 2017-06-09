@@ -33,7 +33,7 @@ export type RecordingStatus =
 export type AudioMode = {
   allowsRecordingIOS: boolean,
   interruptionModeIOS: number,
-  playsInSilentLockedModeIOS: boolean,
+  playsInSilentModeIOS: boolean,
   interruptionModeAndroid: boolean,
   shouldDuckAndroid: boolean,
 };
@@ -64,12 +64,12 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
   if (
     !('allowsRecordingIOS' in mode) ||
     !('interruptionModeIOS' in mode) ||
-    !('playsInSilentLockedModeIOS' in mode) ||
+    !('playsInSilentModeIOS' in mode) ||
     !('interruptionModeAndroid' in mode) ||
     !('shouldDuckAndroid' in mode)
   ) {
     throw new Error(
-      'Audio mode must contain keys "allowsRecordingIOS", "interruptionModeIOS", "playsInSilentLockedModeIOS", "interruptionModeAndroid", and "shouldDuckAndroid".'
+      'Audio mode must contain keys "allowsRecordingIOS", "interruptionModeIOS", "playsInSilentModeIOS", "interruptionModeAndroid", and "shouldDuckAndroid".'
     );
   }
   if (
@@ -91,11 +91,11 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
   }
   if (
     typeof mode.allowsRecordingIOS !== 'boolean' ||
-    typeof mode.playsInSilentLockedModeIOS !== 'boolean' ||
+    typeof mode.playsInSilentModeIOS !== 'boolean' ||
     typeof mode.shouldDuckAndroid !== 'boolean'
   ) {
     throw new Error(
-      '"allowsRecordingIOS", "playsInSilentLockedModeIOS", and "shouldDuckAndroid" must be booleans.'
+      '"allowsRecordingIOS", "playsInSilentModeIOS", and "shouldDuckAndroid" must be booleans.'
     );
   }
   await NativeModules.ExponentAV.setAudioMode(mode);
