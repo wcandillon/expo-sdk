@@ -9,9 +9,9 @@ const LocationEventEmitter = new NativeEventEmitter(
 
 type ProviderStatus = {
   locationServicesEnabled: boolean,
-  gpsAvailable: boolean,
-  networkAvailable: boolean,
-  passiveAvailable: boolean,
+  gpsAvailable: ?boolean,
+  networkAvailable: ?boolean,
+  passiveAvailable: ?boolean,
 };
 
 type LocationOptions = {
@@ -49,7 +49,7 @@ let watchCallbacks: { [watchId: number]: LocationCallback } = {};
 let deviceEventSubscription: ?Function;
 
 function getProviderStatusAsync(): Promise<ProviderStatus> {
-  return ExponentLocation.getProviderStatus();
+  return ExponentLocation.getProviderStatusAsync();
 }
 
 function getCurrentPositionAsync(options: LocationOptions) {
@@ -211,13 +211,7 @@ const _polyfill = {
 window.navigator.geolocation = _polyfill;
 
 const Location = {
-  getProviderStatusAsync: () => {
-    if (Platform.OS === 'android') {
-      return getProviderStatusAsync();
-    } else {
-      Promise.reject(new Error('Unsupported platform'));
-    }
-  },
+  getProviderStatusAsync,
   getCurrentPositionAsync,
   watchPositionAsync,
 
