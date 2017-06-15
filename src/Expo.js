@@ -186,4 +186,5 @@ Object.defineProperty(module.exports, 'Components', {
 if (global) {
   global.__exponent = module.exports;
   global.__expo = module.exports;
+  global.Expo = module.exports;
 }
