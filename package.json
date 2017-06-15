@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "18.0.0-alpha.1",
+  "version": "18.0.0-rc.1",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "scripts": {
