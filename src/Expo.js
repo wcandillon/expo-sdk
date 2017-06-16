@@ -166,7 +166,7 @@ Object.defineProperty(module.exports, 'Components', {
       console.warn(
         'Components under `Expo.Components` have been moved to the root `Expo` namespace. ' +
           'For example, `Expo.Components.Video` is now `Expo.Video`. The `Expo.Components` ' +
-          "namespace is now deprecated and will be removed in version 17.0.0 of 'expo'."
+          "namespace is now deprecated and will be removed in version 19.0.0 of 'expo'."
       );
       Components = {
         AppLoading: module.exports.AppLoading,
