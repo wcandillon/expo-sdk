@@ -266,13 +266,16 @@ type GeoErrorCallback = (error: any) => void;
 
 function getCurrentPosition(
   success: GeoSuccessCallback,
-  error: GeoErrorCallback,
-  options: LocationOptions
+  error?: GeoErrorCallback,
+  options?: LocationOptions = {}
 ): void {
   invariant(
     typeof success === 'function',
     'Must provide a valid success callback.'
   );
+
+  invariant(typeof options === 'object', 'options must be an object.');
+
   _getCurrentPositionAsyncWrapper(success, error, options);
 }
 
