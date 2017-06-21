@@ -39,7 +39,7 @@
     "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.15.2.tar.gz",
     "react-native-svg": "5.2.0",
     "uuid-js": "^0.7.5",
-    "websql": "^0.4.4"
+    "websql": "expo/node-websql#18.0.0"
   },
   "devDependencies": {
     "flow-bin": "0.42.0",
