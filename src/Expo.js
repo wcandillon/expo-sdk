@@ -31,6 +31,9 @@ module.exports = {
   get FileSystem() {
     return NativeModules.ExponentFileSystem;
   },
+  get Fingerprint() {
+    return NativeModules.ExponentFingerprint;
+  },
   get ImageCropper() {
     return NativeModules.ExponentImageCropper;
   },
