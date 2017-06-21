@@ -150,12 +150,16 @@ async function sendRemoteLogsAsync() {
 }
 
 function queueRemoteLog(level, additionalFields, args) {
-  let argsToSend = preprocessArgs(args);
+  let stringifiedArgs = args.map(arg => {
+    return stringifyObject(arg, { indent: '  ', singleQuotes: false });
+  });
+
   logQueue.enqueue({
     count: logCounter++,
     level,
     groupDepth,
-    body: argsToSend,
+    body: stringifiedArgs,
+    originalArgs: args,
     ...additionalFields,
   });
 
@@ -179,16 +183,6 @@ function replaceConsoleFunction(consoleFunc, level, additionalFields) {
   console[consoleFunc] = newConsoleFunc;
 }
 
-// Arguments processing
-function preprocessArgs(args) {
-  return args.map(arg => {
-    if (typeof arg === 'function' || typeof arg === 'object') {
-      return stringifyObject(arg, { indent: '  ', singleQuotes: false });
-    } else {
-      return arg;
-    }
-  });
-}
 // Enable by default
 if (Constants.manifest && Constants.manifest.logUrl) {
   // Checks if the app is running in Chrome. If it is, we do not enable XDE and display a message on the XDE.
