@@ -38,6 +38,7 @@
     "react-native-fbads": "https://github.com/callstack-io/react-native-fbads/tarball/v4.1.0",
     "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.15.2.tar.gz",
     "react-native-svg": "5.2.0",
+    "stringify-object": "^3.2.0",
     "uuid-js": "^0.7.5",
     "websql": "expo/node-websql#18.0.0"
   },
