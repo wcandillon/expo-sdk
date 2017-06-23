@@ -9,7 +9,6 @@ import Constants from './Constants';
 // These are done for the side effects
 import './Logs'; // set up Expo logging infra
 import './Location'; // polyfill navigator.geolocation
-import './AndroidPolyfills';
 
 if (Constants.manifest && typeof Constants.manifest.env === 'object') {
   Object.assign(process.env, Constants.manifest.env);

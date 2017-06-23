@@ -4,7 +4,7 @@ import UUID from 'uuid-js';
 
 import * as Constants from './Constants';
 import Queue from './lib/Queue';
-import stringifyObject from 'stringify-object';
+import prettyFormat from 'pretty-format';
 
 let logQueue = new Queue();
 let logCounter = 0;
@@ -158,7 +158,7 @@ function queueRemoteLog(level, additionalFields, args) {
     if (typeof arg === 'string') {
       return arg;
     } else {
-      return stringifyObject(arg, { indent: '  ', singleQuotes: false });
+      return prettyFormat(arg);
     }
   });
 
@@ -198,7 +198,7 @@ if (Constants.manifest && Constants.manifest.logUrl) {
     enableXDELogging();
   } else {
     queueRemoteLog('info', {}, [
-      "You are now debugging remotely, check your browser console for your application logs.",
+      'You are now debugging remotely, check your browser console for your application logs.',
     ]);
   }
 }
