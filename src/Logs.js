@@ -150,8 +150,16 @@ async function sendRemoteLogsAsync() {
 }
 
 function queueRemoteLog(level, additionalFields, args) {
+  if (!args || !args.map) {
+    return;
+  }
+
   let stringifiedArgs = args.map(arg => {
-    return stringifyObject(arg, { indent: '  ', singleQuotes: false });
+    if (typeof arg === 'string') {
+      return arg;
+    } else {
+      return stringifyObject(arg, { indent: '  ', singleQuotes: false });
+    }
   });
 
   logQueue.enqueue({
@@ -189,10 +197,8 @@ if (Constants.manifest && Constants.manifest.logUrl) {
   if (!navigator.userAgent) {
     enableXDELogging();
   } else {
-    queueRemoteLog(
-      'info',
-      {},
-      "You are now debugging remotely, check Chrome's console for your logs!"
-    );
+    queueRemoteLog('info', {}, [
+      "You are now debugging remotely, check your browser console for your application logs.",
+    ]);
   }
 }
