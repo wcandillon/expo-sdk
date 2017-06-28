@@ -27,17 +27,17 @@ export function processFontFamily(name: ?string) {
       if (isLoading(name)) {
         console.error(
           `You started loading '${name}', but used it before it finished loading\n\n` +
-            `- You need to wait for Exponent.Font.loadAsync to complete before using the font.\n\n` +
+            `- You need to wait for Expo.Font.loadAsync to complete before using the font.\n\n` +
             `- We recommend loading all fonts before rendering the app, and rendering only ` +
-            `Exponent.Components.AppLoading while waiting for loading to complete.`
+            `Expo.AppLoading while waiting for loading to complete.`
         );
       } else {
         console.error(
           `fontFamily '${name}' is not a system font and has not been loaded through ` +
-            `Exponent.Font.loadAsync.\n\n` +
+            `Expo.Font.loadAsync.\n\n` +
             `- If you intended to use a system font, make sure you typed the name ` +
             `correctly and that it is supported by your device operating system.\n\n` +
-            `- If this is a custom font, be sure to load it with Exponent.Font.loadAsync.`
+            `- If this is a custom font, be sure to load it with Expo.Font.loadAsync.`
         );
       }
     }
@@ -117,9 +117,7 @@ export function style(
   }
 
   if (!loaded[name] && !options.ignoreWarning) {
-    console.warn(
-      `[Exponent.Font] No font '${name}', or it hasn't been loaded yet`
-    );
+    console.warn(`[Expo.Font] No font '${name}', or it hasn't been loaded yet`);
   }
   return {
     fontFamily: `ExponentFont-${nativeName(name)}`,
