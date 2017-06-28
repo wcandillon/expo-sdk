@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "18.0.5",
+  "version": "18.0.6",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "lottie-react-native": "1.1.1",
     "md5-file": "^3.1.1",
     "pretty-format": "^20.0.3",
+    "prop-types": "^15.5.10",
     "react-native-branch": "2.0.0-beta.3",
     "react-native-fbads": "https://github.com/callstack-io/react-native-fbads/tarball/v4.1.0",
     "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.15.2.tar.gz",
