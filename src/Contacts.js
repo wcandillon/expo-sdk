@@ -2,8 +2,15 @@
 
 import { NativeModules, Platform } from 'react-native';
 
-type FieldType = 'phoneNumbers' | 'emails' | 'addresses' | 'socialProfiles' |
-                 'instantMessageAddresses' | 'urls' | 'dates' | 'relationships';
+type FieldType =
+  | 'phoneNumbers'
+  | 'emails'
+  | 'addresses'
+  | 'socialProfiles'
+  | 'instantMessageAddresses'
+  | 'urls'
+  | 'dates'
+  | 'relationships';
 
 type Options = {
   pageSize?: number,
@@ -12,7 +19,7 @@ type Options = {
 };
 
 type Contact = {
-  id: number,
+  id: string,
   contactType: string,
   name: string,
   firstName?: string,
@@ -39,7 +46,7 @@ type Contact = {
     email?: string,
     primary?: boolean,
     label: string,
-    id: number,
+    id: string,
   }[],
   phoneNumbers?: {
     number?: string,
@@ -47,7 +54,7 @@ type Contact = {
     digits?: string,
     countryCode?: string,
     label: string,
-    id: number,
+    id: string,
   }[],
   addresses?: {
     street?: string,
@@ -59,7 +66,7 @@ type Contact = {
     poBox?: string,
     isoCountryCode?: string,
     label: string,
-    id: number,
+    id: string,
   }[],
   socialProfiles?: {
     service?: string,
@@ -68,24 +75,24 @@ type Contact = {
     username?: string,
     userId?: string,
     label: string,
-    id: number,
+    id: string,
   }[],
   instantMessageAddresses?: {
     service?: string,
     username?: string,
     localizedService?: string,
     label: string,
-    id: number,
+    id: string,
   }[],
   urls?: {
     label: string,
     url?: string,
-    id: number,
+    id: string,
   }[],
   company?: string,
   jobTitle?: string,
   department?: string,
-  imageAvailable?: bool,
+  imageAvailable?: boolean,
   image?: {
     uri?: string,
   },
@@ -97,13 +104,13 @@ type Contact = {
     day?: number,
     month?: number,
     year?: number,
-    id: number,
+    id: string,
     label: string,
   }[],
   relationsips?: {
     label: string,
     name?: string,
-    id: number,
+    id: string,
   }[],
 };
 
@@ -119,9 +126,14 @@ const DEFAULT_PAGE_SIZE = 100;
 export async function getContactsAsync(
   { pageSize = DEFAULT_PAGE_SIZE, pageOffset = 0, fields = [] }: Options = {}
 ): Promise<Response> {
-  if (Platform.OS === 'ios' && (fields.includes(IMAGE) || fields.includes(THUMBNAIL))) {
-    console.warn('Mind that fetching images for all contacts might be time and resource consuming. ' +
-      'Consider using getContactByIdAsync() to get data for a single contact.');
+  if (
+    Platform.OS === 'ios' &&
+    (fields.includes(IMAGE) || fields.includes(THUMBNAIL))
+  ) {
+    console.warn(
+      'Mind that fetching images for all contacts might be time and resource consuming. ' +
+        'Consider using getContactByIdAsync() to get data for a single contact.'
+    );
   }
   return await NativeModules.ExponentContacts.getContactsAsync({
     pageSize,
@@ -136,7 +148,7 @@ export async function getContactByIdAsync(
   if (id === null) {
     Promise.reject('Please pass an ID as a parameter');
   } else {
-      return await NativeModules.ExponentContacts.getContactsAsync({
+    return await NativeModules.ExponentContacts.getContactsAsync({
       pageSize: 1,
       pageOffset: 0,
       fields,
