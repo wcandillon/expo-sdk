@@ -10,6 +10,8 @@ import resolveAssetSource
 
 import { manifest } from './Constants';
 
+const FS = NativeModules.ExponentFileSystem;
+
 // Return { uri, hash } for an asset's file, picking the correct scale, based on
 // its React Native metadata. If the asset isn't an image just picks the first
 // file.
@@ -116,23 +118,22 @@ export default class Asset {
     this.downloading = true;
 
     try {
-      const path = `ExponentAsset-${this.hash}.${this.type}`;
-      let exists, md5, uri;
+      const localUri = `${FS.cacheDirectory}ExponentAsset-${this.hash}.${this.type}`;
+      console.log(localUri);
+      let exists, md5;
       ({
         exists,
         md5,
-        uri,
-      } = await NativeModules.ExponentFileSystem.getInfoAsync(path, {
+      } = await FS.getInfoAsync(localUri, {
         cache: true,
         md5: true,
       }));
       if (!exists || md5 !== this.hash) {
         ({
           md5,
-          uri,
-        } = await NativeModules.ExponentFileSystem.downloadAsync(
+        } = await FS.downloadAsync(
           this.uri,
-          path,
+          localUri,
           { cache: true, md5: true }
         ));
         if (md5 !== this.hash) {
@@ -142,7 +143,7 @@ export default class Asset {
           );
         }
       }
-      this.localUri = uri;
+      this.localUri = localUri;
       this.downloaded = true;
       this.downloadCallbacks.forEach(({ resolve }) => resolve());
     } catch (e) {
