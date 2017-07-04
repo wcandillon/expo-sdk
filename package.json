@@ -38,7 +38,7 @@
     "prop-types": "^15.5.10",
     "react-native-branch": "2.0.0-beta.3",
     "react-native-fbads": "https://github.com/callstack-io/react-native-fbads/tarball/v4.1.0",
-    "react-native-maps": "https://github.com/expo/react-native-maps/archive/v0.15.2.tar.gz",
+    "react-native-maps": "0.15.3",
     "react-native-svg": "https://github.com/expo/react-native-svg/archive/5.2.0-exp.0.tar.gz",
     "uuid-js": "^0.7.5",
     "websql": "expo/node-websql#18.0.0"
