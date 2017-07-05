@@ -120,6 +120,9 @@ module.exports = {
   get DocumentPicker() {
     return require('./DocumentPicker');
   },
+  get FileSystem() {
+    return require('./FileSystem');
+  },
   get Font() {
     return require('./Font');
   },
