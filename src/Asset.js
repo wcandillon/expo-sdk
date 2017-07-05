@@ -119,7 +119,6 @@ export default class Asset {
 
     try {
       const localUri = `${FS.cacheDirectory}ExponentAsset-${this.hash}.${this.type}`;
-      console.log(localUri);
       let exists, md5;
       ({
         exists,
