@@ -28,9 +28,6 @@ module.exports = {
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
-  get FileSystem() {
-    return NativeModules.ExponentFileSystem;
-  },
   get Fingerprint() {
     return NativeModules.ExponentFingerprint;
   },
