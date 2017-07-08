@@ -3,10 +3,8 @@
 import { NativeModules, PixelRatio, Platform } from 'react-native';
 
 import AssetRegistry from 'react-native/Libraries/Image/AssetRegistry';
-import AssetSourceResolver
-  from 'react-native/Libraries/Image/AssetSourceResolver';
-import resolveAssetSource
-  from 'react-native/Libraries/Image/resolveAssetSource';
+import AssetSourceResolver from 'react-native/Libraries/Image/AssetSourceResolver';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import { manifest } from './Constants';
 
@@ -48,9 +46,10 @@ const pickScale = meta => {
   if (manifest.xde) {
     // Development server URI is pieced together
     return {
-      uri: manifest.bundleUrl.match(/^https?:\/\/.*?\//)[0] +
-        meta.httpServerLocation.replace(/^\/?/, '') +
-        suffix,
+      uri:
+        manifest.bundleUrl.match(/^https?:\/\/.*?\//)[0] +
+          meta.httpServerLocation.replace(/^\/?/, '') +
+          suffix,
       hash,
     };
   }
@@ -118,23 +117,18 @@ export default class Asset {
     this.downloading = true;
 
     try {
-      const localUri = `${FS.cacheDirectory}ExponentAsset-${this.hash}.${this.type}`;
+      const localUri = `${FS.cacheDirectory}ExponentAsset-${this.hash}.${this
+        .type}`;
       let exists, md5;
-      ({
-        exists,
-        md5,
-      } = await FS.getInfoAsync(localUri, {
+      ({ exists, md5 } = await FS.getInfoAsync(localUri, {
         cache: true,
         md5: true,
       }));
       if (!exists || md5 !== this.hash) {
-        ({
-          md5,
-        } = await FS.downloadAsync(
-          this.uri,
-          localUri,
-          { cache: true, md5: true }
-        ));
+        ({ md5 } = await FS.downloadAsync(this.uri, localUri, {
+          cache: true,
+          md5: true,
+        }));
         if (md5 !== this.hash) {
           throw new Error(
             `Downloaded file for asset '${this.name}.${this.type}' ` +
