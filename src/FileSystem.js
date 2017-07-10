@@ -2,6 +2,11 @@ import { NativeModules } from 'react-native';
 
 const { ExponentFileSystem: FS } = NativeModules;
 
+const normalizeEndingSlash = (p) => p.replace(/\/*$/, '') + '/';
+
+FS.documentDirectory = normalizeEndingSlash(FS.documentDirectory);
+FS.cacheDirectory = normalizeEndingSlash(FS.cacheDirectory);
+
 export const documentDirectory = FS.documentDirectory;
 export const cacheDirectory = FS.cacheDirectory;
 
