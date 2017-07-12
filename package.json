@@ -5,6 +5,7 @@
   "main": "src/Expo.js",
   "scripts": {
     "flow": "flow",
+    "prepublishOnly": "proofread",
     "test": "node_modules/jest/bin/jest.js"
   },
   "jest": {
@@ -44,6 +45,7 @@
     "websql": "expo/node-websql#18.0.0"
   },
   "devDependencies": {
+    "@expo/npm-proofread": "^1.0.1",
     "flow-bin": "0.42.0",
     "jest": "^20.0.0",
     "jest-expo": "1.0.0",
