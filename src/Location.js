@@ -58,6 +58,8 @@ let watchCallbacks: {
 } = {};
 let deviceEventSubscription: ?Function;
 let headingEventSub: ?Function;
+let googleApiKey;
+const googleApiUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 function getProviderStatusAsync(): Promise<ProviderStatus> {
   return ExponentLocation.getProviderStatusAsync();
@@ -208,6 +210,94 @@ async function _askPermissionForWatchAsync(success, error, options, watchId) {
   }
 }
 
+async function geocodeAsync(address: string) {
+  return ExponentLocation.geocodeAsync(address).catch(error => {
+    if (Platform.OS === 'android') {
+      if (!googleApiKey) {
+        throw new Error(
+          error.message + ' Please set a Google API Key to use geocoding'
+        );
+      }
+      return _googleGeocodeAsync(address);
+    }
+    throw error;
+  });
+}
+
+async function reverseGeocodeAsync(options: {
+  latitude: number,
+  longitude: number,
+}) {
+  return ExponentLocation.reverseGeocodeAsync(options).catch(error => {
+    if (Platform.OS === 'android') {
+      if (!googleApiKey) {
+        throw new Error(
+          error.message + ' Please set a Google API Key to use geocoding'
+        );
+      }
+      return _googleReverseGeocodeAsync(options);
+    }
+    throw error;
+  });
+}
+
+function setApiKey(apiKey: string) {
+  googleApiKey = apiKey;
+}
+
+async function _googleGeocodeAsync(address: string) {
+  const result = await fetch(
+    `${googleApiUrl}?key=${googleApiKey}&address=${encodeURI(address)}`
+  );
+  const resultObject = await result.json();
+
+  if (resultObject.status !== 'OK') {
+    return Promise.reject('An error occurred during geocoding.');
+  }
+
+  return resultObject.results.map(result => {
+    let location = result.geometry.location;
+    return {
+      latitude: location.lat,
+      longitude: location.lng,
+    };
+  });
+}
+
+async function _googleReverseGeocodeAsync(options: {
+  latitude: number,
+  longitude: number,
+}) {
+  const result = await fetch(
+    `${googleApiUrl}?key=${googleApiKey}&latlng=${options.latitude},${options.longitude}`
+  );
+  const resultObject = await result.json();
+
+  if (resultObject.status !== 'OK') {
+    return Promise.reject('An error occurred during geocoding.');
+  }
+
+  return resultObject.results.map(result => {
+    let address = {};
+    result.address_components.forEach(component => {
+      if (component.types.includes('locality')) {
+        address.city = component.long_name;
+      } else if (component.types.includes('street_address')) {
+        address.street = component.long_name;
+      } else if (component.types.includes('administrative_area_level_1')) {
+        address.region = component.long_name;
+      } else if (component.types.includes('country')) {
+        address.country = component.long_name;
+      } else if (component.types.includes('postal_code')) {
+        address.postalCode = component.long_name;
+      } else if (component.types.includes('point_of_interest')) {
+        address.name = component.long_name;
+      }
+    });
+    return address;
+  });
+}
+
 // Polyfill: navigator.geolocation.watchPosition
 function watchPosition(
   success: GeoSuccessCallback,
@@ -318,6 +408,9 @@ const Location = {
   watchPositionAsync,
   getHeadingAsync,
   watchHeadingAsync,
+  geocodeAsync,
+  reverseGeocodeAsync,
+  setApiKey,
 
   // For internal purposes
   EventEmitter: LocationEventEmitter,
