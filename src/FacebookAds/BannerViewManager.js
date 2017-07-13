@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { requireNativeComponent, type ViewPropTypes } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 type AdType = 'large' | 'rectangle' | 'standard';
 
@@ -27,7 +27,7 @@ type BannerViewProps = {
   placementId: string,
   onPress: Function,
   onError: Function,
-  style: ViewPropTypes.ViewPdrops.style,
+  style: any,
 };
 
 const BannerView = (props: BannerViewProps) => {
