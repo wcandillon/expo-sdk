@@ -179,7 +179,7 @@ export default class Video extends Component {
       throw new Error('Cannot call fullscreen method if the OS is not iOS!');
     }
     return this._performOperationAndHandleStatusAsync((tag: number) =>
-      NativeModules.ExponentVideoManager.setFullscreen(tag, true)
+      NativeModules.ExponentVideoManager.setFullscreen(tag, value)
     );
   };
 

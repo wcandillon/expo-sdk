@@ -24,9 +24,9 @@ export type PlaybackStatus =
       uri: string,
 
       progressUpdateIntervalMillis: number,
-      durationMillis: number,
+      durationMillis?: number,
       positionMillis: number,
-      playableDurationMillis: number,
+      playableDurationMillis?: number,
 
       shouldPlay: boolean,
       isPlaying: boolean,
