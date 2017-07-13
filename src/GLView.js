@@ -7,7 +7,7 @@ import {
   requireNativeComponent,
 } from 'react-native';
 
-import Constants from './Constants';
+import * as Constants from './Constants';
 
 // A component that acts as an OpenGL render target.
 

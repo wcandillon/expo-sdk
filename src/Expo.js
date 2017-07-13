@@ -1,14 +1,14 @@
 // @flow
 
 import { NativeModules } from 'react-native';
-import Constants from './Constants';
+import { manifest } from './Constants';
 
 // These are done for the side effects
 import './Logs'; // set up Expo logging infra
 import './Location'; // polyfill navigator.geolocation
 
-if (Constants.manifest && typeof Constants.manifest.env === 'object') {
-  Object.assign(process.env, Constants.manifest.env);
+if (typeof manifest.env === 'object') {
+  Object.assign(process.env, manifest.env);
 }
 
 let Components;
@@ -105,7 +105,7 @@ module.exports = {
     return require('./Audio');
   },
   get Constants() {
-    return require('./Constants').default;
+    return require('./Constants');
   },
   get Contacts() {
     return require('./Contacts');

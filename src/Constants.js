@@ -13,7 +13,7 @@ if (ExponentConstants && ExponentConstants.manifest) {
   }
 }
 
-export default {
+module.exports = {
   ...NativeModules.ExponentConstants,
   manifest,
 };
