@@ -186,12 +186,15 @@ const _DISABLED_ERROR: Error = new Error(
 );
 
 // Returns true if value is in validValues, and false if not.
-const _isValueValid = (value: any, validValues: Array): boolean => {
+const _isValueValid = (value: any, validValues: Array<any>): boolean => {
   return validValues.filter(validValue => validValue === value).length > 0;
 };
 
 // Returns array of missing keys in object. Returns an empty array if no missing keys are found.
-const _findMissingKeys = (object: Object, requiredKeys: Array): Array => {
+const _findMissingKeys = (
+  object: Object,
+  requiredKeys: Array<any>
+): Array<any> => {
   return requiredKeys.filter(requiredKey => !(requiredKey in object));
 };
 
