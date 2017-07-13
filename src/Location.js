@@ -15,9 +15,9 @@ type ProviderStatus = {
 };
 
 type LocationOptions = {
-  enableHighAccuracy: ?boolean,
-  timeInterval: ?number,
-  distanceInterval: ?number,
+  enableHighAccuracy?: boolean,
+  timeInterval?: number,
+  distanceInterval?: number,
 };
 
 type LocationData = {
@@ -33,11 +33,9 @@ type LocationData = {
 };
 
 type HeadingData = {
-  heading: {
-    trueHeading: number,
-    magHeading: number,
-    accuracy: number,
-  },
+  trueHeading: number,
+  magHeading: number,
+  accuracy: number,
 };
 
 type LocationCallback = (data: LocationData) => any;
@@ -266,7 +264,7 @@ type GeoErrorCallback = (error: any) => void;
 
 function getCurrentPosition(
   success: GeoSuccessCallback,
-  error?: GeoErrorCallback,
+  error?: GeoErrorCallback = () => {},
   options?: LocationOptions = {}
 ): void {
   invariant(

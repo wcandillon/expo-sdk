@@ -1,16 +1,16 @@
 // @flow
 
 import { NativeModules } from 'react-native';
-import Asset from './Asset';
 
-import type { PlaybackSource, PlaybackStatus, PlaybackStatusToSet } from './AV';
 import {
   _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS,
-  _DEFAULT_INITIAL_PLAYBACK_STATUS,
   _COMMON_AV_PLAYBACK_METHODS,
   _getURIAndFullInitialStatusForLoadAsync,
   _throwErrorIfValuesOutOfBoundsInStatus,
   _getUnloadedStatus,
+  type PlaybackSource,
+  type PlaybackStatus,
+  type PlaybackStatusToSet,
 } from './AV';
 
 // TODO For consistency with PlaybackStatus, should we include progressUpdateIntervalMillis here as well?
@@ -478,11 +478,12 @@ export class Recording {
     initialStatus: PlaybackStatusToSet = {},
     callback: ?(status: PlaybackStatus) => void = null
   ): Promise<{ sound: Sound, status: PlaybackStatus }> {
-    if (this._uri === null || !this._isDoneRecording) {
+    if (this._uri == null || !this._isDoneRecording) {
       throw new Error(
         'Cannot create sound when the Recording has not finished!'
       );
     }
+    // $FlowFixMe: Flow can't distinguish between this literal and Asset
     return Sound.create({ uri: this._uri }, initialStatus, callback, false);
   }
 }

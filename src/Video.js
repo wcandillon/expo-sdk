@@ -12,16 +12,15 @@ import {
   ViewPropTypes,
 } from 'react-native';
 
-import Asset from './Asset';
-
-import type { PlaybackSource, PlaybackStatus, PlaybackStatusToSet } from './AV';
 import {
-  _DEFAULT_INITIAL_PLAYBACK_STATUS,
   _COMMON_AV_PLAYBACK_METHODS,
   _getURIFromSource,
   _getURIAndFullInitialStatusForLoadAsync,
   _throwErrorIfValuesOutOfBoundsInStatus,
   _getUnloadedStatus,
+  type PlaybackSource,
+  type PlaybackStatus,
+  type PlaybackStatusToSet,
 } from './AV';
 
 export type NaturalSize = {
@@ -31,6 +30,16 @@ export type NaturalSize = {
 };
 
 type ResizeMode = 'contain' | 'cover' | 'stretch';
+
+type ReadyForDisplayEvent = {
+  naturalSize: NaturalSize,
+  status: PlaybackStatus,
+};
+
+type FullscreenUpdateEvent = {
+  fullscreenUpdate: 0 | 1 | 2 | 3,
+  status: PlaybackStatus,
+};
 
 // TODO extend the Props type from Component
 type Props = {
@@ -43,14 +52,8 @@ type Props = {
   onLoadStart?: () => void,
   onLoad?: (status: PlaybackStatus) => void,
   onError?: (error: string) => void,
-  onReadyForDisplay?: (event: {
-    naturalSize: NaturalSize,
-    status: PlaybackStatus,
-  }) => void,
-  onIOSFullscreenUpdate?: (event: {
-    fullscreenUpdate: 0 | 1 | 2 | 3,
-    status: PlaybackStatus,
-  }) => void,
+  onReadyForDisplay?: (event: ReadyForDisplayEvent) => void,
+  onIOSFullscreenUpdate?: (event: FullscreenUpdateEvent) => void,
 
   // UI stuff
   useNativeControls?: boolean,
@@ -261,25 +264,25 @@ export default class Video extends Component {
 
   // ### Callback wrappers ###
 
-  _nativeCallback = event => {
+  _nativeCallback = (event: { nativeEvent: PlaybackStatus }) => {
     this._handleNewStatus(event.nativeEvent);
   };
 
   // TODO make sure we are passing the right stuff
-  _nativeOnLoadStart = event => {
+  _nativeOnLoadStart = (event: SyntheticEvent) => {
     if (this.props.onLoadStart) {
       this.props.onLoadStart();
     }
   };
 
-  _nativeOnLoad = event => {
+  _nativeOnLoad = (event: { nativeEvent: PlaybackStatus }) => {
     if (this.props.onLoad) {
       this.props.onLoad(event.nativeEvent);
     }
     this._handleNewStatus(event.nativeEvent);
   };
 
-  _nativeOnError = event => {
+  _nativeOnError = (event: { nativeEvent: { error: string } }) => {
     const error: string = event.nativeEvent.error;
     if (this.props.onError) {
       this.props.onError(error);
@@ -287,13 +290,15 @@ export default class Video extends Component {
     this._handleNewStatus(_getUnloadedStatus(error));
   };
 
-  _nativeOnReadyForDisplay = event => {
+  _nativeOnReadyForDisplay = (event: { nativeEvent: ReadyForDisplayEvent }) => {
     if (this.props.onReadyForDisplay) {
       this.props.onReadyForDisplay(event.nativeEvent);
     }
   };
 
-  _nativeOnFullscreenUpdate = event => {
+  _nativeOnFullscreenUpdate = (event: {
+    nativeEvent: FullscreenUpdateEvent,
+  }) => {
     if (this.props.onIOSFullscreenUpdate) {
       this.props.onIOSFullscreenUpdate(event.nativeEvent);
     }

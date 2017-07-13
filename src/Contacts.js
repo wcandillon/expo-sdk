@@ -3,16 +3,27 @@
 import { NativeModules, Platform } from 'react-native';
 
 type FieldType =
-  | 'phoneNumbers'
-  | 'emails'
-  | 'addresses'
-  | 'socialProfiles'
-  | 'instantMessageAddresses'
-  | 'urls'
-  | 'dates'
-  | 'relationships';
+  | typeof PHONE_NUMBERS
+  | typeof EMAILS
+  | typeof ADDRESSES
+  | typeof IMAGE
+  | typeof THUMBNAIL
+  | typeof NOTE
+  | typeof BIRTHDAY
+  | typeof NON_GREGORIAN_BIRTHDAY
+  | typeof NAME_PREFIX
+  | typeof NAME_SUFFIX
+  | typeof PHONETIC_FIRST_NAME
+  | typeof PHONETIC_MIDDLE_NAME
+  | typeof PHONETIC_LAST_NAME
+  | typeof SOCIAL_PROFILES
+  | typeof IM_ADDRESSES
+  | typeof URLS
+  | typeof DATES
+  | typeof RELATIONSHIPS;
 
 type Options = {
+  id?: string,
   pageSize?: number,
   pageOffset?: number,
   fields?: FieldType[],
@@ -107,7 +118,7 @@ type Contact = {
     id: string,
     label: string,
   }[],
-  relationsips?: {
+  relationships?: {
     label: string,
     name?: string,
     id: string,
@@ -143,10 +154,10 @@ export async function getContactsAsync(
 }
 
 export async function getContactByIdAsync(
-  { fields = [], id = null }: Options = {}
+  { fields = [], id }: Options = {}
 ): Promise<Response> {
-  if (id === null) {
-    Promise.reject('Please pass an ID as a parameter');
+  if (id == null) {
+    throw new Error('Please pass an ID as a parameter');
   } else {
     return await NativeModules.ExponentContacts.getContactsAsync({
       pageSize: 1,

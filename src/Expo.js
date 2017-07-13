@@ -1,7 +1,4 @@
-/**
- * @providesModule Exponent
- * @flow
- */
+// @flow
 
 import { NativeModules } from 'react-native';
 import Constants from './Constants';
@@ -13,6 +10,8 @@ import './Location'; // polyfill navigator.geolocation
 if (Constants.manifest && typeof Constants.manifest.env === 'object') {
   Object.assign(process.env, Constants.manifest.env);
 }
+
+let Components;
 
 module.exports = {
   // constants
@@ -159,11 +158,8 @@ module.exports = {
   get ScreenOrientation() {
     return require('./ScreenOrientation');
   },
-};
 
-// add deprecated `Components` module
-let Components;
-Object.defineProperty(module.exports, 'Components', {
+  // add deprecated `Components` module
   get() {
     if (!Components) {
       console.warn(
@@ -184,7 +180,7 @@ Object.defineProperty(module.exports, 'Components', {
     }
     return Components;
   },
-});
+};
 
 if (global) {
   global.__exponent = module.exports;
