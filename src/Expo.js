@@ -105,7 +105,7 @@ module.exports = {
     return require('./Audio');
   },
   get Constants() {
-    return require('./Constants');
+    return require('./Constants').default;
   },
   get Contacts() {
     return require('./Contacts');
