@@ -6,12 +6,12 @@
   "scripts": {
     "flow": "flow",
     "prepublishOnly": "proofread",
-    "test": "node_modules/jest/bin/jest.js"
+    "test": "jest"
   },
   "jest": {
     "preset": "jest-expo",
     "clearMocks": true,
-    "testRegex": "/__tests__/.*-tests\\.js$"
+    "testRegex": "/__tests__/.*-test\\.js$"
   },
   "repository": {
     "type": "git",

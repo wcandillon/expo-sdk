@@ -302,7 +302,7 @@ async function _getCurrentPositionAsyncWrapper(
 
 // Polyfill navigator.geolocation for interop with the core react-native and
 // web API approach to geolocation
-const _polyfill = {
+window.navigator.geolocation = {
   getCurrentPosition,
   watchPosition,
   clearWatch,
@@ -311,7 +311,6 @@ const _polyfill = {
   // should not even exist in react-native docs
   stopObserving: () => {},
 };
-window.navigator.geolocation = _polyfill;
 
 const Location = {
   getProviderStatusAsync,
@@ -320,9 +319,8 @@ const Location = {
   getHeadingAsync,
   watchHeadingAsync,
 
-  // For internal purposes  LocationEventEmitter,
+  // For internal purposes
   EventEmitter: LocationEventEmitter,
-  _polyfill,
   _getCurrentWatchId,
 };
 
