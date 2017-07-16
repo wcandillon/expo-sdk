@@ -81,6 +81,11 @@ export default class Asset {
     this.downloadCallbacks = [];
   }
 
+  static loadAsync(moduleId) {
+    let moduleIds = typeof moduleId === 'number' ? [moduleId] : moduleId;
+    return Promise.all(moduleIds.map(m => Asset.fromModule(m).downloadAsync()));
+  }
+
   static fromModule(moduleId) {
     if (Asset.byModule[moduleId]) {
       return Asset.byModule[moduleId];
