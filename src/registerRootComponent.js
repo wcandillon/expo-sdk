@@ -21,7 +21,7 @@ function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
     render() {
       return (
         <ModalHost>
-          <AppRootComponent {...this.props} />;
+          <AppRootComponent {...this.props} />
         </ModalHost>
       );
     }
