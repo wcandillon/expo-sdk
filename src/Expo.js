@@ -93,6 +93,9 @@ module.exports = {
   get MapView() {
     return require('react-native-maps');
   },
+  get Modal() {
+    return require('./Modal/Modal').default;
+  },
   get Video() {
     return require('./Video').default;
   },
