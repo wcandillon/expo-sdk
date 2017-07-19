@@ -7,7 +7,7 @@ import PureContainer from './PureContainer';
 
 type Layout = { height: number, width: number };
 
-type Renderer = (layout: Layout) => any;
+type Renderer = (layout: Layout, key: number) => any;
 
 type Props = {
   children?: any,
@@ -89,8 +89,8 @@ export default class ModalHost extends Component<void, Props, State> {
           {this.props.children}
         </PureContainer>
         {this.state.layout.measured
-          ? this.state.modals.map(({ renderer }) => {
-              return renderer(this.state.layout);
+          ? this.state.modals.map(({ key, renderer }) => {
+              return renderer(this.state.layout, key);
             })
           : null}
       </View>

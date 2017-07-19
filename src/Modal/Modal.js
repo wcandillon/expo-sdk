@@ -13,14 +13,14 @@ export default class Modal extends Component<void, Props, void> {
 
   componentWillMount() {
     const { register } = this.context[channel];
-    this._handle = register(layout => {
-      return <ModalImplementation {...this.props} layout={layout} />;
+    this._handle = register((layout, key) => {
+      return <ModalImplementation {...this.props} key={key} layout={layout} />;
     });
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    this._handle.update(layout => {
-      return <ModalImplementation {...nextProps} layout={layout} />;
+    this._handle.update((layout, key) => {
+      return <ModalImplementation {...nextProps} key={key} layout={layout} />;
     });
   }
 
