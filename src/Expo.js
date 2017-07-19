@@ -11,8 +11,6 @@ if (typeof manifest.env === 'object') {
   Object.assign(process.env, manifest.env);
 }
 
-let Components;
-
 // Re-define the React Native modal to use our version of it, which plays
 // nicely with the Expo Menu on iOS
 // $FlowFixMe
@@ -172,28 +170,6 @@ module.exports = {
   },
   get Speech() {
     return require('./Speech');
-  },
-
-  // add deprecated `Components` module
-  get() {
-    if (!Components) {
-      console.warn(
-        'Components under `Expo.Components` have been moved to the root `Expo` namespace. ' +
-          'For example, `Expo.Components.Video` is now `Expo.Video`. The `Expo.Components` ' +
-          "namespace is now deprecated and will be removed in version 19.0.0 of 'expo'."
-      );
-      Components = {
-        AppLoading: module.exports.AppLoading,
-        BarCodeScanner: module.exports.BarCodeScanner,
-        BlurView: module.exports.BlurView,
-        KeepAwake: module.exports.KeepAwake,
-        LinearGradient: module.exports.LinearGradient,
-        MapView: module.exports.MapView,
-        Video: module.exports.Video,
-        Svg: module.exports.Svg,
-      };
-    }
-    return Components;
   },
 };
 
