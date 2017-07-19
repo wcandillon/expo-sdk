@@ -72,7 +72,7 @@ export function speak(text: string, options: Options = {}) {
   ExponentSpeech.speak(String(id), text, options);
 }
 
-export async function isSpeaking(): Promise<boolean> {
+export async function isSpeakingAsync(): Promise<boolean> {
   return await ExponentSpeech.isSpeaking();
 }
 
