@@ -16,10 +16,12 @@ export type PlaybackSource = number | { uri: string } | Asset;
 export type PlaybackStatus =
   | {
       isLoaded: false,
+      androidImplementation?: string,
       error?: string, // populated exactly once when an error forces the object to unload
     }
   | {
       isLoaded: true,
+      androidImplementation?: string,
 
       uri: string,
 
@@ -42,6 +44,7 @@ export type PlaybackStatus =
     };
 
 export type PlaybackStatusToSet = {
+  androidImplementation?: string,
   progressUpdateIntervalMillis?: number,
   positionMillis?: number,
   shouldPlay?: boolean,
