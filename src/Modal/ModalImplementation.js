@@ -104,7 +104,7 @@ export default class ModalImplementation extends Component<void, Props, State> {
       : 0;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} pointerEvents={visible ? 'auto' : 'none'}>
         {transparent
           ? null
           : <Animated.View

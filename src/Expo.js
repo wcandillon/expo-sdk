@@ -1,6 +1,6 @@
 // @flow
 
-import { NativeModules } from 'react-native';
+import ReactNative, { NativeModules } from 'react-native';
 import { manifest } from './Constants';
 
 // These are done for the side effects
@@ -12,6 +12,15 @@ if (typeof manifest.env === 'object') {
 }
 
 let Components;
+
+// Re-define the React Native modal to use our version of it, which plays
+// nicely with the Expo Menu on iOS
+// $FlowFixMe
+Object.defineProperty(ReactNative, 'Modal', {
+  get() {
+    return require('./Modal/Modal').default;
+  },
+});
 
 module.exports = {
   // constants
