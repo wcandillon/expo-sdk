@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "19.0.1",
+  "version": "20.0.0-alpha.1",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "files": [
@@ -33,7 +33,7 @@
   "homepage": "https://github.com/expo/expo-sdk",
   "dependencies": {
     "@expo/vector-icons": "^5.0.0",
-    "babel-preset-expo": "^3.0.0",
+    "babel-preset-expo": "^3.0.0-alpha.0",
     "fbemitter": "^2.1.1",
     "lodash.map": "^4.6.0",
     "lodash.zipobject": "^4.1.3",
