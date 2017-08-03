@@ -3,6 +3,11 @@
   "version": "19.0.1",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
+  "files": [
+    "src",
+    "tools",
+    "AppEntry.js"
+  ],
   "scripts": {
     "flow": "flow",
     "prepublishOnly": "proofread",
