@@ -171,6 +171,9 @@ module.exports = {
   get ScreenOrientation() {
     return require('./ScreenOrientation');
   },
+  get SecureStore() {
+    return require('./SecureStore');
+  },
   get Speech() {
     return require('./Speech');
   },
