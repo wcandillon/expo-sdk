@@ -3,9 +3,9 @@
 import { NativeModules } from 'react-native';
 import createSensorWrapper from './lib/createSensorWrapper';
 
-const { ExponentAccelerometer } = NativeModules;
+const { ExponentMagnetometerUncalibrated } = NativeModules;
 
 export default createSensorWrapper(
-  ExponentAccelerometer,
-  'accelerometerDidUpdate'
+  ExponentMagnetometerUncalibrated,
+  'magnetometerUncalibratedDidUpdate'
 );

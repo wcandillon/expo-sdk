@@ -1,6 +1,23 @@
+/* @flow */
+
 import { Platform, NativeEventEmitter } from 'react-native';
 
-export default function createSensorWrapper(NativeSensorModule, eventName) {
+type Result = {
+  x: number,
+  y: number,
+  z: number,
+};
+
+type Listener = Result => void;
+
+type Subscription = {
+  remove: Function,
+};
+
+export default function createSensorWrapper(
+  NativeSensorModule: any,
+  eventName: string
+) {
   const SensorEventEmitter = new NativeEventEmitter(NativeSensorModule);
 
   class SensorWrapper {
@@ -12,7 +29,7 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
       return SensorEventEmitter.listeners(eventName).length;
     }
 
-    addListener(listener) {
+    addListener(listener: Listener) {
       if (Platform.OS === 'android') {
         if (!this.hasListeners()) {
           NativeSensorModule.startObserving();
@@ -23,7 +40,6 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
         eventName,
         listener
       );
-      let originalRemove = emitterSubscription.remove;
 
       emitterSubscription.remove = () => {
         return this.removeSubscription(emitterSubscription);
@@ -40,7 +56,7 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
       return SensorEventEmitter.removeAllListeners(eventName);
     }
 
-    removeSubscription(subscription) {
+    removeSubscription(subscription: Subscription) {
       if (Platform.OS === 'android') {
         if (this.getListenerCount() === 1) {
           NativeSensorModule.stopObserving();
@@ -50,7 +66,7 @@ export default function createSensorWrapper(NativeSensorModule, eventName) {
       return SensorEventEmitter.removeSubscription(subscription);
     }
 
-    setUpdateInterval(intervalMs) {
+    setUpdateInterval(intervalMs: number) {
       NativeSensorModule.setUpdateInterval(intervalMs);
     }
   }

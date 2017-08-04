@@ -2,6 +2,7 @@
 
 import ReactNative, { NativeModules } from 'react-native';
 import { manifest } from './Constants';
+import MagnetometerUncalibrated from './MagnetometerUncalibrated';
 
 // These are done for the side effects
 import './Logs'; // set up Expo logging infra
@@ -77,6 +78,12 @@ module.exports = {
   },
   get Gyroscope() {
     return require('./Gyroscope').default;
+  },
+  get Magnetometer() {
+    return require('./Magnetometer').default;
+  },
+  get MagnetometerUncalibrated() {
+    return require('./MagnetometerUncalibrated').default;
   },
   get Notifications() {
     return require('./Notifications').default;
