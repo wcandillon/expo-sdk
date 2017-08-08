@@ -6,3 +6,5 @@
 export Lottie from 'lottie-react-native';
 
 export Branch from 'react-native-branch';
+
+export Payments from './Payments.js';
