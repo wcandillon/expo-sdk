@@ -466,13 +466,29 @@ export class Recording {
 
   // Internal methods
 
-  _pollingLoop = () => {
+  _cleanupForUnloadedRecorder = async (finalStatus: RecordingStatus) => {
+    this._canRecord = false;
+    this._isDoneRecording = true;
+    this._finalDurationMillis = finalStatus.durationMillis;
+    _recorderExists = false;
+    if (NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording) {
+      NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording(null);
+    }
+    this._disablePolling();
+    return await this.getStatusAsync(); // Automatically calls the callback for the final state.
+  };
+
+  _pollingLoop = async () => {
     if (_enabled && this._canRecord && this._callback != null) {
-      this.getStatusAsync(); // Automatically calls this._callback.
       this._progressUpdateTimeoutVariable = setTimeout(
         this._pollingLoop,
         this._progressUpdateIntervalMillis
       );
+      try {
+        await this.getStatusAsync();
+      } catch (error) {
+        _disablePolling();
+      }
     }
   };
 
@@ -593,6 +609,12 @@ export class Recording {
     }
 
     if (!this._canRecord) {
+      if (NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording) {
+        NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording(
+          this._cleanupForUnloadedRecorder
+        );
+      }
+
       const {
         uri,
         status,
@@ -626,19 +648,21 @@ export class Recording {
 
   async stopAndUnloadAsync(): Promise<RecordingStatus> {
     if (!this._canRecord) {
-      throw new Error('Cannot unload a Recording that has not been prepared.');
+      if (this._isDoneRecording) {
+        throw new Error(
+          'Cannot unload a Recording that has already been unloaded.'
+        );
+      } else {
+        throw new Error(
+          'Cannot unload a Recording that has not been prepared.'
+        );
+      }
     }
     // We perform a separate native API call so that the state of the Recording can be updated with
     // the final duration of the recording. (We cast stopStatus as Object to appease Flow)
-    const stopStatus: Object = await NativeModules.ExponentAV.stopAudioRecording();
-    this._finalDurationMillis = stopStatus.durationMillis;
-    this._disablePolling();
-
+    const finalStatus: Object = await NativeModules.ExponentAV.stopAudioRecording();
     await NativeModules.ExponentAV.unloadAudioRecorder();
-    this._canRecord = false;
-    this._isDoneRecording = true;
-    _recorderExists = false;
-    return this.getStatusAsync(); // Automatically calls the callback for the final state.
+    return this._cleanupForUnloadedRecorder(finalStatus);
   }
 
   // Read API
