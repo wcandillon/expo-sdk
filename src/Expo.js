@@ -98,6 +98,9 @@ module.exports = {
   get BlurView() {
     return require('./BlurView').default;
   },
+  get Camera() {
+    return require('./Camera').default;
+  },
   get KeepAwake() {
     return require('./KeepAwake').default;
   },
