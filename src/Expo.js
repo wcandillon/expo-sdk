@@ -1,12 +1,10 @@
 // @flow
-
-import ReactNative, { NativeModules } from 'react-native';
-import { manifest } from './Constants';
-import MagnetometerUncalibrated from './MagnetometerUncalibrated';
-
 // These are done for the side effects
 import './Logs'; // set up Expo logging infra
 import './Location'; // polyfill navigator.geolocation
+
+import ReactNative, { NativeModules } from 'react-native';
+import { manifest } from './Constants';
 
 if (typeof manifest.env === 'object') {
   Object.assign(process.env, manifest.env);
@@ -17,7 +15,6 @@ if (typeof manifest.env === 'object') {
 //
 // Re-define the React Native modal to use our version of it, which plays
 // nicely with the Expo Menu on iOS
-// $FlowFixMe
 // Object.defineProperty(ReactNative, 'Modal', {
 //   get() {
 //     return require('./Modal/Modal').default;

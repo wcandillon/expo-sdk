@@ -1,4 +1,3 @@
-import './window.js';
 import { NativeModules } from 'react-native';
 
 import {
@@ -186,7 +185,7 @@ describe('Location', () => {
   });
 });
 
-function emitNativeLocationUpdate(location, watchId) {
+function emitNativeLocationUpdate(location) {
   Location.EventEmitter.emit('Exponent.locationChanged', {
     watchId: Location._getCurrentWatchId(),
     location,

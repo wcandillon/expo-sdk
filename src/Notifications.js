@@ -131,7 +131,7 @@ export default {
 
   /* Re-export, we can add flow here if we want as well */
   getExpoPushTokenAsync: ExponentNotifications.getExponentPushTokenAsync,
-  getExponentPushTokenAsync(...args) {
+  getExponentPushTokenAsync(...args: any[]) {
     if (!_warnedAboutDeprecatedPushTokenMethod) {
       console.warn(
         `Notifications.getExponentPushTokenAsync is deprecated and will be removed in SDK 21. Call Notifications.getExpoPushTokenAsync (which has the exact same behavior) instead.`

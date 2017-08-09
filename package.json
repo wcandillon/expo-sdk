@@ -49,9 +49,9 @@
   },
   "devDependencies": {
     "@expo/npm-proofread": "^1.0.1",
-    "flow-bin": "^0.47.0",
+    "flow-bin": "^0.49.1",
     "jest": "^20.0.0",
-    "jest-expo": "1.0.0",
+    "jest-expo": "^19.0.0",
     "react": "16.0.0-alpha.12",
     "react-native": "expo/react-native#sdk-20"
   }

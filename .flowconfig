@@ -5,7 +5,6 @@
 
 <PROJECT_ROOT>/node_modules/metro-bundler/.*
 <PROJECT_ROOT>/node_modules/react-native/.*
-<PROJECT_ROOT>/node_modules/react-native-fbads/.*
 
 [include]
 

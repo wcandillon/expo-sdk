@@ -5,7 +5,16 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import PureContainer from './PureContainer';
 
-type Layout = { height: number, width: number };
+type Layout = {
+  width: number,
+  height: number,
+};
+
+type LayoutEvent = {
+  nativeEvent: {
+    layout: Layout,
+  },
+};
 
 type Renderer = (layout: Layout, key: number) => any;
 
@@ -72,7 +81,7 @@ export default class ModalHost extends Component<void, Props, State> {
     };
   };
 
-  _handleLayout = e => {
+  _handleLayout = (e: LayoutEvent) => {
     const { layout } = e.nativeEvent;
     if (
       layout.height !== this.state.layout.height ||
