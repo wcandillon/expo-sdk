@@ -156,7 +156,7 @@ export const _getUnloadedStatus = (error: ?string = null): PlaybackStatus => {
 export const _COMMON_AV_PLAYBACK_METHODS = {
   // The following are separately defined in each playback object:
   //   getStatusAsync
-  //   setCallback
+  //   setOnPlaybackStatusUpdate
   //   loadAsync
   //   unloadAsync
   //   setStatusAsync

@@ -49,7 +49,7 @@ type Props = {
   posterSource?: { uri: string } | number, // { uri: 'http://foo/bar.mp4' } or require('./foo/bar.mp4')
 
   // Callbacks
-  callback?: (status: PlaybackStatus) => void, // TODO for consistency should this also be "event" encapsulated? What about with Audio? Should we call this onStatusUpdate?
+  onPlaybackStatusUpdate?: (status: PlaybackStatus) => void,
   onLoadStart?: () => void,
   onLoad?: (status: PlaybackStatus) => void,
   onError?: (error: string) => void,
@@ -152,8 +152,8 @@ export default class Video extends Component {
       this.setState({ showPoster: false });
     }
 
-    if (this.props.callback) {
-      this.props.callback(status);
+    if (this.props.onPlaybackStatusUpdate) {
+      this.props.onPlaybackStatusUpdate(status);
     }
   };
 
@@ -193,7 +193,7 @@ export default class Video extends Component {
   };
 
   // ### Unified playback API ### (consistent with Audio.js)
-  // All calls automatically call the callback as a side effect.
+  // All calls automatically call onPlaybackStatusUpdate as a side effect.
 
   // Get status API
 
@@ -203,8 +203,10 @@ export default class Video extends Component {
     );
   };
 
-  setCallback = (callback: ?(status: PlaybackStatus) => void) => {
-    this.setNativeProps({ callback });
+  setOnPlaybackStatusUpdate = (
+    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void
+  ) => {
+    this.setNativeProps({ onPlaybackStatusUpdate });
     this.getStatusAsync();
   };
 
@@ -265,7 +267,7 @@ export default class Video extends Component {
 
   // ### Callback wrappers ###
 
-  _nativeCallback = (event: { nativeEvent: PlaybackStatus }) => {
+  _nativeOnPlaybackStatusUpdate = (event: { nativeEvent: PlaybackStatus }) => {
     this._handleNewStatus(event.nativeEvent);
   };
 
@@ -348,7 +350,7 @@ export default class Video extends Component {
       uri,
       nativeResizeMode,
       status,
-      onStatusUpdateNative: this._nativeCallback,
+      onStatusUpdateNative: this._nativeOnPlaybackStatusUpdate,
       onLoadStartNative: this._nativeOnLoadStart,
       onLoadNative: this._nativeOnLoad,
       onErrorNative: this._nativeOnError,
@@ -383,7 +385,7 @@ Video.propTypes = {
   ]),
 
   // Callbacks
-  callback: PropTypes.func,
+  onPlaybackStatusUpdate: PropTypes.func,
   onLoadStart: PropTypes.func,
   onLoad: PropTypes.func,
   onError: PropTypes.func,

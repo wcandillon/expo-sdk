@@ -255,23 +255,23 @@ export class Sound {
   _loaded: boolean;
   _loading: boolean;
   _key: number;
-  _callback: ?(status: PlaybackStatus) => void;
+  _onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void;
 
   constructor() {
     this._loaded = false;
     this._loading = false;
     this._key = -1;
-    this._callback = null;
+    this._onPlaybackStatusUpdate = null;
   }
 
   static create = async (
     source: PlaybackSource,
     initialStatus: PlaybackStatusToSet = {},
-    callback: ?(status: PlaybackStatus) => void = null,
+    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void = null,
     downloadFirst: boolean = true
   ): Promise<{ sound: Sound, status: PlaybackStatus }> => {
     const sound: Sound = new Sound();
-    sound.setCallback(callback);
+    sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
     const status: PlaybackStatus = await sound.loadAsync(
       source,
       initialStatus,
@@ -282,9 +282,9 @@ export class Sound {
 
   // Internal methods
 
-  _callCallbackForNewStatus(status: PlaybackStatus) {
-    if (this._callback != null) {
-      this._callback(status);
+  _callOnPlaybackStatusUpdateForNewStatus(status: PlaybackStatus) {
+    if (this._onPlaybackStatusUpdate != null) {
+      this._onPlaybackStatusUpdate(status);
     }
   }
 
@@ -296,24 +296,24 @@ export class Sound {
     }
     if (this._loaded) {
       const status = await operation();
-      this._callCallbackForNewStatus(status);
+      this._callOnPlaybackStatusUpdateForNewStatus(status);
       return status;
     } else {
       throw new Error('Cannot complete operation because sound is not loaded.');
     }
   }
 
-  _statusUpdateCallback = (status: PlaybackStatus) => {
-    this._callCallbackForNewStatus(status);
-    this._setStatusUpdateCallback(); // Callbacks are only called once and then released.
+  _internalStatusUpdateCallback = (status: PlaybackStatus) => {
+    this._callOnPlaybackStatusUpdateForNewStatus(status);
+    this._setInternalStatusUpdateCallback(); // Callbacks are only called once and then released.
   };
 
-  // TODO: We can optimize by only using time observer on native if (this._callback).
-  _setStatusUpdateCallback() {
+  // TODO: We can optimize by only using time observer on native if (this._onPlaybackStatusUpdate).
+  _setInternalStatusUpdateCallback() {
     if (this._loaded) {
       NativeModules.ExponentAV.setStatusUpdateCallbackForSound(
         this._key,
-        this._statusUpdateCallback
+        this._internalStatusUpdateCallback
       );
     }
   }
@@ -321,11 +321,11 @@ export class Sound {
   _errorCallback = (error: string) => {
     this._loaded = false;
     this._key = -1;
-    this._callCallbackForNewStatus(_getUnloadedStatus(error));
+    this._callOnPlaybackStatusUpdateForNewStatus(_getUnloadedStatus(error));
   };
 
   // ### Unified playback API ### (consistent with Video.js)
-  // All calls automatically call the callback as a side effect.
+  // All calls automatically call onPlaybackStatusUpdate as a side effect.
 
   // Get status API
 
@@ -336,12 +336,14 @@ export class Sound {
       );
     }
     const status: PlaybackStatus = _getUnloadedStatus();
-    this._callCallbackForNewStatus(status);
+    this._callOnPlaybackStatusUpdateForNewStatus(status);
     return status;
   };
 
-  setCallback(callback: ?(status: PlaybackStatus) => void) {
-    this._callback = callback;
+  setOnPlaybackStatusUpdate(
+    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void
+  ) {
+    this._onPlaybackStatusUpdate = onPlaybackStatusUpdate;
     this.getStatusAsync();
   }
 
@@ -381,8 +383,8 @@ export class Sound {
               this._key,
               this._errorCallback
             );
-            this._setStatusUpdateCallback();
-            this._callCallbackForNewStatus(status);
+            this._setInternalStatusUpdateCallback();
+            this._callOnPlaybackStatusUpdateForNewStatus(status);
             resolve(status);
           };
           const loadError = (error: string) => {
@@ -408,10 +410,10 @@ export class Sound {
       const key = this._key;
       this._key = -1;
       const status = await NativeModules.ExponentAV.unloadForSound(key);
-      this._callCallbackForNewStatus(status);
+      this._callOnPlaybackStatusUpdateForNewStatus(status);
       return status;
     } else {
-      return this.getStatusAsync(); // Automatically calls the callback.
+      return this.getStatusAsync(); // Automatically calls onPlaybackStatusUpdate.
     }
   }
 
@@ -449,7 +451,7 @@ export class Recording {
   _isDoneRecording: boolean;
   _finalDurationMillis: number;
   _uri: ?string;
-  _callback: ?(status: RecordingStatus) => void;
+  _onRecordingStatusUpdate: ?(status: RecordingStatus) => void;
   _progressUpdateTimeoutVariable: ?number;
   _progressUpdateIntervalMillis: number;
   _options: ?RecordingOptions;
@@ -475,11 +477,11 @@ export class Recording {
       NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording(null);
     }
     this._disablePolling();
-    return await this.getStatusAsync(); // Automatically calls the callback for the final state.
+    return await this.getStatusAsync(); // Automatically calls onRecordingStatusUpdate for the final state.
   };
 
   _pollingLoop = async () => {
-    if (_enabled && this._canRecord && this._callback != null) {
+    if (_enabled && this._canRecord && this._onRecordingStatusUpdate != null) {
       this._progressUpdateTimeoutVariable = setTimeout(
         this._pollingLoop,
         this._progressUpdateIntervalMillis
@@ -500,15 +502,15 @@ export class Recording {
   }
 
   _enablePollingIfNecessaryAndPossible() {
-    if (_enabled && this._canRecord && this._callback != null) {
+    if (_enabled && this._canRecord && this._onRecordingStatusUpdate != null) {
       this._disablePolling();
       this._pollingLoop();
     }
   }
 
-  _callCallbackForNewStatus(status: RecordingStatus) {
-    if (this._callback != null) {
-      this._callback(status);
+  _callOnRecordingStatusUpdateForNewStatus(status: RecordingStatus) {
+    if (this._onRecordingStatusUpdate != null) {
+      this._onRecordingStatusUpdate(status);
     }
   }
 
@@ -520,7 +522,7 @@ export class Recording {
     }
     if (this._canRecord) {
       const status = await operation();
-      this._callCallbackForNewStatus(status);
+      this._callOnRecordingStatusUpdateForNewStatus(status);
       return status;
     } else {
       throw new Error(
@@ -529,12 +531,12 @@ export class Recording {
     }
   }
 
-  // Note that all calls automatically call the callback as a side effect.
+  // Note that all calls automatically call onRecordingStatusUpdate as a side effect.
 
   // Get status API
 
   getStatusAsync = async (): Promise<RecordingStatus> => {
-    // Automatically calls the callback.
+    // Automatically calls onRecordingStatusUpdate.
     if (this._canRecord) {
       return this._performOperationAndHandleStatusAsync(() =>
         NativeModules.ExponentAV.getAudioRecordingStatus()
@@ -550,13 +552,15 @@ export class Recording {
           canRecord: false,
           isDoneRecording: false,
         };
-    this._callCallbackForNewStatus(status);
+    this._callOnRecordingStatusUpdateForNewStatus(status);
     return status;
   };
 
-  setCallback(callback: ?(status: RecordingStatus) => void) {
-    this._callback = callback;
-    if (callback == null) {
+  setOnRecordingStatusUpdate(
+    onRecordingStatusUpdate: ?(status: RecordingStatus) => void
+  ) {
+    this._onRecordingStatusUpdate = onRecordingStatusUpdate;
+    if (onRecordingStatusUpdate == null) {
       this._disablePolling();
     } else {
       this._enablePollingIfNecessaryAndPossible();
@@ -626,7 +630,7 @@ export class Recording {
       this._uri = uri;
       this._options = options;
       this._canRecord = true;
-      this._callCallbackForNewStatus(status);
+      this._callOnRecordingStatusUpdateForNewStatus(status);
       this._enablePollingIfNecessaryAndPossible();
       return status;
     } else {
@@ -673,7 +677,7 @@ export class Recording {
 
   async createNewLoadedSound(
     initialStatus: PlaybackStatusToSet = {},
-    callback: ?(status: PlaybackStatus) => void = null
+    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void = null
   ): Promise<{ sound: Sound, status: PlaybackStatus }> {
     if (this._uri == null || !this._isDoneRecording) {
       throw new Error(
@@ -681,6 +685,11 @@ export class Recording {
       );
     }
     // $FlowFixMe: Flow can't distinguish between this literal and Asset
-    return Sound.create({ uri: this._uri }, initialStatus, callback, false);
+    return Sound.create(
+      { uri: this._uri },
+      initialStatus,
+      onPlaybackStatusUpdate,
+      false
+    );
   }
 }
