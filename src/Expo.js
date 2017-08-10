@@ -55,9 +55,6 @@ module.exports = {
   get apisAreAvailable() {
     return require('./apisAreAvailable').default;
   },
-  get createTHREEViewClass() {
-    return require('./createTHREEViewClass').default;
-  },
   get registerRootComponent() {
     return require('./registerRootComponent').default;
   },
