@@ -184,6 +184,29 @@ describe('Notifications', () => {
     );
   });
 
+  it('properly passes "options.intervalMs" when scheduling notification on android', async () => {
+    mockPlatformAndroid();
+    const spy = jest.fn();
+    NativeModules.ExponentNotifications.scheduleLocalNotification = spy;
+
+    const notifDate = new Date();
+    await Notifications.scheduleLocalNotificationAsync(
+      { title: 'Android notification' },
+      {
+        // we pass time as number, but below it should be passed as date
+        time: notifDate.getTime(),
+        intervalMs: 1000,
+      }
+    );
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    expect(spy).toHaveBeenCalledWith(
+      { data: {}, title: 'Android notification' },
+      { intervalMs: 1000, time: notifDate }
+    );
+  });
+
   it('properly detects invalid time value in scheduled notification options', async () => {
     NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
 
@@ -259,6 +282,101 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         new Error(
           `Please pass one of ['minute', 'hour', 'day', 'week', 'month', \
 'year'] as the value for the "repeat" option`
+        )
+      );
+    }
+
+    expect(
+      NativeModules.ExponentNotifications.scheduleLocalNotification
+    ).toHaveBeenCalledTimes(0);
+  });
+
+  it('properly throws if "options.intervalMs" is used on ios', async () => {
+    mockPlatformIOS();
+    const spy = jest.fn();
+    NativeModules.ExponentNotifications.scheduleLocalNotification = spy;
+    try {
+      await Notifications.scheduleLocalNotificationAsync(
+        mockedScheduledNotifIOS,
+        {
+          intervalMs: 60000
+        }
+      );
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          `"intervalMs" option is not supported on iOS`
+        )
+      );
+    }
+
+    expect(
+      NativeModules.ExponentNotifications.scheduleLocalNotification
+    ).toHaveBeenCalledTimes(0);
+  });
+
+
+  it('properly throws if both "options.repeat" and "options.intervalMs" are set in scheduled notification options on android', async () => {
+    mockPlatformAndroid();
+    NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
+    try {
+      await Notifications.scheduleLocalNotificationAsync(
+        mockedScheduledNotifIOS,
+        {
+          intervalMs: 60000,
+          repeat: 'minute'
+        }
+      );
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          `Please pass either the "repeat" option or "intervalMs" option, not both`
+        )
+      );
+    }
+
+    expect(
+      NativeModules.ExponentNotifications.scheduleLocalNotification
+    ).toHaveBeenCalledTimes(0);
+  });
+
+  it('properly throws for negative number for "options.intervalMs" in scheduled notification options on android', async () => {
+    mockPlatformAndroid();
+    NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
+    try {
+      await Notifications.scheduleLocalNotificationAsync(
+        mockedScheduledNotifIOS,
+        {
+          intervalMs: -1000,
+        }
+      );
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          `Please pass an integer greater than zero as the value for the "intervalMs" option`
+        )
+      );
+    }
+
+    expect(
+      NativeModules.ExponentNotifications.scheduleLocalNotification
+    ).toHaveBeenCalledTimes(0);
+  });
+
+  it('properly throws for non integer for "options.intervalMs" in scheduled notification options on android', async () => {
+    mockPlatformAndroid();
+    NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
+    try {
+      await Notifications.scheduleLocalNotificationAsync(
+        mockedScheduledNotifIOS,
+        {
+          intervalMs: 0.1,
+        }
+      );
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          `Please pass an integer greater than zero as the value for the "intervalMs" option`
         )
       );
     }

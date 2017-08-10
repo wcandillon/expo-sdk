@@ -160,6 +160,7 @@ export default {
     options: {
       time?: Date | number,
       repeat?: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year',
+      intervalMs?: number,
     } = {}
   ): Promise<LocalNotificationId> {
     // set now at the beginning of the method, to prevent potential
@@ -226,6 +227,24 @@ export default {
           `Please pass one of ['minute', 'hour', 'day', 'week', 'month', 'year'] as the value for the "repeat" option`
         );
       }
+    }
+
+    if (options.intervalMs && Platform.OS === 'ios') {
+      throw new Error(
+        `"intervalMs" option is not supported on iOS`
+      );
+    }
+
+    if (options.intervalMs && options.repeat) {
+      throw new Error(
+        `Please pass either the "repeat" option or "intervalMs" option, not both`
+      );
+    }
+
+    if (options.intervalMs <= 0 || (options.intervalMs && !Number.isInteger(options.intervalMs))) {
+      throw new Error(
+        `Please pass an integer greater than zero as the value for the "intervalMs" option`
+      );
     }
 
     return ExponentNotifications.scheduleLocalNotification(
