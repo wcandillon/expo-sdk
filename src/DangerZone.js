@@ -7,6 +7,6 @@ export Lottie from 'lottie-react-native';
 
 export Branch from 'react-native-branch';
 
-export GestureHandler from 'react-native-gesture-handler';
+export * as GestureHandler from 'react-native-gesture-handler';
 
 export Payments from './Payments.js';
