@@ -21,7 +21,7 @@ export function deleteValueWithKeyAsync(key, options?: SecureStoreOptions) {
   }
   return new Promise(async (resolve, reject) => {
     try {
-      if (!_stringIsValid(key)) {
+      if (!_keyIsValid(key)) {
         throw new Error('Invalid key.');
       }
       await ExponentSecureStore.deleteValueWithKeyAsync(key, options);
