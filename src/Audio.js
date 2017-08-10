@@ -347,6 +347,14 @@ export class Sound {
     this.getStatusAsync();
   }
 
+  // DEPRECATED -- WILL BE REMOVED IN SDK21:
+  setCallback = (callback: ?(status: PlaybackStatus) => void) => {
+    console.warn(
+      `'Sound.setCallback()' is deprecated and will be removed in SDK21. Use 'Sound.setOnPlaybackStatusUpdate()' instead.`
+    );
+    this.setOnPlaybackStatusUpdate(callback);
+  };
+
   // Loading / unloading API
 
   async loadAsync(
@@ -566,6 +574,15 @@ export class Recording {
       this._enablePollingIfNecessaryAndPossible();
     }
     this.getStatusAsync();
+  }
+
+  // DEPRECATED -- WILL BE REMOVED IN SDK21:
+  setCallback(callback: ?(status: RecordingStatus) => void) {
+    // DEPRECATED -- WILL BE REMOVED IN SDK21:
+    console.warn(
+      `'Recording.setCallback()' is deprecated and will be removed in SDK21. Use 'Recording.setOnRecordingStatusUpdate()' instead.`
+    );
+    this.setOnRecordingStatusUpdate(callback);
   }
 
   setProgressUpdateInterval(progressUpdateIntervalMillis: number) {

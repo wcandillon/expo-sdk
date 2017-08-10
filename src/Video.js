@@ -49,6 +49,7 @@ type Props = {
   posterSource?: { uri: string } | number, // { uri: 'http://foo/bar.mp4' } or require('./foo/bar.mp4')
 
   // Callbacks
+  callback?: (status: PlaybackStatus) => void, // DEPRECATED -- WILL BE REMOVED IN SDK21
   onPlaybackStatusUpdate?: (status: PlaybackStatus) => void,
   onLoadStart?: () => void,
   onLoad?: (status: PlaybackStatus) => void,
@@ -154,6 +155,9 @@ export default class Video extends Component {
 
     if (this.props.onPlaybackStatusUpdate) {
       this.props.onPlaybackStatusUpdate(status);
+    } else if (this.props.callback) {
+      // DEPRECATED -- WILL BE REMOVED IN SDK21
+      this.props.callback(status);
     }
   };
 
@@ -208,6 +212,14 @@ export default class Video extends Component {
   ) => {
     this.setNativeProps({ onPlaybackStatusUpdate });
     this.getStatusAsync();
+  };
+
+  // DEPRECATED -- WILL BE REMOVED IN SDK21:
+  setCallback = (callback: ?(status: PlaybackStatus) => void) => {
+    console.warn(
+      `'Video.setCallback()' is deprecated and will be removed in SDK21. Use 'Video.setOnPlaybackStatusUpdate()' instead.`
+    );
+    this.setOnPlaybackStatusUpdate(callback);
   };
 
   // Loading / unloading API
@@ -308,6 +320,13 @@ export default class Video extends Component {
   };
 
   render() {
+    // DEPRECATED -- WILL BE REMOVED IN SDK21:
+    if (this.props.callback) {
+      console.warn(
+        `The prop 'callback' on Video is deprecated and will be removed in SDK21. Use the new 'onPlaybackStatusUpdate' prop instead.`
+      );
+    }
+
     const uri: ?string = _getURIFromSource(this.props.source);
 
     let nativeResizeMode: Object =
@@ -385,6 +404,7 @@ Video.propTypes = {
   ]),
 
   // Callbacks
+  callback: PropTypes.func, // DEPRECATED -- WILL BE REMOVED IN SDK21
   onPlaybackStatusUpdate: PropTypes.func,
   onLoadStart: PropTypes.func,
   onLoad: PropTypes.func,
