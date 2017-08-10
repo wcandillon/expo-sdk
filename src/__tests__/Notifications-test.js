@@ -161,7 +161,7 @@ describe('Notifications', () => {
     );
   });
 
-  it('properly passes time as Date when scheduling notification on android', async () => {
+  it('properly passes time as Date when scheduling notification on Android', async () => {
     mockPlatformAndroid();
     const spy = jest.fn();
     NativeModules.ExponentNotifications.scheduleLocalNotification = spy;
@@ -291,7 +291,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
     ).toHaveBeenCalledTimes(0);
   });
 
-  it('properly throws if "options.intervalMs" is used on ios', async () => {
+  it('properly throws if "options.intervalMs" is used on iOS', async () => {
     mockPlatformIOS();
     const spy = jest.fn();
     NativeModules.ExponentNotifications.scheduleLocalNotification = spy;
@@ -303,11 +303,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         }
       );
     } catch (e) {
-      expect(e).toEqual(
-        new Error(
-          `"intervalMs" option is not supported on iOS`
-        )
-      );
+      expect(e).toMatchSnapshot();
     }
 
     expect(
@@ -363,7 +359,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
     ).toHaveBeenCalledTimes(0);
   });
 
-  it('properly throws for non integer for "options.intervalMs" in scheduled notification options on android', async () => {
+  it('properly throws for non-integer for "options.intervalMs" in scheduled notification options on android', async () => {
     mockPlatformAndroid();
     NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
     try {
