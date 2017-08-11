@@ -278,12 +278,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         }
       );
     } catch (e) {
-      expect(e).toEqual(
-        new Error(
-          `Please pass one of ['minute', 'hour', 'day', 'week', 'month', \
-'year'] as the value for the "repeat" option`
-        )
-      );
+      expect(e).toMatchSnapshot();
     }
 
     expect(
@@ -299,7 +294,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
       await Notifications.scheduleLocalNotificationAsync(
         mockedScheduledNotifIOS,
         {
-          intervalMs: 60000
+          intervalMs: 60000,
         }
       );
     } catch (e) {
@@ -311,7 +306,6 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
     ).toHaveBeenCalledTimes(0);
   });
 
-
   it('properly throws if both "options.repeat" and "options.intervalMs" are set in scheduled notification options on android', async () => {
     mockPlatformAndroid();
     NativeModules.ExponentNotifications.scheduleLocalNotification = jest.fn();
@@ -320,15 +314,11 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         mockedScheduledNotifIOS,
         {
           intervalMs: 60000,
-          repeat: 'minute'
+          repeat: 'minute',
         }
       );
     } catch (e) {
-      expect(e).toEqual(
-        new Error(
-          `Please pass either the "repeat" option or "intervalMs" option, not both`
-        )
-      );
+      expect(e).toMatchSnapshot();
     }
 
     expect(
@@ -347,11 +337,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         }
       );
     } catch (e) {
-      expect(e).toEqual(
-        new Error(
-          `Please pass an integer greater than zero as the value for the "intervalMs" option`
-        )
-      );
+      expect(e).toMatchSnapshot();
     }
 
     expect(
@@ -370,11 +356,7 @@ pass number of seconds since Unix Epoch instead of number of milliseconds?`
         }
       );
     } catch (e) {
-      expect(e).toEqual(
-        new Error(
-          `Please pass an integer greater than zero as the value for the "intervalMs" option`
-        )
-      );
+      expect(e).toMatchSnapshot();
     }
 
     expect(
