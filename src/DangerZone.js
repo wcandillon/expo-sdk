@@ -3,10 +3,17 @@
  * you keep your app up do date if you plan to use any of these.
  */
 
-export Lottie from 'lottie-react-native';
-
-export Branch from 'react-native-branch';
-
-export * as GestureHandler from 'react-native-gesture-handler';
-
-export Payments from './Payments.js';
+module.exports = {
+  get Lottie() {
+    return require('lottie-react-native');
+  },
+  get Branch() {
+    return require('react-native-branch').default;
+  },
+  get GestureHandler() {
+    return require('react-native-gesture-handler');
+  },
+  get Payments() {
+    return require('./Payments');
+  },
+};
