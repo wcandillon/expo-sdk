@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "flow": "flow",
+    "lint": "eslint src tools",
     "prepublishOnly": "proofread",
     "test": "jest"
   },
@@ -17,6 +18,9 @@
     "preset": "jest-expo",
     "clearMocks": true,
     "testRegex": "/__tests__/.*-test\\.js$"
+  },
+  "eslintConfig": {
+    "extends": "expo/native"
   },
   "repository": {
     "type": "git",
@@ -50,9 +54,12 @@
   },
   "devDependencies": {
     "@expo/npm-proofread": "^1.0.1",
+    "eslint": "^4.4.1",
+    "eslint-config-expo": "^6.0.0",
     "flow-bin": "^0.52.0",
     "jest": "^20.0.0",
     "jest-expo": "^19.0.0",
+    "prettier": "^1.5.3",
     "react": "16.0.0-alpha.12",
     "react-native": "expo/react-native#sdk-20"
   }
