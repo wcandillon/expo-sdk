@@ -96,12 +96,13 @@ export default class ModalImplementation extends Component<void, Props, State> {
     }
 
     const opacity = animationType === 'fade' ? visible : 1;
-    const translate = animationType === 'slide'
-      ? visible.interpolate({
-          inputRange: [0, 1],
-          outputRange: [layout.height, 0],
-        })
-      : 0;
+    const translate =
+      animationType === 'slide'
+        ? visible.interpolate({
+            inputRange: [0, 1],
+            outputRange: [layout.height, 0],
+          })
+        : 0;
 
     return (
       <View style={styles.container} pointerEvents={visible ? 'auto' : 'none'}>

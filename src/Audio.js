@@ -497,7 +497,7 @@ export class Recording {
       try {
         await this.getStatusAsync();
       } catch (error) {
-        _disablePolling();
+        this._disablePolling();
       }
     }
   };

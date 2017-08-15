@@ -133,12 +133,13 @@ export const _getURIAndFullInitialStatusForLoadAsync = async (
   }
 
   // Get the full initial status
-  const fullInitialStatus: PlaybackStatusToSet = initialStatus == null
-    ? _DEFAULT_INITIAL_PLAYBACK_STATUS
-    : {
-        ..._DEFAULT_INITIAL_PLAYBACK_STATUS,
-        ...initialStatus,
-      };
+  const fullInitialStatus: PlaybackStatusToSet =
+    initialStatus == null
+      ? _DEFAULT_INITIAL_PLAYBACK_STATUS
+      : {
+          ..._DEFAULT_INITIAL_PLAYBACK_STATUS,
+          ...initialStatus,
+        };
   _throwErrorIfValuesOutOfBoundsInStatus(fullInitialStatus);
 
   return { uri, fullInitialStatus };

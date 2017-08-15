@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {
   NativeModules,
-  requireNativeComponent,
   ViewPropTypes,
   Platform,
+  requireNativeComponent,
 } from 'react-native';
 
 const CameraManager =
@@ -70,17 +71,31 @@ export default class Camera extends React.Component {
     whiteBalance: CameraManager.WhiteBalance.auto,
   };
 
-  takePicture = async function() {
+  async takePictureAsync() {
     return await CameraManager.takePicture();
-  };
+  }
 
-  getSupportedRatios = async function() {
+  async getSupportedRatiosAsync() {
     if (Platform.OS === 'android') {
       return await CameraManager.getSupportedRatios();
     } else {
-      Promise.reject('Ratio is not supported on iOS');
+      throw new Error('Ratio is not supported on iOS');
     }
-  };
+  }
+
+  takePicture() {
+    console.warn(
+      `Call takePictureAsync instead of takePicture. This method will be removed in SDK 22.`
+    );
+    return this.takePictureAsync();
+  }
+
+  getSupportedRatios() {
+    console.warn(
+      `Call getSupportedRatiosAsync instead of getSupportedRatios. This method will be removed in SDK 22.`
+    );
+    return this.getSupportedRatiosAsync();
+  }
 
   _nativeOnCameraReady() {
     if (this.props.onCameraReady) {

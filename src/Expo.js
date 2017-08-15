@@ -3,11 +3,11 @@
 import './Logs'; // set up Expo logging infra
 import './Location'; // polyfill navigator.geolocation
 
-import ReactNative, { NativeModules } from 'react-native';
-import { manifest } from './Constants';
+import { NativeModules } from 'react-native';
+import Constants from './Constants';
 
-if (typeof manifest.env === 'object') {
-  Object.assign(process.env, manifest.env);
+if (typeof Constants.manifest.env === 'object') {
+  Object.assign(process.env, Constants.manifest.env);
 }
 
 // NOTE(brentvatne): this is temporarily disabled until we can work out bugs
@@ -86,6 +86,7 @@ module.exports = {
     return require('./SQLite').default;
   },
 
+  // components
   get AppLoading() {
     return require('./AppLoading').default;
   },
@@ -122,7 +123,7 @@ module.exports = {
     return require('./Audio');
   },
   get Constants() {
-    return require('./Constants');
+    return require('./Constants').default;
   },
   get Contacts() {
     return require('./Contacts');

@@ -1,3 +1,5 @@
+// @flow
+
 import { NativeModules } from 'react-native';
 
 const { ExponentSecureStore } = NativeModules;
@@ -8,14 +10,17 @@ type SecureStoreOptions = {
 };
 
 function _keyIsValid(tstString) {
-  return tstString.match(/^[\w\.\-]+$/);
+  return tstString.match(/^[\w.-]+$/);
 }
 
 function _valueIsValid(tstString) {
   return tstString.match(/^\S*$/);
 }
 
-export function deleteValueWithKeyAsync(key, options?: SecureStoreOptions) {
+export function deleteValueWithKeyAsync(
+  key: string,
+  options?: SecureStoreOptions
+) {
   if (!options || typeof options !== 'object') {
     options = {};
   }
@@ -32,7 +37,10 @@ export function deleteValueWithKeyAsync(key, options?: SecureStoreOptions) {
   });
 }
 
-export function getValueWithKeyAsync(key, options?: SecureStoreOptions) {
+export function getValueWithKeyAsync(
+  key: string,
+  options?: SecureStoreOptions
+) {
   if (!options || typeof options !== 'object') {
     options = {};
   }
@@ -54,7 +62,11 @@ export function getValueWithKeyAsync(key, options?: SecureStoreOptions) {
   });
 }
 
-export function setValueWithKeyAsync(value, key, options?: SecureStoreOptions) {
+export function setValueWithKeyAsync(
+  value: string,
+  key: string,
+  options?: SecureStoreOptions
+) {
   if (!options || typeof options !== 'object') {
     options = {};
   }

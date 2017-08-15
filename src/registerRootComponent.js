@@ -3,7 +3,6 @@
 import React from 'react';
 import { AppRegistry, StyleSheet } from 'react-native';
 
-import Constants from './Constants';
 import { processFontFamily } from './Font';
 import Notifications from './Notifications';
 import ModalHost from './Modal/ModalHost';

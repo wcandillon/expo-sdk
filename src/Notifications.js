@@ -177,7 +177,7 @@ export default {
       if (options.time && typeof options.time === 'number') {
         timeAsDateObj = new Date(options.time);
         // god, JS is the worst
-        if (((timeAsDateObj: any): string) == 'Invalid Date') {
+        if (((timeAsDateObj: any): string) === 'Invalid Date') {
           timeAsDateObj = null;
         }
       } else if (options.time && options.time instanceof Date) {
@@ -260,7 +260,7 @@ export default {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissNotification(notificationId);
     } else {
-      return Promise.reject('Dismissing notifications is not supported on iOS');
+      throw new Error('Dismissing notifications is not supported on iOS');
     }
   },
 
@@ -269,19 +269,19 @@ export default {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissAllNotifications();
     } else {
-      return Promise.reject('Dismissing notifications is not supported on iOS');
+      throw new Error('Dismissing notifications is not supported on iOS');
     }
   },
 
   /* Cancel scheduled notification notification with ID */
-  async cancelScheduledNotificationAsync(
+  cancelScheduledNotificationAsync(
     notificationId: LocalNotificationId
   ): Promise<void> {
     return ExponentNotifications.cancelScheduledNotification(notificationId);
   },
 
   /* Cancel all scheduled notifications */
-  async cancelAllScheduledNotificationsAsync(): Promise<void> {
+  cancelAllScheduledNotificationsAsync(): Promise<void> {
     return ExponentNotifications.cancelAllScheduledNotifications();
   },
 
