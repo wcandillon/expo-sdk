@@ -1,11 +1,11 @@
 /* @flow */
 
 import { NativeModules } from 'react-native';
-import createSensorWrapper from './lib/createSensorWrapper';
+import ThreeAxisSensor from './ThreeAxisSensor';
 
 const { ExponentMagnetometer } = NativeModules;
 
-export default createSensorWrapper(
+export default new ThreeAxisSensor(
   ExponentMagnetometer,
   'magnetometerDidUpdate'
 );

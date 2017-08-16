@@ -5,7 +5,7 @@ import {
   unmockAllProperties,
   mockPlatformIOS,
   mockPlatformAndroid,
-} from './mocking';
+} from '../../test/mocking';
 import Location from '../Location';
 import * as Permissions from '../Permissions';
 

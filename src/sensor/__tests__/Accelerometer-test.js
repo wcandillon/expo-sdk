@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native';
 
-import { mockPlatformIOS } from './mocking';
+import { mockPlatformIOS } from '../../../test/mocking';
 
 let Accelerometer;
 
@@ -35,13 +35,13 @@ it(`notifies listeners`, () => {
   Accelerometer.addListener(mockListener);
 
   const mockEvent = { x: 0.2, y: 0.1, z: 0.3 };
-  Accelerometer._emitter.emit('accelerometerDidUpdate', mockEvent);
+  Accelerometer._nativeEmitter.emit('accelerometerDidUpdate', mockEvent);
   expect(mockListener).toHaveBeenCalledWith(mockEvent);
 });
 
 it(`sets the update interval`, async () => {
   const NativeAccelerometer = NativeModules.ExponentAccelerometer;
-  await Accelerometer.setUpdateIntervalAsync(1234);
+  await Accelerometer.setUpdateInterval(1234);
   expect(NativeAccelerometer.setUpdateInterval).toHaveBeenCalledTimes(1);
   expect(NativeAccelerometer.setUpdateInterval).toHaveBeenCalledWith(1234);
 });

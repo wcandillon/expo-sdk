@@ -62,19 +62,19 @@ module.exports = {
     return require('./Asset').default;
   },
   get Accelerometer() {
-    return require('./Accelerometer').default;
+    return require('./sensor/Accelerometer').default;
   },
   get GLView() {
     return require('./GLView').default;
   },
   get Gyroscope() {
-    return require('./Gyroscope').default;
+    return require('./sensor/Gyroscope').default;
   },
   get Magnetometer() {
-    return require('./Magnetometer').default;
+    return require('./sensor/Magnetometer').default;
   },
   get MagnetometerUncalibrated() {
-    return require('./MagnetometerUncalibrated').default;
+    return require('./sensor/MagnetometerUncalibrated').default;
   },
   get Notifications() {
     return require('./Notifications').default;

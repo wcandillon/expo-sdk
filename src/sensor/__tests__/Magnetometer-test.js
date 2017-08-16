@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
 
+import { mockPlatformIOS } from '../../../test/mocking';
 import Magnetometer from '../Magnetometer';
 import MagnetometerUncalibrated from '../MagnetometerUncalibrated';
-import { mockPlatformIOS } from './mocking';
 
 describe(
   'Magnetometer',
@@ -49,14 +49,17 @@ function declareMagnetometerSpecs(
       const subscription = Magnetometer.addListener(mockListener);
 
       const mockEvent = { x: 0.2, y: 0.1, z: 0.3 };
-      Magnetometer._emitter.emit(eventNames.magnetometerDidUpdate, mockEvent);
+      Magnetometer._nativeEmitter.emit(
+        eventNames.magnetometerDidUpdate,
+        mockEvent
+      );
       expect(mockListener).toHaveBeenCalledWith(mockEvent);
 
       subscription.remove();
     });
 
     it(`sets the update interval`, async () => {
-      await Magnetometer.setUpdateIntervalAsync(1234);
+      await Magnetometer.setUpdateInterval(1234);
       expect(NativeMagnetometer.setUpdateInterval).toHaveBeenCalledTimes(1);
       expect(NativeMagnetometer.setUpdateInterval).toHaveBeenCalledWith(1234);
     });
