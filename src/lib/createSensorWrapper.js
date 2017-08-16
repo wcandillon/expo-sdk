@@ -21,6 +21,8 @@ export default function createSensorWrapper(
   const SensorEventEmitter = new NativeEventEmitter(NativeSensorModule);
 
   class SensorWrapper {
+    _emitter = SensorEventEmitter;
+
     hasListeners() {
       return this.getListenerCount() > 0;
     }
@@ -67,7 +69,14 @@ export default function createSensorWrapper(
     }
 
     setUpdateInterval(intervalMs: number) {
+      console.warn(
+        `setUpdateInterval is deprecated in favor of setUpdateIntervalAsync and will be removed in SDK 22`
+      );
       NativeSensorModule.setUpdateInterval(intervalMs);
+    }
+
+    setUpdateIntervalAsync(intervalMs: number) {
+      return NativeSensorModule.setUpdateInterval(intervalMs);
     }
   }
 
