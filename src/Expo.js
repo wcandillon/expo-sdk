@@ -47,9 +47,6 @@ module.exports = {
   get Segment() {
     return NativeModules.ExponentSegment;
   },
-  get Util() {
-    return NativeModules.ExponentUtil;
-  },
 
   // defaults
   get apisAreAvailable() {
@@ -181,6 +178,9 @@ module.exports = {
   },
   get Speech() {
     return require('./Speech');
+  },
+  get Util() {
+    return require('./Util').default;
   },
 };
 
