@@ -10,7 +10,10 @@ let _emitter;
 function _maybeInitEmitter() {
   if (!_emitter) {
     _emitter = new EventEmitter();
-    DeviceEventEmitter.addListener('Exponent.newVersionAvailable', _emitNewVersionAvailable);
+    DeviceEventEmitter.addListener(
+      'Exponent.newVersionAvailable',
+      _emitNewVersionAvailable
+    );
   }
 }
 
@@ -22,7 +25,9 @@ function _emitNewVersionAvailable(newVersionEvent) {
   _emitter.emit('newVersionAvailable', newVersionEvent);
 }
 
-ExponentUtil.addNewVersionListenerExperimental = function(listener: Function): EventSubscription {
+ExponentUtil.addNewVersionListenerExperimental = function(
+  listener: Function
+): EventSubscription {
   _maybeInitEmitter();
 
   return _emitter.addListener('newVersionAvailable', listener);
