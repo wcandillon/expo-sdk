@@ -2,9 +2,9 @@ We've set up Expo SDK to help us keep it reliable and clean and be confident in 
 
 ## Getting Started
 
-Make sure you can run the unit tests, have linting enabled, and can run Flow:
+Make sure you can run the unit tests, lint and Flow:
 ```sh
-yarn test
+yarn test  # This starts the test watcher
 yarn lint
 yarn flow
 ```
@@ -13,7 +13,7 @@ yarn flow
 
 The first thing we do when working on Expo SDK is to start the unit test watcher:
 ```sh
-yarn test -- --watch
+yarn test
 ```
 
 This starts Jest, the test runner we use. Jest looks at the files you've modified and runs tests that may be affected. Jest also watches your filesystem and re-runs affected tests when you make a change. As we develop in Expo SDK, we get quick feedback on the effect of our changes.
@@ -40,9 +40,9 @@ Our integration tests are under `apps/test-suite` in Universe. The `test-suite` 
 
 If you make changes to native code, update `test-suite` too.
 
-## Tests run in CI
+## Continuous Integration
 
-When a PR to Universe or a commit to the master branch contains changes to Expo SDK, CI will run the Expo SDK tests as well as the integration test suite. We need to keep the CI status green. You are responsible for the code you write!
+When a PR to Universe or a commit to the master branch contains changes to Expo SDK, CI will run the Expo SDK tests as well as the integration test suite. CI also runs the linter and Flow. We need to keep the CI status green. You are responsible for the code you write!
 
 ## Linting
 

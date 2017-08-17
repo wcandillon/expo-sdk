@@ -9,10 +9,9 @@
     "AppEntry.js"
   ],
   "scripts": {
-    "flow": "flow",
     "lint": "eslint src tools",
     "prepublishOnly": "proofread",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "jest": {
     "preset": "jest-expo",
