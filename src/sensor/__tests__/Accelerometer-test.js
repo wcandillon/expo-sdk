@@ -1,14 +1,10 @@
 import { NativeModules } from 'react-native';
 
 import { mockPlatformIOS } from '../../../test/mocking';
+import Accelerometer from '../Accelerometer';
 
-let Accelerometer;
-
-// NOTE(ide): Remove this after making the tests clean up side effects
-beforeEach(() => {
-  jest.resetModules();
-  Accelerometer = require('../Accelerometer').default;
-  expect(Accelerometer.hasListeners()).toBe(false);
+afterEach(() => {
+  Accelerometer.removeAllListeners();
 });
 
 it(`adds an "accelerometerDidUpdate" listener on iOS`, () => {

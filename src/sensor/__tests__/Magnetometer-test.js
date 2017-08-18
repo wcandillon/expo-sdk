@@ -26,6 +26,10 @@ function declareMagnetometerSpecs(
   eventNames
 ) {
   return () => {
+    afterEach(() => {
+      Magnetometer.removeAllListeners();
+    });
+
     it(`adds an magnetometer update listener on iOS`, () => {
       mockPlatformIOS();
 
@@ -46,7 +50,7 @@ function declareMagnetometerSpecs(
       mockPlatformIOS();
 
       const mockListener = jest.fn();
-      const subscription = Magnetometer.addListener(mockListener);
+      Magnetometer.addListener(mockListener);
 
       const mockEvent = { x: 0.2, y: 0.1, z: 0.3 };
       Magnetometer._nativeEmitter.emit(
@@ -54,8 +58,6 @@ function declareMagnetometerSpecs(
         mockEvent
       );
       expect(mockListener).toHaveBeenCalledWith(mockEvent);
-
-      subscription.remove();
     });
 
     it(`sets the update interval`, async () => {
