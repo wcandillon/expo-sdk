@@ -43,3 +43,20 @@ export function mockPlatformIOS() {
 export function mockPlatformAndroid() {
   mockProperty(Platform, 'OS', 'android');
 }
+
+export function describeCrossPlatform(message, tests) {
+  describe(`  ${message}`, () => {
+    beforeEach(mockPlatformIOS);
+    tests();
+    afterAll(() => {
+      unmockProperty(Platform, 'OS');
+    });
+  });
+  describe(`🤖  ${message}`, () => {
+    beforeEach(mockPlatformAndroid);
+    tests();
+    afterAll(() => {
+      unmockProperty(Platform, 'OS');
+    });
+  });
+}

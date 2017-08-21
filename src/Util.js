@@ -5,6 +5,22 @@ import { DeviceEventEmitter, NativeModules } from 'react-native';
 
 const { ExponentUtil } = NativeModules;
 
+export function getCurrentDeviceCountryAsync(): Promise<string> {
+  return ExponentUtil.getCurrentDeviceCountryAsync();
+}
+
+export function getCurrentLocaleAsync(): Promise<string> {
+  return ExponentUtil.getCurrentLocaleAsync();
+}
+
+export function getCurrentTimeZoneAsync(): Promise<string> {
+  return ExponentUtil.getCurrentTimeZoneAsync();
+}
+
+export function reload() {
+  ExponentUtil.reload();
+}
+
 let _emitter;
 
 function _maybeInitEmitter() {
@@ -25,12 +41,10 @@ function _emitNewVersionAvailable(newVersionEvent) {
   _emitter.emit('newVersionAvailable', newVersionEvent);
 }
 
-ExponentUtil.addNewVersionListenerExperimental = function(
+export function addNewVersionListenerExperimental(
   listener: Function
 ): EventSubscription {
   _maybeInitEmitter();
 
   return _emitter.addListener('newVersionAvailable', listener);
-};
-
-export default ExponentUtil;
+}

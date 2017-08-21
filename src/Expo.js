@@ -23,9 +23,6 @@ if (typeof Constants.manifest.env === 'object') {
 
 module.exports = {
   // constants
-  get Amplitude() {
-    return NativeModules.ExponentAmplitude;
-  },
   get Crypto() {
     return NativeModules.ExponentCrypto;
   },
@@ -35,17 +32,8 @@ module.exports = {
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
-  get Fingerprint() {
-    return NativeModules.ExponentFingerprint;
-  },
   get ImageCropper() {
     return NativeModules.ExponentImageCropper;
-  },
-  get WebBrowser() {
-    return NativeModules.ExponentWebBrowser;
-  },
-  get Segment() {
-    return NativeModules.ExponentSegment;
   },
 
   // defaults
@@ -111,11 +99,20 @@ module.exports = {
   get Video() {
     return require('./Video').default;
   },
+  get WebBrowser() {
+    return require('./WebBrowser');
+  },
   get Svg() {
     return require('./Svg').default;
   },
+  get Fingerprint() {
+    return require('./Fingerprint');
+  },
 
   // globs
+  get Amplitude() {
+    return require('./Amplitude');
+  },
   get Audio() {
     return require('./Audio');
   },
@@ -176,11 +173,14 @@ module.exports = {
   get SecureStore() {
     return require('./SecureStore');
   },
+  get Segment() {
+    return require('./Segment');
+  },
   get Speech() {
     return require('./Speech');
   },
   get Util() {
-    return require('./Util').default;
+    return require('./Util');
   },
 };
 
