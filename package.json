@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "20.0.0",
+  "version": "20.0.1",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "files": [

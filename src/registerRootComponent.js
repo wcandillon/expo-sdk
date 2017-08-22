@@ -5,7 +5,6 @@ import { AppRegistry, StyleSheet } from 'react-native';
 
 import { processFontFamily } from './Font';
 import Notifications from './Notifications';
-import ModalHost from './Modal/ModalHost';
 
 function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
   class ExponentRootComponent extends React.Component {
@@ -18,11 +17,7 @@ function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
     }
 
     render() {
-      return (
-        <ModalHost>
-          <AppRootComponent {...this.props} />
-        </ModalHost>
-      );
+      return <AppRootComponent {...this.props} />;
     }
   }
 
