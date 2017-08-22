@@ -9,6 +9,14 @@ yarn lint
 yarn flow
 ```
 
+## Testing in an App
+
+The React Native packager doesn't support symlinks, so `npm link` doesn't work.
+You can use the `./install-to-directory.sh` script to test instead. Run
+`./install-to-directory.sh PATH_TO_APP` copy the expo-sdk code into that app's
+node_modules. You will have to run that command every time you make a change that
+you want copied into the app.
+
 ## Unit tests
 
 The first thing we do when working on Expo SDK is to start the unit test watcher:
