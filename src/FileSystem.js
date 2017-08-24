@@ -1,7 +1,7 @@
 // @flow
 
-import { NativeModules, NativeEventEmitter } from 'react-native';
-import UUIDjs from 'uuid-js';
+import { NativeEventEmitter, NativeModules } from 'react-native';
+import UUID from 'uuid-js';
 
 const { ExponentFileSystem: FS } = NativeModules;
 
@@ -13,80 +13,135 @@ FS.cacheDirectory = normalizeEndingSlash(FS.cacheDirectory);
 export const documentDirectory = FS.documentDirectory;
 export const cacheDirectory = FS.cacheDirectory;
 
-export function getInfoAsync(fileUri, options = {}) {
+type FileInfo =
+  | {
+      exists: true,
+      uri: string,
+      size: number,
+      modificationTime: number,
+      md5?: string,
+    }
+  | {
+      exists: false,
+      isDirectory: false,
+    };
+
+export function getInfoAsync(
+  fileUri: string,
+  options: { md5?: boolean } = {}
+): Promise<FileInfo> {
   return FS.getInfoAsync(fileUri, options);
 }
 
-export function readAsStringAsync(fileUri) {
+export function readAsStringAsync(fileUri: string): Promise<string> {
   return FS.readAsStringAsync(fileUri, {});
 }
 
-export function writeAsStringAsync(fileUri, contents) {
+export function writeAsStringAsync(
+  fileUri: string,
+  contents: string
+): Promise<void> {
   return FS.writeAsStringAsync(fileUri, contents, {});
 }
 
-export function deleteAsync(fileUri, options = {}) {
+export function deleteAsync(
+  fileUri: string,
+  options: { idempotent?: boolean } = {}
+): Promise<void> {
   return FS.deleteAsync(fileUri, options);
 }
 
-export function moveAsync(options) {
+export function moveAsync(options: {
+  from: string,
+  to: string,
+}): Promise<void> {
   return FS.moveAsync(options);
 }
 
-export function copyAsync(options) {
+export function copyAsync(options: {
+  from: string,
+  to: string,
+}): Promise<void> {
   return FS.copyAsync(options);
 }
 
-export function makeDirectoryAsync(fileUri, options = {}) {
+export function makeDirectoryAsync(
+  fileUri: string,
+  options: { intermediates?: boolean } = {}
+): Promise<void> {
   return FS.makeDirectoryAsync(fileUri, options);
 }
 
-export function readDirectoryAsync(fileUri) {
+export function readDirectoryAsync(fileUri: string): Array<string> {
   return FS.readDirectoryAsync(fileUri, {});
 }
 
-export function downloadAsync(uri, fileUri, options = {}) {
+type DownloadOptions = { md5?: boolean };
+type DownloadResult = {
+  uri: string,
+  status: number,
+  headers: { [string]: string },
+  md5?: string,
+};
+
+export function downloadAsync(
+  uri: string,
+  fileUri: string,
+  options: DownloadOptions = {}
+): Promise<DownloadResult> {
   return FS.downloadAsync(uri, fileUri, options);
 }
 
 export function createDownloadResumable(
-  url,
-  fileUri,
-  options = {},
-  callback = null,
-  resumeData = null
+  uri: string,
+  fileUri: string,
+  options?: DownloadOptions,
+  callback?: DownloadProgressCallback,
+  resumeData?: string
 ) {
-  return new DownloadResumable(url, fileUri, options, callback, resumeData);
+  return new DownloadResumable(uri, fileUri, options, callback, resumeData);
 }
 
-type DownloadProgressCallback = (data: DownloadProgressData) => any;
+type DownloadProgressCallback = (data: DownloadProgressData) => void;
 type DownloadProgressData = {
   totalBytesWritten: number,
   totalBytesExpectedToWrite: number,
+};
+type DownloadPauseState = {
+  url: string,
+  fileUri: string,
+  options: DownloadOptions,
+  resumeData: ?string,
 };
 
 export class DownloadResumable {
   _uuid: string;
   _url: string;
   _fileUri: string;
-  _options: object;
-  _resumeData: string;
-  _callBack: ?DownloadProgressCallback;
+  _options: DownloadOptions;
+  _resumeData: ?string;
+  _callback: ?DownloadProgressCallback;
   _subscription: ?Function;
   _emitter: NativeEventEmitter;
 
-  constructor(url, fileUri, options = {}, callback, resumeData) {
-    this._uuid = UUIDjs.create(4).toString();
+  constructor(
+    url: string,
+    fileUri: string,
+    options: DownloadOptions = {},
+    callback: ?DownloadProgressCallback,
+    resumeData: ?string
+  ) {
+    this._uuid = UUID.create(4).toString();
     this._url = url;
     this._fileUri = fileUri;
     this._options = options;
     this._resumeData = resumeData;
-    this._callBack = callback;
+    this._callback = callback;
     this._subscription = null;
     this._emitter = new NativeEventEmitter(FS);
   }
 
-  async downloadAsync() {
+  async downloadAsync(): Promise<?DownloadResult> {
     this._addSubscription();
     return await FS.downloadResumableStartAsync(
       this._url,
@@ -97,13 +152,13 @@ export class DownloadResumable {
     );
   }
 
-  async pauseAsync() {
+  async pauseAsync(): Promise<{ resumeData: string }> {
     const pauseResult = await FS.downloadResumablePauseAsync(this._uuid);
     this._resumeData = pauseResult.resumeData;
     return pauseResult;
   }
 
-  async resumeAsync() {
+  async resumeAsync(): Promise<?DownloadResult> {
     this._addSubscription();
     return await FS.downloadResumableStartAsync(
       this._url,
@@ -114,7 +169,7 @@ export class DownloadResumable {
     );
   }
 
-  savable() {
+  savable(): DownloadPauseState {
     return {
       url: this._url,
       fileUri: this._fileUri,
@@ -123,17 +178,18 @@ export class DownloadResumable {
     };
   }
 
-  _addSubscription() {
-    if (!this._subscription) {
-      this._subscription = this._emitter.addListener(
-        'Exponent.downloadProgress',
-        ({ uuid, data }) => {
-          const callback = this._callBack;
-          if (callback) {
-            callback(data);
-          }
-        }
-      );
+  _addSubscription(): void {
+    if (this._subscription) {
+      return;
     }
+    this._subscription = this._emitter.addListener(
+      'Exponent.downloadProgress',
+      ({ uuid, data }) => {
+        const callback = this._callback;
+        if (callback) {
+          callback(data);
+        }
+      }
+    );
   }
 }

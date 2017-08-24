@@ -479,6 +479,7 @@ export class Recording {
   _cleanupForUnloadedRecorder = async (finalStatus: RecordingStatus) => {
     this._canRecord = false;
     this._isDoneRecording = true;
+    // $FlowFixMe(greg): durationMillis is not always defined
     this._finalDurationMillis = finalStatus.durationMillis;
     _recorderExists = false;
     if (NativeModules.ExponentAV.setUnloadedCallbackForAndroidRecording) {
@@ -701,8 +702,8 @@ export class Recording {
         'Cannot create sound when the Recording has not finished!'
       );
     }
-    // $FlowFixMe: Flow can't distinguish between this literal and Asset
     return Sound.create(
+      // $FlowFixMe: Flow can't distinguish between this literal and Asset
       { uri: this._uri },
       initialStatus,
       onPlaybackStatusUpdate,

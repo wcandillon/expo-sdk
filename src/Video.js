@@ -97,6 +97,10 @@ type NativeProps = {
   // etc...
 };
 
+type State = {
+  showPoster: boolean,
+};
+
 export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT = 0;
 export const IOS_FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = 1;
 export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = 2;
@@ -116,15 +120,11 @@ const _STYLES = StyleSheet.create({
   },
 });
 
-export default class Video extends Component {
+export default class Video extends Component<Props, State> {
   static RESIZE_MODE_CONTAIN = 'contain';
   static RESIZE_MODE_COVER = 'cover';
   static RESIZE_MODE_STRETCH = 'stretch';
 
-  state: {
-    showPoster: boolean,
-  };
-  props: Props;
   _root: ExponentVideo;
 
   constructor(props: Props) {
@@ -284,7 +284,7 @@ export default class Video extends Component {
   };
 
   // TODO make sure we are passing the right stuff
-  _nativeOnLoadStart = (event: SyntheticEvent) => {
+  _nativeOnLoadStart = (event: SyntheticEvent<*>) => {
     if (this.props.onLoadStart) {
       this.props.onLoadStart();
     }

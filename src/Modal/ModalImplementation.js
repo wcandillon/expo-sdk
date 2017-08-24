@@ -21,7 +21,7 @@ type State = {
   rendered: boolean,
 };
 
-export default class ModalImplementation extends Component<void, Props, State> {
+export default class ModalImplementation extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

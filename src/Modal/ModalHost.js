@@ -31,7 +31,7 @@ type State = {
 
 export const channel = '__$expo_modal_host';
 
-export default class ModalHost extends Component<void, Props, State> {
+export default class ModalHost extends Component<Props, State> {
   static childContextTypes = {
     [channel]: PropTypes.object,
   };

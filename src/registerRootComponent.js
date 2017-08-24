@@ -1,13 +1,26 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { AppRegistry, StyleSheet } from 'react-native';
 
 import { processFontFamily } from './Font';
 import Notifications from './Notifications';
 
-function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
-  class ExponentRootComponent extends React.Component {
+type InitialProps = {
+  exp: {
+    notification?: Object,
+    errorRecovery?: Object,
+    [string]: any,
+  },
+  shell?: boolean,
+  shellManifestUrl?: string,
+  [string]: any,
+};
+
+function wrapWithExpoRoot<P: InitialProps>(
+  AppRootComponent: React.ComponentType<P>
+): React.ComponentType<P> {
+  return class ExpoRootComponent extends React.Component<P> {
     componentWillMount() {
       StyleSheet.setStyleAttributePreprocessor('fontFamily', processFontFamily);
 
@@ -19,11 +32,11 @@ function wrapWithExponentRoot(AppRootComponent: ReactClass<{}>) {
     render() {
       return <AppRootComponent {...this.props} />;
     }
-  }
-
-  return ExponentRootComponent;
+  };
 }
 
-export default function registerRootComponent(component: ReactClass<{}>) {
-  AppRegistry.registerComponent('main', () => wrapWithExponentRoot(component));
+export default function registerRootComponent(
+  component: React.ComponentType<*>
+): void {
+  AppRegistry.registerComponent('main', () => wrapWithExpoRoot(component));
 }
