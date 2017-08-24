@@ -6,7 +6,7 @@ import { NativeModules } from 'react-native';
 const { ExponentConstants } = NativeModules;
 
 let manifest;
-if (ExponentConstants.manifest) {
+if (ExponentConstants) {
   manifest = ExponentConstants.manifest;
   if (typeof manifest === 'string') {
     manifest = JSON.parse(manifest);
