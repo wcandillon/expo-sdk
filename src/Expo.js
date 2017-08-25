@@ -174,7 +174,7 @@ module.exports = {
     return require('./SecureStore');
   },
   get Segment() {
-    return require('./Segment');
+    return require('./Segment').default;
   },
   get Speech() {
     return require('./Speech');
