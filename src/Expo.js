@@ -26,9 +26,6 @@ module.exports = {
   get Crypto() {
     return NativeModules.ExponentCrypto;
   },
-  get ErrorRecovery() {
-    return NativeModules.ExponentErrorRecovery;
-  },
   get Fabric() {
     return NativeModules.ExponentFabric;
   },
@@ -51,6 +48,9 @@ module.exports = {
   },
   get Accelerometer() {
     return require('./sensor/Accelerometer').default;
+  },
+  get ErrorRecovery() {
+    return require('./ErrorRecovery').default;
   },
   get GLView() {
     return require('./GLView').default;
