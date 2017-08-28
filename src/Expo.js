@@ -156,7 +156,7 @@ module.exports = {
     return require('./Permissions');
   },
   get Facebook() {
-    return require('./Facebook');
+    return require('./Facebook').default;
   },
   get FacebookAds() {
     return require('./FacebookAds');

@@ -4,7 +4,7 @@ import { NativeModules } from 'react-native';
 const { ExponentErrorRecovery } = NativeModules;
 
 export default {
-  setRecoveryProps(props: { any: any }): void {
+  setRecoveryProps(props: Object): void {
     return ExponentErrorRecovery.setRecoveryProps(props);
   },
 };
