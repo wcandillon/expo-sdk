@@ -111,7 +111,7 @@ module.exports = {
 
   // globs
   get Amplitude() {
-    return require('./Amplitude');
+    return require('./Amplitude').default;
   },
   get Audio() {
     return require('./Audio');
