@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { type ComponentType } from 'react';
 import { AppRegistry, StyleSheet } from 'react-native';
 
 import { processFontFamily } from './Font';
@@ -18,8 +18,8 @@ type InitialProps = {
 };
 
 function wrapWithExpoRoot<P: InitialProps>(
-  AppRootComponent: React.ComponentType<P>
-): React.ComponentType<P> {
+  AppRootComponent: ComponentType<P>
+): ComponentType<P> {
   return class ExpoRootComponent extends React.Component<P> {
     componentWillMount() {
       StyleSheet.setStyleAttributePreprocessor('fontFamily', processFontFamily);
@@ -36,7 +36,7 @@ function wrapWithExpoRoot<P: InitialProps>(
 }
 
 export default function registerRootComponent(
-  component: React.ComponentType<*>
+  component: ComponentType<*>
 ): void {
   AppRegistry.registerComponent('main', () => wrapWithExpoRoot(component));
 }
