@@ -100,7 +100,7 @@ module.exports = {
     return require('./Video').default;
   },
   get WebBrowser() {
-    return require('./WebBrowser');
+    return require('./WebBrowser').default;
   },
   get Svg() {
     return require('./Svg').default;
