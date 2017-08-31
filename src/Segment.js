@@ -1,14 +1,14 @@
 // @flow
 import { NativeModules, Platform } from 'react-native';
 
-const { Segment } = NativeModules.ExponentSegment;
+const { ExponentSegment } = NativeModules;
 
 export default {
   initialize(options: { androidWriteKey?: string, iosWriteKey?: string }) {
     if (Platform.OS === 'android') {
-      return Segment.initializeAndroid(options.androidWriteKey);
+      return ExponentSegment.initializeAndroid(options.androidWriteKey);
     } else if (Platform.OS === 'ios') {
-      return Segment.initializeIOS(options.androidWriteKey);
+      return ExponentSegment.initializeIOS(options.iosWriteKey);
     } else {
       throw new Error(`Unable to initialize Segment on \`${Platform.OS}\``);
     }
@@ -24,7 +24,7 @@ export default {
       );
     }
 
-    return Segment.initializeIOS(writeKey);
+    return ExponentSegment.initializeIOS(writeKey);
   },
 
   initializeAndroid(writeKey: string) {
@@ -37,38 +37,38 @@ export default {
       );
     }
 
-    return Segment.initializeAndroid(writeKey);
+    return ExponentSegment.initializeAndroid(writeKey);
   },
 
   identify(userId: string) {
-    return Segment.identify(userId);
+    return ExponentSegment.identify(userId);
   },
 
   identifyWithTraits(userId: string, traits: { [string]: any }) {
-    return Segment.identifyWithTraits(userId, traits);
+    return ExponentSegment.identifyWithTraits(userId, traits);
   },
 
   reset() {
-    return Segment.reset();
+    return ExponentSegment.reset();
   },
 
   track(event: string) {
-    return Segment.track((event: string));
+    return ExponentSegment.track((event: string));
   },
 
   trackWithProperties(event: string, properties: { [string]: any }) {
-    return Segment.trackWithProperties(event, properties);
+    return ExponentSegment.trackWithProperties(event, properties);
   },
 
   screen(screenName: string) {
-    return Segment.screen(screenName);
+    return ExponentSegment.screen(screenName);
   },
 
   screenWithProperties(event: string, properties: string) {
-    return Segment.screenWithProperties(event, properties);
+    return ExponentSegment.screenWithProperties(event, properties);
   },
 
   flush() {
-    return Segment.flush();
+    return ExponentSegment.flush();
   },
 };
