@@ -184,10 +184,14 @@ export class DownloadResumable {
     }
     this._subscription = this._emitter.addListener(
       'Exponent.downloadProgress',
-      ({ uuid, data }) => {
-        const callback = this._callback;
-        if (callback) {
-          callback(data);
+      ({ UUID, uuid, data }) => {
+        // TODO: Fix. iOS sends UUID and Android sends uuid.
+        const identifier = UUID || uuid;
+        if (identifier === this._uuid) {
+          const callback = this._callBack;
+          if (callback) {
+            callback(data);
+          }
         }
       }
     );
