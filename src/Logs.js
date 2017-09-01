@@ -357,7 +357,9 @@ function _cleanStack(stack) {
 function _removeProjectRoot(frame) {
   if (
     Constants.manifest.developer &&
-    Constants.manifest.developer.projectRoot
+    Constants.manifest.developer.projectRoot &&
+    frame.file &&
+    frame.file.includes(Constants.manifest.developer.projectRoot)
   ) {
     frame.file = frame.file.replace(
       Constants.manifest.developer.projectRoot,
