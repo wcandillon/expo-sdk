@@ -66,7 +66,9 @@ function getProviderStatusAsync(): Promise<ProviderStatus> {
   return ExponentLocation.getProviderStatusAsync();
 }
 
-function getCurrentPositionAsync(options: LocationOptions) {
+function getCurrentPositionAsync(
+  options: LocationOptions
+): Promise<LocationData> {
   // On Android we have a native method for this case.
   if (Platform.OS === 'android') {
     return ExponentLocation.getCurrentPositionAsync(options);

@@ -20,7 +20,7 @@ function _valueIsValid(tstString) {
 export function deleteValueWithKeyAsync(
   key: string,
   options?: SecureStoreOptions
-) {
+): Promise<void> {
   if (!options || typeof options !== 'object') {
     options = {};
   }
@@ -40,7 +40,7 @@ export function deleteValueWithKeyAsync(
 export function getValueWithKeyAsync(
   key: string,
   options?: SecureStoreOptions
-) {
+): Promise<?string> {
   if (!options || typeof options !== 'object') {
     options = {};
   }
@@ -66,7 +66,7 @@ export function setValueWithKeyAsync(
   value: string,
   key: string,
   options?: SecureStoreOptions
-) {
+): Promise<void> {
   if (!options || typeof options !== 'object') {
     options = {};
   }
