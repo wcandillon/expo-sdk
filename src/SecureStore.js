@@ -4,88 +4,83 @@ import { NativeModules } from 'react-native';
 
 const { ExponentSecureStore } = NativeModules;
 
-type SecureStoreOptions = {
+export type SecureStoreOptions = {
   keychainService?: string,
   keychainAccessible?: string,
 };
 
-function _keyIsValid(tstString) {
-  return tstString.match(/^[\w.-]+$/);
-}
-
-function _valueIsValid(tstString) {
-  return tstString.match(/^\S*$/);
-}
-
-export function deleteValueWithKeyAsync(
+export async function deleteItemAsync(
   key: string,
-  options?: SecureStoreOptions
+  options: SecureStoreOptions = {}
 ): Promise<void> {
-  if (!options || typeof options !== 'object') {
-    options = {};
-  }
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!_keyIsValid(key)) {
-        throw new Error('Invalid key.');
-      }
-      await ExponentSecureStore.deleteValueWithKeyAsync(key, options);
-      resolve();
-    } catch (e) {
-      reject(e);
-    }
-  });
+  _ensureValidKey(key);
+  await ExponentSecureStore.deleteValueWithKeyAsync(key, options);
 }
 
-export function getValueWithKeyAsync(
+export async function getItemAsync(
   key: string,
-  options?: SecureStoreOptions
+  options: SecureStoreOptions = {}
 ): Promise<?string> {
-  if (!options || typeof options !== 'object') {
-    options = {};
-  }
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!_keyIsValid(key)) {
-        throw new Error(
-          'Invalid key. Keys may constain alphanumeric characters, `.`, `-`, and `_`'
-        );
-      }
-      const fetchedValue = await ExponentSecureStore.getValueWithKeyAsync(
-        key,
-        options
-      );
-      resolve(fetchedValue);
-    } catch (e) {
-      reject(e);
-    }
-  });
+  _ensureValidKey(key);
+  return await ExponentSecureStore.getValueWithKeyAsync(key, options);
 }
 
-export function setValueWithKeyAsync(
+export async function setItemAsync(
+  key: string,
+  value: string,
+  options: SecureStoreOptions = {}
+): Promise<void> {
+  _ensureValidKey(key);
+  if (!_isValidValue(value)) {
+    throw new Error(
+      `Invalid value provided to SecureStore. Values must be strings; consider JSON-encoding your values if they are serializable.`
+    );
+  }
+  await ExponentSecureStore.setValueWithKeyAsync(value, key, options);
+}
+
+function _ensureValidKey(key: string) {
+  if (!_isValidKey(key)) {
+    throw new Error(
+      `Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".`
+    );
+  }
+}
+
+function _isValidKey(key: string) {
+  return typeof key === 'string' && /^[\w.-]+$/.test(key);
+}
+
+function _isValidValue(value: string) {
+  return typeof value === 'string';
+}
+
+// Legacy aliases (remove in SDK 22)
+export const getValueWithKeyAsync = function getValueWithKeyAsync(
+  key: string,
+  options: SecureStoreOptions = {}
+) {
+  console.warn(
+    `SecureStore.getValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.setItemAsync(key, value, options) instead.`
+  );
+  return getItemAsync(key, options);
+};
+export const setValueWithKeyAsync = function setValueWithKeyAsync(
   value: string,
   key: string,
-  options?: SecureStoreOptions
-): Promise<void> {
-  if (!options || typeof options !== 'object') {
-    options = {};
-  }
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!_keyIsValid(key)) {
-        throw new Error(
-          'Invalid key. Keys may constain alphanumeric characters, `.`, `-`, and `_`'
-        );
-      }
-
-      if (!_valueIsValid(value)) {
-        throw new Error('Invalid key. Keys may not contain white space.');
-      }
-
-      await ExponentSecureStore.setValueWithKeyAsync(value, key, options);
-      resolve();
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
+  options: SecureStoreOptions = {}
+) {
+  console.warn(
+    `SecureStore.setValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.setItemAsync(key, options) instead.`
+  );
+  return setItemAsync(key, value, options);
+};
+export const deleteValueWithKeyAsync = function deleteValueWithKeyAsync(
+  key: string,
+  options: SecureStoreOptions = {}
+) {
+  console.warn(
+    `SecureStore.deleteValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.deleteItemAsync(key, options) instead.`
+  );
+  return deleteItemAsync(key, options);
+};;
