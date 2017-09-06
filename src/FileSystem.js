@@ -188,7 +188,7 @@ export class DownloadResumable {
         // TODO: Fix. iOS sends UUID and Android sends uuid.
         const identifier = UUID || uuid;
         if (identifier === this._uuid) {
-          const callback = this._callBack;
+          const callback = this._callback;
           if (callback) {
             callback(data);
           }
