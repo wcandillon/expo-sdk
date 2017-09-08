@@ -116,6 +116,9 @@ module.exports = {
   get Audio() {
     return require('./Audio');
   },
+  get Brightness() {
+    return require('./Brightness');
+  },
   get Constants() {
     return require('./Constants').default;
   },
