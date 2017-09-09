@@ -43,11 +43,14 @@ module.exports = {
   get takeSnapshotAsync() {
     return require('./takeSnapshotAsync').default;
   },
+  get Accelerometer() {
+    return require('./sensor/Accelerometer').default;
+  },
   get Asset() {
     return require('./Asset').default;
   },
-  get Accelerometer() {
-    return require('./sensor/Accelerometer').default;
+  get AuthSession() {
+    return require('./AuthSession').default;
   },
   get ErrorRecovery() {
     return require('./ErrorRecovery').default;

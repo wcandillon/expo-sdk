@@ -1,4 +1,5 @@
-import { Platform } from 'react-native';
+import { Linking, Platform } from 'react-native';
+import { EventEmitter } from 'fbemitter';
 
 const allOriginalObjectProperties = new Map();
 
@@ -59,4 +60,31 @@ export function describeCrossPlatform(message, tests) {
       unmockProperty(Platform, 'OS');
     });
   });
+}
+
+export function mockLinking() {
+  let emitter = new EventEmitter();
+  let subscriptions = {};
+
+  mockProperty(
+    Linking,
+    'addEventListener',
+    jest.fn((type, cb) => {
+      let subscription = emitter.addListener(type, cb);
+      subscriptions[type] = subscriptions[type] || new Map();
+      subscriptions[type].set(cb, subscription);
+    })
+  );
+
+  mockProperty(
+    Linking,
+    'removeEventListener',
+    jest.fn((type, cb) => {
+      subscriptions[type].delete(cb);
+    })
+  );
+
+  return (type, data) => {
+    emitter.emit(type, data);
+  };
 }
