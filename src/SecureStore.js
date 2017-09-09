@@ -4,6 +4,18 @@ import { NativeModules } from 'react-native';
 
 const { ExponentSecureStore } = NativeModules;
 
+export const AFTER_FIRST_UNLOCK = ExponentSecureStore.AFTER_FIRST_UNLOCK;
+export const AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY =
+  ExponentSecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY;
+export const ALWAYS = ExponentSecureStore.ALWAYS;
+export const WHEN_PASSCODE_SET_THIS_DEVICE_ONLY =
+  ExponentSecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY;
+export const ALWAYS_THIS_DEVICE_ONLY =
+  ExponentSecureStore.ALWAYS_THIS_DEVICE_ONLY;
+export const WHEN_UNLOCKED = ExponentSecureStore.WHEN_UNLOCKED;
+export const WHEN_UNLOCKED_THIS_DEVICE_ONLY =
+  ExponentSecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY;
+
 export type SecureStoreOptions = {
   keychainService?: string,
   keychainAccessible?: string,
