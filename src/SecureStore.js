@@ -83,4 +83,4 @@ export const deleteValueWithKeyAsync = function deleteValueWithKeyAsync(
     `SecureStore.deleteValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.deleteItemAsync(key, options) instead.`
   );
   return deleteItemAsync(key, options);
-};;
+};
