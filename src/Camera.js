@@ -7,8 +7,14 @@ import {
   requireNativeComponent,
 } from 'react-native';
 
-type PictureOptions = {
-  quality?: number,
+type PictureOptions ={
+  quality ? : number,
+}
+
+type RecordingOptions = {
+  maxDuration?: number,
+  maxFileSize?: number,
+  quality?: number | string,
 };
 
 const CameraManager =
@@ -47,6 +53,7 @@ export default class Camera extends React.Component {
     FlashMode: CameraManager.FlashMode,
     AutoFocus: CameraManager.AutoFocus,
     WhiteBalance: CameraManager.WhiteBalance,
+    VideoQuality: CameraManager.VideoQuality,
   };
 
   static propTypes = {
@@ -98,6 +105,19 @@ export default class Camera extends React.Component {
       `Call takePictureAsync instead of takePicture. This method will be removed in SDK 22.`
     );
     return this.takePictureAsync(options);
+  }
+
+  async recordAsync(options?: RecordingOptions) {
+    if (!options || typeof options !== 'object') {
+      options = {};
+    } else if (typeof options.quality === 'string') {
+      options.quality = Camera.Constants.VideoQuality[options.quality];
+    }
+    return await CameraManager.record(options);
+  }
+
+  stopRecording() {
+    CameraManager.stopRecording();
   }
 
   getSupportedRatios() {
