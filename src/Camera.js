@@ -7,6 +7,10 @@ import {
   requireNativeComponent,
 } from 'react-native';
 
+type PictureOptions = {
+  quality?: number,
+};
+
 const CameraManager =
   NativeModules.ExponentCameraManager || NativeModules.ExponentCameraModule;
 
@@ -71,8 +75,14 @@ export default class Camera extends React.Component {
     whiteBalance: CameraManager.WhiteBalance.auto,
   };
 
-  async takePictureAsync() {
-    return await CameraManager.takePicture();
+  async takePictureAsync(options?: PictureOptions) {
+    if (!options) {
+      options = {};
+    }
+    if (!options.quality) {
+      options.quality = 1;
+    }
+    return await CameraManager.takePicture(options);
   }
 
   async getSupportedRatiosAsync() {
@@ -83,11 +93,11 @@ export default class Camera extends React.Component {
     }
   }
 
-  takePicture() {
+  takePicture(options?: PictureOptions) {
     console.warn(
       `Call takePictureAsync instead of takePicture. This method will be removed in SDK 22.`
     );
-    return this.takePictureAsync();
+    return this.takePictureAsync(options);
   }
 
   getSupportedRatios() {
