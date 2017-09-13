@@ -1,3 +1,5 @@
+// @flow
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
@@ -7,9 +9,9 @@ import {
   requireNativeComponent,
 } from 'react-native';
 
-type PictureOptions ={
-  quality ? : number,
-}
+type PictureOptions = {
+  quality?: number,
+};
 
 type RecordingOptions = {
   maxDuration?: number,
@@ -20,34 +22,10 @@ type RecordingOptions = {
 const CameraManager =
   NativeModules.ExponentCameraManager || NativeModules.ExponentCameraModule;
 
-function convertNativeProps(props) {
-  const newProps = { ...props };
-  if (typeof props.flashMode === 'string') {
-    newProps.flashMode = Camera.Constants.FlashMode[props.flashMode];
-  }
+// FIX: Define the prop types with Flow properly
+type Props = any;
 
-  if (typeof props.type === 'string') {
-    newProps.type = Camera.Constants.Type[props.type];
-  }
-
-  if (typeof props.autoFocus === 'string') {
-    newProps.autoFocus = Camera.Constants.AutoFocus[props.autoFocus];
-  }
-
-  if (typeof props.whiteBalance === 'string') {
-    newProps.whiteBalance = Camera.Constants.WhiteBalance[props.whiteBalance];
-  }
-
-  newProps.onCameraReadyNative = this._nativeOnCameraReady;
-
-  if (Platform.OS === 'ios') {
-    delete newProps.ratio;
-  }
-
-  return newProps;
-}
-
-export default class Camera extends React.Component {
+export default class Camera extends React.Component<Props> {
   static Constants = {
     Type: CameraManager.Type,
     FlashMode: CameraManager.FlashMode,
@@ -127,16 +105,43 @@ export default class Camera extends React.Component {
     return this.getSupportedRatiosAsync();
   }
 
-  _nativeOnCameraReady() {
+  _nativeOnCameraReady = () => {
     if (this.props.onCameraReady) {
       this.props.onCameraReady();
     }
-  }
+  };
 
   render() {
-    const nativeProps = convertNativeProps(this.props);
+    const nativeProps = this._convertNativeProps(this.props);
 
     return <ExponentCamera {...nativeProps} />;
+  }
+
+  _convertNativeProps(props: Props) {
+    const newProps = { ...props };
+    if (typeof props.flashMode === 'string') {
+      newProps.flashMode = Camera.Constants.FlashMode[props.flashMode];
+    }
+
+    if (typeof props.type === 'string') {
+      newProps.type = Camera.Constants.Type[props.type];
+    }
+
+    if (typeof props.autoFocus === 'string') {
+      newProps.autoFocus = Camera.Constants.AutoFocus[props.autoFocus];
+    }
+
+    if (typeof props.whiteBalance === 'string') {
+      newProps.whiteBalance = Camera.Constants.WhiteBalance[props.whiteBalance];
+    }
+
+    newProps.onCameraReadyNative = this._nativeOnCameraReady;
+
+    if (Platform.OS === 'ios') {
+      delete newProps.ratio;
+    }
+
+    return newProps;
   }
 }
 
