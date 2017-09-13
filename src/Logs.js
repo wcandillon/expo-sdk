@@ -1,5 +1,3 @@
-'use strict';
-
 import prettyFormat from 'pretty-format';
 import UUID from 'uuid-js';
 
@@ -150,6 +148,17 @@ async function sendRemoteLogsAsync() {
 async function queueRemoteLogAsync(level, additionalFields, args) {
   if (!args || !args.map) {
     return;
+  }
+
+  //  note(brentvatne): react-native does the same thing internally for yellow-box :/
+  if (args.length === 1 && args[0] && args[0].startsWith('Warning: ')) {
+    level = 'warn';
+
+    // Remove the stacktrace from warning message, we will get our own
+    let lines = args[0] && args[0].split && args[0].split('\n');
+    if (lines && lines[1] && lines[1].match(/^\s+in /)) {
+      args[0] = lines[0];
+    }
   }
 
   const { body, includesStack } = await _serializeLogArgsAsync(args, level);
