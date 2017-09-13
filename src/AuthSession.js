@@ -29,6 +29,16 @@ let _authLock = false;
 async function startAsync(
   options: AuthSessionOptions
 ): Promise<AuthSessionResult> {
+  const returnUrl = options.returnUrl || getDefaultReturnUrl();
+  const authUrl = options.authUrl;
+  const startUrl = getStartUrl(authUrl, returnUrl);
+
+  if (!authUrl) {
+    throw new Error(
+      'No authUrl provided to AuthSession.startAsync. An authUrl is required -- it points to the page where the user will be able to sign in.'
+    );
+  }
+
   // Prevent multiple sessions from running at the same time, WebBrowser doesn't
   // support it this makes the behavior predictable.
   if (_authLock) {
@@ -41,16 +51,6 @@ async function startAsync(
     return { type: 'locked' };
   } else {
     _authLock = true;
-  }
-
-  const returnUrl = options.returnUrl || getDefaultReturnUrl();
-  const authUrl = options.authUrl;
-  const startUrl = getStartUrl(authUrl, returnUrl);
-
-  if (!authUrl) {
-    throw new Error(
-      'No authUrl provided to AuthSession.startAsync. An authUrl is required -- it points to the page where the user will be able to sign in.'
-    );
   }
 
   let result;

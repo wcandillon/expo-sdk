@@ -130,3 +130,47 @@ it('returns error when errorCode is present', async () => {
   expect(result.errorCode).toEqual('nope');
   expect(result.params).toEqual({ id: '42' });
 });
+
+it('throws from AuthSession.startAsync if authUrl is falsy', async () => {
+  expect.assertions(1);
+  try {
+    await AuthSession.startAsync({
+      authUrl: null,
+    });
+  } catch (e) {
+    expect(e).toMatchSnapshot();
+  }
+});
+
+it('lets us call AuthSession.startAsync after param validation throws', async () => {
+  AuthSession.startAsync({ authUrl: null });
+
+  const emitLinkingEvent = mockLinking();
+  const authUrl = 'http://example.io';
+  const returnUrl = 'https://example-return.io/+';
+  const returnUrlWithParams = `${returnUrl}?id=42#token=abc123`;
+
+  let authSessionPromise = AuthSession.startAsync({
+    authUrl,
+    returnUrl,
+  });
+  emitLinkingEvent('url', { url: returnUrlWithParams });
+
+  let result = await authSessionPromise;
+
+  expect(result.type).not.toEqual('locked');
+});
+
+it('returns getRedirectUrl and calls a warning when getRedirectUri is called', () => {
+  mockProperty(console, 'warn', jest.fn());
+  expect(AuthSession.getRedirectUri()).toEqual(AuthSession.getRedirectUrl());
+
+  expect(console.warn.mock.calls).toMatchSnapshot();
+});
+
+it('warns if user is @anonymous in getRedirectUrl', () => {
+  mockProperty(Constants.manifest, 'id', '@anonymous/abc');
+  mockProperty(console, 'warn', jest.fn());
+  AuthSession.getRedirectUrl();
+  expect(console.warn.mock.calls).toMatchSnapshot();
+});
