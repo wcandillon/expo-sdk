@@ -1,6 +1,8 @@
 import { NativeModules } from 'react-native';
 import * as SecureStore from '../SecureStore';
 
+import { mockPlatformIOS } from '../../test/mocking';
+
 it(`sets values`, async () => {
   const testKey = 'key-test_0.0';
   const testValue = 'value `~!@#$%^&*();:\'"-_.,<>';
@@ -70,6 +72,26 @@ it(`checks for invalid values`, async () => {
   expect(
     NativeModules.ExponentSecureStore.setValueWithKeyAsync
   ).not.toHaveBeenCalled();
+});
+
+it(`exports accessibility options on iOS`, () => {
+  mockPlatformIOS();
+
+  expect(SecureStore.AFTER_FIRST_UNLOCK).toMatchSnapshot('AFTER_FIRST_UNLOCK');
+  expect(SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY).toMatchSnapshot(
+    'AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY'
+  );
+  expect(SecureStore.ALWAYS).toMatchSnapshot('ALWAYS');
+  expect(SecureStore.ALWAYS_THIS_DEVICE_ONLY).toMatchSnapshot(
+    'ALWAYS_THIS_DEVICE_ONLY'
+  );
+  expect(SecureStore.WHEN_UNLOCKED).toMatchSnapshot('WHEN_UNLOCKED');
+  expect(SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY).toMatchSnapshot(
+    'WHEN_UNLOCKED_THIS_DEVICE_ONLY'
+  );
+  expect(SecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY).toMatchSnapshot(
+    'WHEN_PASSCODE_SET_THIS_DEVICE_ONLY'
+  );
 });
 
 it(`exports legacy methods`, async () => {

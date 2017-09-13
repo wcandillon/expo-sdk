@@ -4,21 +4,25 @@ import { NativeModules } from 'react-native';
 
 const { ExponentSecureStore } = NativeModules;
 
-export const AFTER_FIRST_UNLOCK = ExponentSecureStore.AFTER_FIRST_UNLOCK;
-export const AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY =
+export /* opaque */ type KeychainAccessibilityConstant = number;
+
+export const AFTER_FIRST_UNLOCK: KeychainAccessibilityConstant =
+  ExponentSecureStore.AFTER_FIRST_UNLOCK;
+export const AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY;
-export const ALWAYS = ExponentSecureStore.ALWAYS;
-export const WHEN_PASSCODE_SET_THIS_DEVICE_ONLY =
+export const ALWAYS: KeychainAccessibilityConstant = ExponentSecureStore.ALWAYS;
+export const WHEN_PASSCODE_SET_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY;
-export const ALWAYS_THIS_DEVICE_ONLY =
+export const ALWAYS_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.ALWAYS_THIS_DEVICE_ONLY;
-export const WHEN_UNLOCKED = ExponentSecureStore.WHEN_UNLOCKED;
-export const WHEN_UNLOCKED_THIS_DEVICE_ONLY =
+export const WHEN_UNLOCKED: KeychainAccessibilityConstant =
+  ExponentSecureStore.WHEN_UNLOCKED;
+export const WHEN_UNLOCKED_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY;
 
 export type SecureStoreOptions = {
   keychainService?: string,
-  keychainAccessible?: string,
+  keychainAccessible?: KeychainAccessibilityConstant,
 };
 
 export async function deleteItemAsync(
