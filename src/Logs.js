@@ -151,7 +151,11 @@ async function queueRemoteLogAsync(level, additionalFields, args) {
   }
 
   //  note(brentvatne): react-native does the same thing internally for yellow-box :/
-  if (args.length === 1 && args[0] && args[0].startsWith('Warning: ')) {
+  if (
+    args.length === 1 &&
+    typeof args[0] === 'string' &&
+    args[0].startsWith('Warning: ')
+  ) {
     level = 'warn';
 
     // Remove the stacktrace from warning message, we will get our own
