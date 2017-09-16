@@ -32,12 +32,6 @@ module.exports = {
   get ImageCropper() {
     return NativeModules.ExponentImageCropper;
   },
-  get AdMobInterstitial() {
-    return NativeModules.RNAdMobInterstitial;
-  },
-  get AdMobRewarded() {
-    return NativeModules.RNAdMobRewarded;
-  },
 
   // defaults
   get apisAreAvailable() {
@@ -86,6 +80,12 @@ module.exports = {
   },
   get PublisherBanner() {
     return require('./RNPublisherBanner').default;
+  },
+  get AdMobInterstitial() {
+    return require('./RNAdMobInterstitial');
+  },
+  get AdMobRewarded() {
+    return require('./RNAdMobRewarded');
   },
   get AppLoading() {
     return require('./AppLoading').default;
