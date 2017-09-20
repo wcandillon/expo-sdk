@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "21.0.0-rc.6",
+  "version": "21.0.0",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "files": [
@@ -51,7 +51,7 @@
     "react-native-maps": "0.15.3",
     "react-native-svg": "5.3.0",
     "uuid-js": "^0.7.5",
-    "websql": "expo/node-websql#18.0.0"
+    "websql": "https://github.com/expo/node-websql/archive/18.0.0.tar.gz"
   },
   "devDependencies": {
     "@expo/npm-proofread": "^1.0.1",
