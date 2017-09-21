@@ -21,6 +21,9 @@ export default class GLView extends React.Component {
     // [iOS only] Number of samples for Apple's built-in multisampling.
     msaaSamples: PropTypes.number,
 
+    // A ref callback for the native GLView
+    nativeRef_EXPERIMENTAL: PropTypes.func,
+
     ...ViewPropTypes,
   };
 
@@ -29,15 +32,19 @@ export default class GLView extends React.Component {
   };
 
   render() {
-    // eslint-disable-next-line no-unused-vars
-    const { onContextCreate, msaaSamples, ...viewProps } = this.props;
+    const {
+      onContextCreate, // eslint-disable-line no-unused-vars
+      msaaSamples,
+      nativeRef_EXPERIMENTAL,
+      ...viewProps
+    } = this.props;
 
     // NOTE: Removing `backgroundColor: 'transparent'` causes a performance
     //       regression. Not sure why yet...
     return (
       <View {...viewProps}>
         <GLView.NativeView
-          ref={ref => (this.nativeRef = ref)}
+          ref={nativeRef_EXPERIMENTAL}
           style={{ flex: 1, backgroundColor: 'transparent' }}
           onSurfaceCreate={this._onSurfaceCreate}
           msaaSamples={Platform.OS === 'ios' ? msaaSamples : undefined}
