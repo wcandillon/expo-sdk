@@ -3,6 +3,8 @@
  * you keep your app up do date if you plan to use any of these.
  */
 
+import { Platform } from 'react-native';
+
 module.exports = {
   get Lottie() {
     return require('lottie-react-native');
@@ -15,5 +17,8 @@ module.exports = {
   },
   get Payments() {
     return require('./Payments');
+  },
+  get DeviceMotion() {
+    return require('./sensor/DeviceMotion').default;
   },
 };

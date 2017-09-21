@@ -55,18 +55,13 @@ export default class ThreeAxisSensor {
   }
 
   removeAllListeners(): void {
-    if (Platform.OS === 'android') {
-      this._nativeModule.stopObserving();
-    }
-
+    this._nativeModule.stopObserving();
     return this._nativeEmitter.removeAllListeners(this._nativeEventName);
   }
 
   removeSubscription(subscription: Subscription): void {
-    if (Platform.OS === 'android') {
-      if (this.getListenerCount() === 1) {
-        this._nativeModule.stopObserving();
-      }
+    if (this.getListenerCount() === 1) {
+      this._nativeModule.stopObserving();
     }
 
     return this._nativeEmitter.removeSubscription(subscription);
