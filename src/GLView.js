@@ -73,7 +73,7 @@ export default class GLView extends React.Component {
   });
 
   startARSessionAsync() {
-    return NativeModules.ExponentGLViewManager.startARSession(
+    return NativeModules.ExponentGLViewManager.startARSessionAsync(
       findNodeHandle(this.nativeRef)
     );
   }
