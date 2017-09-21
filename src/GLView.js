@@ -37,6 +37,7 @@ export default class GLView extends React.Component {
     return (
       <View {...viewProps}>
         <GLView.NativeView
+          ref={ref => (this.nativeRef = ref)}
           style={{ flex: 1, backgroundColor: 'transparent' }}
           onSurfaceCreate={this._onSurfaceCreate}
           msaaSamples={Platform.OS === 'ios' ? msaaSamples : undefined}
