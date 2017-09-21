@@ -4,7 +4,7 @@ import Expo from '../Expo';
 // which can happen when we add or change a native module and haven't yet
 // updated the mocks in jest-expo. This list is a temporary workaround, not a
 // way to indefinitely avoid testing modules.
-const skippedExports = ['Camera'];
+const skippedExports = [];
 
 const exportNames = Object.keys(Expo);
 for (const exportName of exportNames) {
