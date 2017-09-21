@@ -1,9 +1,9 @@
 import { mockPlatformAndroid, mockPlatformIOS } from '../../../test/mocking';
-import ThreeAxisSensor from '../ThreeAxisSensor';
+import DeviceSensor from '../DeviceSensor';
 
 it(`counts the number of listeners`, () => {
   const nativeModule = new MockNativeSensorModule();
-  const sensor = new ThreeAxisSensor(nativeModule, 'mockDidUpdate');
+  const sensor = new DeviceSensor(nativeModule, 'mockDidUpdate');
 
   // Add listeners
   const subscription1 = sensor.addListener(() => {});
@@ -28,7 +28,7 @@ it(`counts the number of listeners`, () => {
 it(`tracks the listener count on iOS`, () => {
   mockPlatformIOS();
   const nativeModule = new MockNativeSensorModule();
-  const sensor = new ThreeAxisSensor(nativeModule, 'mockDidUpdate');
+  const sensor = new DeviceSensor(nativeModule, 'mockDidUpdate');
 
   // Add listeners
   const subscription1 = sensor.addListener(() => {});
@@ -50,7 +50,7 @@ it(`tracks the listener count on iOS`, () => {
 it(`starts and stops observing on Android`, () => {
   mockPlatformAndroid();
   const nativeModule = new MockNativeSensorModule();
-  const sensor = new ThreeAxisSensor(nativeModule, 'mockDidUpdate');
+  const sensor = new DeviceSensor(nativeModule, 'mockDidUpdate');
 
   expect(nativeModule.startObserving).not.toHaveBeenCalled();
   expect(nativeModule.stopObserving).not.toHaveBeenCalled();
@@ -66,6 +66,27 @@ it(`starts and stops observing on Android`, () => {
   expect(nativeModule.stopObserving).not.toHaveBeenCalled();
   subscription2.remove();
   expect(nativeModule.stopObserving).toHaveBeenCalledTimes(1);
+});
+
+it(`doesn't manually start and stop observing on iOS`, () => {
+  mockPlatformIOS();
+  const nativeModule = new MockNativeSensorModule();
+  const sensor = new DeviceSensor(nativeModule, 'mockDidUpdate');
+
+  expect(nativeModule.startObserving).not.toHaveBeenCalled();
+  expect(nativeModule.stopObserving).not.toHaveBeenCalled();
+
+  // Add listeners
+  let subscription1 = sensor.addListener(() => {});
+  expect(nativeModule.startObserving).not.toHaveBeenCalled();
+  let subscription2 = sensor.addListener(() => {});
+  expect(nativeModule.startObserving).not.toHaveBeenCalled();
+
+  // Remove listeners
+  subscription1.remove();
+  expect(nativeModule.stopObserving).not.toHaveBeenCalled();
+  subscription2.remove();
+  expect(nativeModule.stopObserving).not.toHaveBeenCalled();
 });
 
 class MockNativeSensorModule {

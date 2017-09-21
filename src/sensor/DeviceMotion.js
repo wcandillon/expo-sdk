@@ -1,5 +1,8 @@
-import { NativeModules, Platform } from 'react-native';
-import ThreeAxisSensor from './ThreeAxisSensor';
+// @flow
+
+import { NativeModules } from 'react-native';
+
+import DeviceSensor from './DeviceSensor';
 
 const { ExponentDeviceMotion } = NativeModules;
 
@@ -27,28 +30,13 @@ type Measurement = {
   orientation: number,
 };
 
-type Listener = Measurement => void;
-
-type Subscription = {
-  remove: () => void,
-};
-
-class ComplexSensor extends ThreeAxisSensor {
-  Gravity = this._nativeModule.Gravity;
-
-  addListener(listener: Listener): Subscription {
-    if (!this.hasListeners()) {
-      this._nativeModule.startObserving();
-    }
-    let subscription = this._nativeEmitter.addListener(
-      this._nativeEventName,
-      listener
-    );
-    subscription.remove = () => this.removeSubscription(subscription);
-    return subscription;
-  }
+class DeviceMotionSensor extends DeviceSensor<Measurement> {
+  Gravity = ExponentDeviceMotion.Gravity;
 }
 
-export const Gravity = ComplexSensor.Gravity;
+export const Gravity = ExponentDeviceMotion.Gravity;
 
-export default new ComplexSensor(ExponentDeviceMotion, 'deviceMotionDidUpdate');
+export default new DeviceMotionSensor(
+  ExponentDeviceMotion,
+  'deviceMotionDidUpdate'
+);
