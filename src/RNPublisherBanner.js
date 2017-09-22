@@ -1,33 +1,23 @@
 import React from 'react';
-import {
-  NativeModules,
-  requireNativeComponent,
-  View,
-  NativeEventEmitter,
-} from 'react-native';
+import { requireNativeComponent, View } from 'react-native';
 
 const RNBanner = requireNativeComponent('RNAdMobDFP', PublisherBanner);
 
 export default class PublisherBanner extends React.Component {
-  constructor() {
-    super();
-    this.onSizeChange = this.onSizeChange.bind(this);
-    this.state = {
-      style: {},
-    };
-  }
+  state = {
+    style: {},
+  };
 
-  onSizeChange(event) {
+  _handleSizeChange = event => {
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
-  }
+  };
 
   render() {
     const {
       adUnitID,
       testDeviceID,
       bannerSize,
-      style,
       didFailToReceiveAdWithError,
       admobDispatchAppEvent,
     } = this.props;
@@ -35,7 +25,7 @@ export default class PublisherBanner extends React.Component {
       <View style={this.props.style}>
         <RNBanner
           style={this.state.style}
-          onSizeChange={this.onSizeChange.bind(this)}
+          onSizeChange={this._handleSizeChange}
           onAdViewDidReceiveAd={this.props.adViewDidReceiveAd}
           onDidFailToReceiveAdWithError={event =>
             didFailToReceiveAdWithError(event.nativeEvent.error)}
