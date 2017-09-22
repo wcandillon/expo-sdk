@@ -58,7 +58,7 @@
     "eslint": "^4.6.1",
     "eslint-config-universe": "^1.0.5",
     "flow-bin": "^0.54.0",
-    "jest-expo": "^21.0.1",
+    "jest-expo": "21.0.2-SNAPSHOT.dfc39753",
     "prettier": "^1.6.0",
     "react": "16.0.0-alpha.12",
     "react-native": "expo/react-native#sdk-21"
