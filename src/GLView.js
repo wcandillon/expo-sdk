@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  NativeModules,
+  Platform,
   View,
   ViewPropTypes,
-  Platform,
+  findNodeHandle,
   requireNativeComponent,
 } from 'react-native';
 
@@ -35,7 +37,6 @@ export default class GLView extends React.Component {
     const {
       onContextCreate, // eslint-disable-line no-unused-vars
       msaaSamples,
-      nativeRef_EXPERIMENTAL,
       ...viewProps
     } = this.props;
 
@@ -44,7 +45,7 @@ export default class GLView extends React.Component {
     return (
       <View {...viewProps}>
         <GLView.NativeView
-          ref={nativeRef_EXPERIMENTAL}
+          ref={this._setNativeRef}
           style={{ flex: 1, backgroundColor: 'transparent' }}
           onSurfaceCreate={this._onSurfaceCreate}
           msaaSamples={Platform.OS === 'ios' ? msaaSamples : undefined}
@@ -52,6 +53,13 @@ export default class GLView extends React.Component {
       </View>
     );
   }
+
+  _setNativeRef = nativeRef => {
+    if (this.props.nativeRef_EXPERIMENTAL) {
+      this.props.nativeRef_EXPERIMENTAL(nativeRef);
+    }
+    this.nativeRef = nativeRef;
+  };
 
   _onSurfaceCreate = ({ nativeEvent: { exglCtxId } }) => {
     const gl = getGl(exglCtxId);
@@ -63,6 +71,12 @@ export default class GLView extends React.Component {
   static NativeView = requireNativeComponent('ExponentGLView', GLView, {
     nativeOnly: { onSurfaceCreate: true },
   });
+
+  startARSessionAsync() {
+    return NativeModules.ExponentGLViewManager.startARSession(
+      findNodeHandle(this.nativeRef)
+    );
+  }
 }
 
 // JavaScript WebGL types to wrap around native objects
