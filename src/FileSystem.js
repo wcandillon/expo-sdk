@@ -76,7 +76,10 @@ export function readDirectoryAsync(fileUri: string): Array<string> {
   return FS.readDirectoryAsync(fileUri, {});
 }
 
-type DownloadOptions = { md5?: boolean };
+type DownloadOptions = {
+  md5?: boolean,
+  headers?: { [string]: string },
+};
 type DownloadResult = {
   uri: string,
   status: number,
