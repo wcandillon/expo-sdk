@@ -1,8 +1,6 @@
 /* @flow */
 
-import { Linking } from 'react-native';
 import { Constants, WebBrowser } from 'expo';
-import invariant from 'invariant';
 import qs from 'qs';
 
 type AuthSessionOptions = {
@@ -14,14 +12,10 @@ type AuthSessionResult =
   | { type: 'cancel' | 'dismissed' | 'locked' }
   | {
       type: 'error' | 'success',
-      event: RedirectEvent,
       errorCode: ?string,
       params: Object,
+      url: string,
     };
-
-type RedirectEvent = {
-  url: string,
-};
 
 const BASE_URL = `https://auth.expo.io`;
 let _authLock = false;
@@ -33,6 +27,7 @@ async function startAsync(
   const authUrl = options.authUrl;
   const startUrl = getStartUrl(authUrl, returnUrl);
 
+  // Prevent accidentally starting to an empty url
   if (!authUrl) {
     throw new Error(
       'No authUrl provided to AuthSession.startAsync. An authUrl is required -- it points to the page where the user will be able to sign in.'
@@ -49,76 +44,55 @@ async function startAsync(
     }
 
     return { type: 'locked' };
-  } else {
-    _authLock = true;
   }
+
+  // About to start session, set lock
+  _authLock = true;
 
   let result;
-  let error;
   try {
-    result = await Promise.race([
-      _openWebBrowserAsync(startUrl),
-      _waitForRedirectAsync(returnUrl),
-    ]);
+    result = await _openWebBrowserAsync(startUrl, returnUrl);
   } catch (e) {
-    error = e;
+    _authLock = false;
+    throw e;
   }
 
-  _closeWebBrowser();
-  _stopWaitingForRedirect();
+  // WebBrowser session complete, unset lock
   _authLock = false;
 
-  if (error) {
-    throw error;
-  } else if (!result || !result.type) {
+  // Handle failures
+  if (!result) {
     throw new Error('Unexpected AuthSession result');
-  } else {
-    return result;
   }
+  if (!result.url) {
+    if (result.type) {
+      return result;
+    } else {
+      throw new Error('Unexpected AuthSession result');
+    }
+  }
+
+  let { params, errorCode } = parseUrl(result.url);
+
+  return {
+    type: errorCode ? 'error' : 'success',
+    params,
+    errorCode,
+    url: result.url,
+  };
 }
 
 function dismiss() {
-  WebBrowser.dismissBrowser();
+  WebBrowser.dismissAuthSession();
 }
 
-async function _openWebBrowserAsync(startUrl) {
-  let result = await WebBrowser.openBrowserAsync(startUrl);
+async function _openWebBrowserAsync(startUrl, returnUrl) {
+  let result = await WebBrowser.openAuthSessionAsync(startUrl, returnUrl);
   if (result.type === 'cancel' || result.type === 'dismissed') {
     return { type: result.type };
   }
-}
 
-function _closeWebBrowser() {
-  WebBrowser.dismissBrowser();
-}
-
-let _redirectHandler;
-function _waitForRedirectAsync(returnUrl) {
-  invariant(
-    !_redirectHandler,
-    'AuthSession is in a bad state. _redirectHandler is defined when it should not be.'
-  );
-  return new Promise(resolve => {
-    _redirectHandler = (event: RedirectEvent) => {
-      if (event.url.startsWith(returnUrl)) {
-        let { params, errorCode } = parseUrl(event.url);
-
-        resolve({
-          type: errorCode ? 'error' : 'success',
-          params,
-          errorCode,
-          event,
-        });
-      }
-    };
-
-    Linking.addEventListener('url', _redirectHandler);
-  });
-}
-
-function _stopWaitingForRedirect() {
-  Linking.removeEventListener('url', _redirectHandler);
-  _redirectHandler = null;
+  return result;
 }
 
 function getStartUrl(authUrl: string, returnUrl: string): string {
