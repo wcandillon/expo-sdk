@@ -12,8 +12,8 @@ function applyMocks() {
   mockProperty(Constants.manifest, 'id', '@example/abc');
 }
 
-function mockOpenBrowserAsync(openBrowserFn) {
-  mockProperty(WebBrowser, 'openBrowserAsync', jest.fn(openBrowserFn));
+function mockOpenAuthSessionAsync(openBrowserFn) {
+  mockProperty(WebBrowser, 'openAuthSessionAsync', jest.fn(openBrowserFn));
 }
 
 beforeEach(() => {
@@ -37,12 +37,6 @@ it('returns the correct return URL from getDefaultReturnUrl', () => {
   );
 });
 
-it('calls WebBrowser.dismissBrowser from dismiss', () => {
-  mockProperty(WebBrowser, 'dismissBrowser', jest.fn());
-  AuthSession.dismiss();
-  expect(WebBrowser.dismissBrowser).toHaveBeenCalledTimes(1);
-});
-
 it('returns the correct start URL from getStartUrl', () => {
   const authUrl = 'https://signin.com';
   const returnUrl = 'exp://expo.io/@example/abc+';
@@ -56,11 +50,12 @@ it('opens WebBrowser startAsync to the start URL', async () => {
   const authUrl = 'abcd.com';
   const returnUrl = 'efgh.com';
 
-  mockOpenBrowserAsync(async () => ({ type: 'cancel' }));
+  mockOpenAuthSessionAsync(async () => ({ type: 'cancel' }));
   await AuthSession.startAsync({ authUrl, returnUrl });
 
-  expect(WebBrowser.openBrowserAsync).toHaveBeenCalledWith(
-    AuthSession.getStartUrl(authUrl, returnUrl)
+  expect(WebBrowser.openAuthSessionAsync).toHaveBeenCalledWith(
+    AuthSession.getStartUrl(authUrl, returnUrl),
+    returnUrl
   );
 });
 
@@ -74,7 +69,7 @@ it('only lets you call startAsync once at a time', async () => {
 
   jest.useFakeTimers();
 
-  mockOpenBrowserAsync(() => {
+  mockOpenAuthSessionAsync(() => {
     return new Promise(resolve => {
       setTimeout(() => resolve(normalResponse), 0);
     });
