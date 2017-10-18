@@ -1,5 +1,6 @@
 /* @flow */
 
+import { Platform } from 'react-native';
 import { Constants, WebBrowser } from 'expo';
 import qs from 'qs';
 
@@ -113,7 +114,12 @@ function getRedirectUrl(): string {
 }
 
 function getDefaultReturnUrl(): string {
-  return `${Constants.linkingUrl}expo-auth-session`;
+  // TODO: remove this when we make Constants.linkingUrl consistent everywhere
+  if (Platform.OS === 'android' && Constants.appOwnership === 'standalone') {
+    return `${Constants.linkingUrl}+expo-auth-session`;
+  } else {
+    return `${Constants.linkingUrl}expo-auth-session`;
+  }
 }
 
 function parseUrl(url: string): { errorCode: ?string, params: Object } {
