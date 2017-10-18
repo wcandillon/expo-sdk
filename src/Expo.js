@@ -17,7 +17,7 @@ if (typeof Constants.manifest.env === 'object') {
 // nicely with the Expo Menu on iOS
 // Object.defineProperty(ReactNative, 'Modal', {
 //   get() {
-//     return require('./Modal/Modal').default;
+//     return require('./modal/Modal').default;
 //   },
 // });
 
@@ -38,7 +38,7 @@ module.exports = {
     return require('./apisAreAvailable').default;
   },
   get registerRootComponent() {
-    return require('./registerRootComponent').default;
+    return require('./launch/registerRootComponent').default;
   },
   get takeSnapshotAsync() {
     return require('./takeSnapshotAsync').default;
@@ -76,25 +76,25 @@ module.exports = {
 
   // components
   get AdMobBanner() {
-    return require('./RNAdMobBanner').default;
+    return require('./admob/RNAdMobBanner').default;
   },
   get PublisherBanner() {
-    return require('./RNPublisherBanner').default;
+    return require('./admob/RNPublisherBanner').default;
   },
   get AdMobInterstitial() {
-    return require('./RNAdMobInterstitial');
+    return require('./admob/RNAdMobInterstitial');
   },
   get AdMobRewarded() {
-    return require('./RNAdMobRewarded');
+    return require('./admob/RNAdMobRewarded');
   },
   get AppLoading() {
-    return require('./AppLoading').default;
+    return require('./launch/AppLoading').default;
   },
   get BarCodeScanner() {
     return require('./BarCodeScanner').default;
   },
   get BlurView() {
-    return require('./BlurView').default;
+    return require('./effects/BlurView').default;
   },
   get Camera() {
     return require('./Camera').default;
@@ -103,16 +103,16 @@ module.exports = {
     return require('./KeepAwake').default;
   },
   get LinearGradient() {
-    return require('./LinearGradient').default;
+    return require('./effects/LinearGradient').default;
   },
   get MapView() {
     return require('react-native-maps');
   },
   get Modal() {
-    return require('./Modal/Modal').default;
+    return require('./modal/Modal').default;
   },
   get Video() {
-    return require('./Video').default;
+    return require('./av/Video').default;
   },
   get WebBrowser() {
     return require('./WebBrowser').default;
@@ -129,7 +129,7 @@ module.exports = {
     return require('./Amplitude').default;
   },
   get Audio() {
-    return require('./Audio');
+    return require('./av/Audio');
   },
   get Brightness() {
     return require('./Brightness');
@@ -177,7 +177,7 @@ module.exports = {
     return require('./Facebook').default;
   },
   get FacebookAds() {
-    return require('./FacebookAds');
+    return require('./facebook-ads');
   },
   get LegacyAsyncStorage() {
     return require('./LegacyAsyncStorage');

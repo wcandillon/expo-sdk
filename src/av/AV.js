@@ -1,6 +1,6 @@
 // @flow
 
-import Asset from './Asset';
+import Asset from '../Asset';
 
 // TODO add:
 //  disableFocusOnAndroid

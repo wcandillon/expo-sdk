@@ -3,8 +3,8 @@
 import React, { type ComponentType } from 'react';
 import { AppRegistry, StyleSheet } from 'react-native';
 
-import { processFontFamily } from './Font';
-import Notifications from './Notifications';
+import { processFontFamily } from '../Font';
+import Notifications from '../Notifications';
 import RootErrorBoundary from './RootErrorBoundary';
 
 type InitialProps = {
