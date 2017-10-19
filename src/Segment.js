@@ -18,32 +18,6 @@ export default {
     }
   },
 
-  initializeIOS(writeKey: string) {
-    console.warn(
-      '`Segment.initializeIOS(writeKey)` is deprecated, use `Segment.initialize({androidWriteKey, iosWriteKey})` instead.'
-    );
-    if (Platform.OS !== 'ios') {
-      throw new Error(
-        `Expo.Segment.initializeIOS() should only be called on iOS, not \`${Platform.OS}\``
-      );
-    }
-
-    return ExponentSegment.initializeIOS(writeKey);
-  },
-
-  initializeAndroid(writeKey: string) {
-    console.warn(
-      '`Segment.initializeAndroid(writeKey)` is deprecated, use `Segment.initialize({androidWriteKey, iosWriteKey})` instead.'
-    );
-    if (Platform.OS !== 'android') {
-      throw new Error(
-        `Expo.Segment.initializeAndroid() should only be called on Android, not \`${Platform.OS}\``
-      );
-    }
-
-    return ExponentSegment.initializeAndroid(writeKey);
-  },
-
   identify(userId: string): void {
     return ExponentSegment.identify(userId);
   },
