@@ -41,7 +41,6 @@ type LocalNotificationId = string | number;
 
 let _emitter;
 let _initialNotification;
-let _warnedAboutDeprecatedPushTokenMethod = false;
 
 function _maybeInitEmitter() {
   if (!_emitter) {
@@ -129,16 +128,9 @@ export default {
     _initialNotification = notification;
   },
 
-  /* Re-export, we can add flow here if we want as well */
-  getExpoPushTokenAsync: ExponentNotifications.getExponentPushTokenAsync,
-  getExponentPushTokenAsync(...args: any[]) {
-    if (!_warnedAboutDeprecatedPushTokenMethod) {
-      console.warn(
-        `Notifications.getExponentPushTokenAsync is deprecated and will be removed in SDK 21. Call Notifications.getExpoPushTokenAsync (which has the exact same behavior) instead.`
-      );
-      _warnedAboutDeprecatedPushTokenMethod = true;
-    }
-    return ExponentNotifications.getExponentPushTokenAsync(...args);
+  /* Re-export */
+  getExpoPushTokenAsync(): Promise<string> {
+    return ExponentNotifications.getExponentPushTokenAsync();
   },
 
   /* Re-export, we can add flow here if we want as well */
