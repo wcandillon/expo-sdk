@@ -4,7 +4,7 @@ import { NativeModules } from 'react-native';
 
 const { ExponentSecureStore } = NativeModules;
 
-export /* opaque */ type KeychainAccessibilityConstant = number;
+export opaque type KeychainAccessibilityConstant = number;
 
 export const AFTER_FIRST_UNLOCK: KeychainAccessibilityConstant =
   ExponentSecureStore.AFTER_FIRST_UNLOCK;
