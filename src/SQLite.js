@@ -87,6 +87,9 @@ function openDatabase(
   callback?: ?(db: *) => void
 ) {
   if (name && typeof name === 'object') {
+    console.warn(
+      'Passing in an object to Expo.SQLite.openDatabase is deprecated and will be removed in SDK 23. Pass in the fields as separate arguments instead.'
+    );
     // accept SQLite Plugin 1-style object here
     if (typeof version !== 'string') {
       callback = version;
