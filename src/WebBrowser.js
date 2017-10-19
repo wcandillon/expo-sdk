@@ -1,11 +1,16 @@
 // @flow
-import { Linking, NativeModules, Platform } from 'react-native';
+
 import invariant from 'invariant';
+import { Linking, NativeModules, Platform } from 'react-native';
 
 const { ExponentWebBrowser } = NativeModules;
 
 type RedirectEvent = {
   url: 'string',
+};
+
+type BrowserResult = {
+  type: 'cancel' | 'dismissed',
 };
 
 async function openBrowserAsync(
@@ -18,10 +23,12 @@ function dismissBrowser(): void {
   ExponentWebBrowser.dismissBrowser();
 }
 
+type AuthSessionResult = RedirectResult | BrowserResult;
+
 async function openAuthSessionAsync(
   url: string,
   redirectUrl: string
-): Promise<any> {
+): Promise<AuthSessionResult> {
   if (_authSessionIsNativelySupported()) {
     return ExponentWebBrowser.openAuthSessionAsync(url, redirectUrl);
   } else {
@@ -48,36 +55,35 @@ function _authSessionIsNativelySupported() {
   return versionNumber >= 11;
 }
 
-let _redirectHandler;
-async function _openAuthSessionPolyfillAsync(startUrl, returnUrl) {
+let _redirectHandler: ?(event: RedirectEvent) => void;
+
+async function _openAuthSessionPolyfillAsync(
+  startUrl: string,
+  returnUrl: string
+): Promise<AuthSessionResult> {
   invariant(
     !_redirectHandler,
     'WebBrowser.openAuthSessionAsync is in a bad state. _redirectHandler is defined when it should not be.'
   );
 
-  let result;
-  let error;
   try {
-    result = await Promise.race([
+    return await Promise.race([
       openBrowserAsync(startUrl),
       _waitForRedirectAsync(returnUrl),
     ]);
-  } catch (e) {
-    error = e;
-  }
-
-  dismissBrowser();
-  Linking.removeEventListener('url', _redirectHandler);
-  _redirectHandler = null;
-
-  if (error) {
-    throw error;
-  } else {
-    return result;
+  } finally {
+    dismissBrowser();
+    Linking.removeEventListener('url', _redirectHandler);
+    _redirectHandler = null;
   }
 }
 
-function _waitForRedirectAsync(returnUrl) {
+type RedirectResult = {
+  type: 'success',
+  url: string,
+};
+
+function _waitForRedirectAsync(returnUrl: string): Promise<RedirectResult> {
   return new Promise(resolve => {
     _redirectHandler = (event: RedirectEvent) => {
       if (event.url.startsWith(returnUrl)) {

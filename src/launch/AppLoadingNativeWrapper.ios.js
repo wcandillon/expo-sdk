@@ -1,12 +1,9 @@
-'use strict';
+// @flow
 
 import React from 'react';
-
 import { NativeModules, requireNativeComponent } from 'react-native';
 
-const NativeAppLoading = requireNativeComponent('ExponentAppLoading', null);
-
-export default class AppLoading extends React.Component {
+export default class AppLoading extends React.Component<{}> {
   componentWillUnmount() {
     NativeModules.ExponentAppLoadingManager.finishedAsync();
   }
@@ -15,3 +12,5 @@ export default class AppLoading extends React.Component {
     return <NativeAppLoading />;
   }
 }
+
+const NativeAppLoading = requireNativeComponent('ExponentAppLoading', null);

@@ -43,7 +43,7 @@ export async function getStepCountAsync(
 ): Promise<PedometerResult> {
   invariant(
     start <= end,
-    'Pedometer: The start date must be smaller than the end date.'
+    'Pedometer: The start date must precede the end date.'
   );
   return await NativeModules.ExponentPedometer.getStepCountAsync(
     start.getTime(),

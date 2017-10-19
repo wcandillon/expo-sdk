@@ -23,6 +23,7 @@ function wrapWithExpoRoot<P: InitialProps>(
 ): ComponentType<P> {
   return class ExpoRootComponent extends React.Component<P> {
     componentWillMount() {
+      console.log('expo root');
       StyleSheet.setStyleAttributePreprocessor('fontFamily', processFontFamily);
 
       if (this.props.exp.notification) {

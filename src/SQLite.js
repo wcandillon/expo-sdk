@@ -1,14 +1,13 @@
+// @flow
+
+import './timer/polyfillNextTick';
+
 import map from 'lodash.map';
 import zipObject from 'lodash.zipobject';
-
+import { NativeModules, Platform } from 'react-native';
 import customOpenDatabase from 'websql/custom';
 
-import { NativeModules, Platform } from 'react-native';
 const { ExponentSQLite } = NativeModules;
-
-if (!process.nextTick) {
-  process.nextTick = callback => setTimeout(callback, 0);
-}
 
 function SQLiteResult(error, insertId, rowsAffected, rows) {
   this.error = error;
@@ -80,10 +79,18 @@ SQLiteDatabase.prototype.exec = function exec(queries, readOnly, callback) {
 
 const openDB = customOpenDatabase(SQLiteDatabase);
 
-function openDatabase(name, version, description, size, callback) {
+function openDatabase(
+  name: string | Object,
+  version: string | ?(db: *) => void,
+  description?: string,
+  size?: number,
+  callback?: ?(db: *) => void
+) {
   if (name && typeof name === 'object') {
     // accept SQLite Plugin 1-style object here
-    callback = version;
+    if (typeof version !== 'string') {
+      callback = version;
+    }
     size = name.size;
     description = name.description;
     version = name.version;

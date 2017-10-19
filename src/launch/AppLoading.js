@@ -1,11 +1,12 @@
-/* @flow */
+// @flow
 import React from 'react';
 import { EventEmitter } from 'fbemitter';
+
 import NativeAppLoading from './AppLoadingNativeWrapper';
 
 type Props =
   | {
-      startAsync: () => Promise<any>,
+      startAsync: () => Promise<void>,
       onError?: (error: Error) => void,
       onFinish: () => void,
     }
@@ -25,8 +26,11 @@ export default class AppLoading extends React.Component<Props> {
     // startAsync is optional, you can do this process manually if you prefer
     // (this is mainly for backwards compatibility and it is not recommended)
     if (this.props.startAsync) {
-      /* $FlowFixMe */
-      this._startLoadingAppResourcesAsync().done();
+      this._startLoadingAppResourcesAsync().catch(error => {
+        console.error(
+          `AppLoading threw an unexpected error when loading:\n${error.stack}`
+        );
+      });
     }
   }
 
@@ -69,13 +73,14 @@ export default class AppLoading extends React.Component<Props> {
 }
 
 let _lifecycleEmitter: ?EventEmitter;
-function _emitEvent(event: string) {
+
+function _emitEvent(event: string): void {
   if (_lifecycleEmitter) {
     _lifecycleEmitter.emit(event);
   }
 }
 
-export function getAppLoadingLifecycleEmitter() {
+export function getAppLoadingLifecycleEmitter(): EventEmitter {
   if (!_lifecycleEmitter) {
     _lifecycleEmitter = new EventEmitter();
   }

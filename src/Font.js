@@ -9,9 +9,9 @@ function nativeName(name) {
   return `${Constants.sessionId}-${name}`;
 }
 
-const loaded = {};
-const loading = {};
-const onLoadPromises = {};
+const loaded: { [name: string]: boolean } = {};
+const loading: { [name: string]: boolean } = {};
+const onLoadPromises: { [name: string]: Array<() => void> } = {};
 
 export function processFontFamily(name: ?string) {
   if (!name || Constants.systemFonts.includes(name) || name === 'System') {
@@ -59,7 +59,7 @@ export function isLoading(name: string) {
 export async function loadAsync(
   nameOrMapOrArray: any,
   uriOrModuleOrAsset: any
-) {
+): Promise<void> {
   if (typeof nameOrMapOrArray === 'object') {
     if (Array.isArray(nameOrMapOrArray)) {
       const fontObjs = nameOrMapOrArray;

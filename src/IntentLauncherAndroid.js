@@ -1,6 +1,6 @@
-/* @flow */
+// @flow
 
-import { Platform, NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 /**
  * Constants are from the source code of Settings:
@@ -145,7 +145,7 @@ export const ACTION_ZEN_MODE_SETTINGS = 'android.settings.ZEN_MODE_SETTINGS';
 
 export function startActivityAsync(
   activity: string,
-  data?: ?Object = null
+  data: ?Object = null
 ): Promise<boolean> {
   if (Platform.OS === 'android') {
     return NativeModules.ExponentIntentLauncher.startActivity(activity, data);

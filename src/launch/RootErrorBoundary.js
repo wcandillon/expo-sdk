@@ -1,14 +1,19 @@
-/* @flow */
-import React from 'react';
-import { NativeModules, Text, View } from 'react-native';
+// @flow
+
+import * as React from 'react';
+import { NativeModules, StyleSheet, Text, View } from 'react-native';
 
 import { getAppLoadingLifecycleEmitter } from './AppLoading';
 
-type State = {
-  error: any,
+type Props = {
+  children: React.ChildrenArray<React.Node>,
 };
 
-export default class RootErrorBoundary extends React.Component<*, State> {
+type State = {
+  error: ?Error,
+};
+
+export default class RootErrorBoundary extends React.Component<Props, State> {
   state = {
     error: null,
   };
@@ -35,7 +40,7 @@ export default class RootErrorBoundary extends React.Component<*, State> {
   _subscribeToGlobalErrors = () => {
     this._appLoadingIsMounted = true;
 
-    /* $FlowFixMe */
+    let ErrorUtils = global.ErrorUtils;
     let originalErrorHandler = ErrorUtils.getGlobalHandler();
 
     ErrorUtils.setGlobalHandler((error, isFatal) => {
@@ -61,7 +66,7 @@ export default class RootErrorBoundary extends React.Component<*, State> {
   };
 
   // Test this by adding `throw new Error('example')` to your root component
-  unstable_handleError(error: any) {
+  componentDidCatch(error: Error) {
     if (this._appLoadingIsMounted) {
       NativeModules.ExponentAppLoadingManager &&
         NativeModules.ExponentAppLoadingManager.finishedAsync();
@@ -77,23 +82,13 @@ export default class RootErrorBoundary extends React.Component<*, State> {
 
   render() {
     if (this.state.error) {
-      const paragraphStyle = {
-        marginBottom: 10,
-        textAlign: 'center',
-        marginHorizontal: 30,
-        maxWidth: 350,
-        fontSize: 15,
-        color: '#888',
-      };
-
       return (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 40, marginBottom: 20 }}>⚠️</Text>
-          <Text style={[paragraphStyle, { color: '#000' }]}>
+        <View style={styles.container}>
+          <Text style={styles.warningIcon}>⚠️</Text>
+          <Text style={[styles.paragraph, { color: '#000' }]}>
             A fatal error was encountered while rendering the root component.
           </Text>
-          <Text style={paragraphStyle}>
+          <Text style={styles.paragraph}>
             Review your application logs for more information, and reload the
             app when the issue is resolved. In production, your app would have
             crashed.
@@ -105,3 +100,23 @@ export default class RootErrorBoundary extends React.Component<*, State> {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paragraph: {
+    marginBottom: 10,
+    textAlign: 'center',
+    marginHorizontal: 30,
+    maxWidth: 350,
+    fontSize: 15,
+    color: '#888',
+  },
+  warningIcon: {
+    fontSize: 40,
+    marginBottom: 20,
+  },
+});

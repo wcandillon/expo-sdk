@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 
 import React, { Component } from 'react';
 import { Animated, BackHandler, Easing, StyleSheet, View } from 'react-native';

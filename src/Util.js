@@ -1,5 +1,6 @@
-/* @flow */
+// @flow
 
+import invariant from 'invariant';
 import { EventEmitter, EventSubscription } from 'fbemitter';
 import { DeviceEventEmitter, NativeModules } from 'react-native';
 
@@ -17,13 +18,13 @@ export function getCurrentTimeZoneAsync(): Promise<string> {
   return ExponentUtil.getCurrentTimeZoneAsync();
 }
 
-export function reload() {
+export function reload(): void {
   ExponentUtil.reload();
 }
 
-let _emitter;
+let _emitter: ?EventEmitter;
 
-function _maybeInitEmitter() {
+function _getEmitter(): EventEmitter {
   if (!_emitter) {
     _emitter = new EventEmitter();
     DeviceEventEmitter.addListener(
@@ -31,20 +32,24 @@ function _maybeInitEmitter() {
       _emitNewVersionAvailable
     );
   }
+  return _emitter;
 }
 
-function _emitNewVersionAvailable(newVersionEvent) {
+function _emitNewVersionAvailable(newVersionEvent): void {
   if (typeof newVersionEvent === 'string') {
     newVersionEvent = JSON.parse(newVersionEvent);
   }
 
+  invariant(
+    _emitter,
+    `EventEmitter must be initialized to use from its listener`
+  );
   _emitter.emit('newVersionAvailable', newVersionEvent);
 }
 
 export function addNewVersionListenerExperimental(
   listener: Function
 ): EventSubscription {
-  _maybeInitEmitter();
-
-  return _emitter.addListener('newVersionAvailable', listener);
+  let emitter = _getEmitter();
+  return emitter.addListener('newVersionAvailable', listener);
 }

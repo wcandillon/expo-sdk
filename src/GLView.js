@@ -1,5 +1,7 @@
-import React from 'react';
+// @flow
+
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   NativeModules,
   Platform,
@@ -11,27 +13,47 @@ import {
 
 import Constants from './Constants';
 
-// A component that acts as an OpenGL render target.
+type Props = {
+  /**
+   * Called when the OpenGL context is created, with the context object as a
+   * parameter. The context object has an API mirroring WebGL's
+   * WebGLRenderingContext.
+   */
+  onContextCreate?: (gl: *) => void,
 
-export default class GLView extends React.Component {
+  /**
+   * [iOS only] Number of samples for Apple's built-in multisampling.
+   */
+  msaaSamples: number,
+
+  /**
+   * A ref callback for the native GLView
+   */
+  nativeRef_EXPERIMENTAL: React.Ref<typeof GLView.NativeView>,
+} & React.ElementProps<typeof View>;
+
+type SurfaceCreateEvent = {
+  nativeEvent: {
+    exglCtxId: number,
+  },
+};
+
+/**
+ * A component that acts as an OpenGL render target
+ */
+export default class GLView extends React.Component<Props> {
   static propTypes = {
-    // Called when the OpenGL context is created, with the context object as a
-    // parameter. The context object has an API mirroring WebGL's
-    // WebGLRenderingContext.
     onContextCreate: PropTypes.func,
-
-    // [iOS only] Number of samples for Apple's built-in multisampling.
     msaaSamples: PropTypes.number,
-
-    // A ref callback for the native GLView
     nativeRef_EXPERIMENTAL: PropTypes.func,
-
     ...ViewPropTypes,
   };
 
   static defaultProps = {
     msaaSamples: 4,
   };
+
+  nativeRef: ?GLView.NativeView;
 
   render() {
     const {
@@ -54,14 +76,14 @@ export default class GLView extends React.Component {
     );
   }
 
-  _setNativeRef = nativeRef => {
+  _setNativeRef = (nativeRef: GLView.NativeView) => {
     if (this.props.nativeRef_EXPERIMENTAL) {
       this.props.nativeRef_EXPERIMENTAL(nativeRef);
     }
     this.nativeRef = nativeRef;
   };
 
-  _onSurfaceCreate = ({ nativeEvent: { exglCtxId } }) => {
+  _onSurfaceCreate = ({ nativeEvent: { exglCtxId } }: SurfaceCreateEvent) => {
     const gl = getGl(exglCtxId);
     if (this.props.onContextCreate) {
       this.props.onContextCreate(gl);
@@ -83,10 +105,14 @@ export default class GLView extends React.Component {
 
 class WebGLRenderingContext {}
 
+type WebGLObjectId = any;
+
 const idToObject = {};
 
 class WebGLObject {
-  constructor(id) {
+  id: WebGLObjectId;
+
+  constructor(id: WebGLObjectId) {
     if (idToObject[id]) {
       throw new Error(
         `WebGL object with underlying EXGLObjectId '${id}' already exists!`
@@ -99,7 +125,7 @@ class WebGLObject {
   }
 }
 
-const wrapObject = (type, id) => {
+const wrapObject = (type, id: WebGLObjectId) => {
   const found = idToObject[id];
   if (found) {
     return found;
@@ -120,7 +146,9 @@ class WebGLShader extends WebGLObject {}
 class WebGLTexture extends WebGLObject {}
 
 class WebGLUniformLocation {
-  constructor(id) {
+  id: WebGLObjectId;
+
+  constructor(id: WebGLObjectId) {
     this.id = id; // Native GL object id
   }
 }
@@ -337,6 +365,8 @@ const getGl = exglCtxId => {
   if (Object.setPrototypeOf) {
     Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
   } else {
+    // Delete this path when we are competely sure we're using modern JSC on
+    // Android. iOS 9+ supports Object.setPrototypeOf.
     gl.__proto__ = global.WebGLRenderingContext.prototype; // eslint-disable-line no-proto
   }
 
@@ -353,12 +383,14 @@ const getGl = exglCtxId => {
 
   // Enable/disable logging of all GL function calls
   let enableLogging = false;
+
+  // $FlowIssue: Flow wants a "value" field
   Object.defineProperty(gl, 'enableLogging', {
     configurable: true,
-    get() {
+    get(): boolean {
       return enableLogging;
     },
-    set(enable) {
+    set(enable: boolean): void {
       if (enable === enableLogging) {
         return;
       }

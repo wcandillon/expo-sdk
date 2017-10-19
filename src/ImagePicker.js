@@ -19,11 +19,8 @@ type ImageLibraryOptions = {
 };
 
 export async function launchImageLibraryAsync(
-  options?: ImageLibraryOptions
+  options?: ImageLibraryOptions = {}
 ): Promise<ImageResult> {
-  if (!options || typeof options !== 'object') {
-    options = {};
-  }
   return ExponentImagePicker.launchImageLibraryAsync(options);
 }
 
@@ -34,10 +31,7 @@ type CameraOptions = {
 };
 
 export async function launchCameraAsync(
-  options?: CameraOptions
+  options?: CameraOptions = {}
 ): Promise<ImageResult> {
-  if (!options || typeof options !== 'object') {
-    options = {};
-  }
   return ExponentImagePicker.launchCameraAsync(options);
 }

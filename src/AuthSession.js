@@ -1,7 +1,7 @@
-/* @flow */
+// @flow
 
-import { Platform } from 'react-native';
 import { Constants, WebBrowser } from 'expo';
+import { Platform } from 'react-native';
 import qs from 'qs';
 
 type AuthSessionOptions = {
@@ -53,23 +53,20 @@ async function startAsync(
   let result;
   try {
     result = await _openWebBrowserAsync(startUrl, returnUrl);
-  } catch (e) {
+  } finally {
+    // WebBrowser session complete, unset lock
     _authLock = false;
-    throw e;
   }
-
-  // WebBrowser session complete, unset lock
-  _authLock = false;
 
   // Handle failures
   if (!result) {
-    throw new Error('Unexpected AuthSession result');
+    throw new Error('Unexpected missing AuthSession result');
   }
   if (!result.url) {
     if (result.type) {
       return result;
     } else {
-      throw new Error('Unexpected AuthSession result');
+      throw new Error('Unexpected AuthSession result with missing type');
     }
   }
 
@@ -88,6 +85,7 @@ function dismiss() {
 }
 
 async function _openWebBrowserAsync(startUrl, returnUrl) {
+  // $FlowIssue: Flow thinks the awaited result can be a promise
   let result = await WebBrowser.openAuthSessionAsync(startUrl, returnUrl);
   if (result.type === 'cancel' || result.type === 'dismissed') {
     return { type: result.type };

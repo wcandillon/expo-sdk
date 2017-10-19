@@ -1,10 +1,14 @@
 // @flow
+
 import { NativeModules, Platform } from 'react-native';
 
 const { ExponentSegment } = NativeModules;
 
 export default {
-  initialize(options: { androidWriteKey?: string, iosWriteKey?: string }) {
+  initialize(options: {
+    androidWriteKey?: string,
+    iosWriteKey?: string,
+  }): void {
     if (Platform.OS === 'android') {
       return ExponentSegment.initializeAndroid(options.androidWriteKey);
     } else if (Platform.OS === 'ios') {
@@ -40,35 +44,35 @@ export default {
     return ExponentSegment.initializeAndroid(writeKey);
   },
 
-  identify(userId: string) {
+  identify(userId: string): void {
     return ExponentSegment.identify(userId);
   },
 
-  identifyWithTraits(userId: string, traits: { [string]: any }) {
+  identifyWithTraits(userId: string, traits: { [string]: any }): void {
     return ExponentSegment.identifyWithTraits(userId, traits);
   },
 
-  reset() {
+  reset(): void {
     return ExponentSegment.reset();
   },
 
-  track(event: string) {
+  track(event: string): void {
     return ExponentSegment.track((event: string));
   },
 
-  trackWithProperties(event: string, properties: { [string]: any }) {
+  trackWithProperties(event: string, properties: { [string]: any }): void {
     return ExponentSegment.trackWithProperties(event, properties);
   },
 
-  screen(screenName: string) {
+  screen(screenName: string): void {
     return ExponentSegment.screen(screenName);
   },
 
-  screenWithProperties(event: string, properties: string) {
+  screenWithProperties(event: string, properties: string): void {
     return ExponentSegment.screenWithProperties(event, properties);
   },
 
-  flush() {
+  flush(): void {
     return ExponentSegment.flush();
   },
 };
