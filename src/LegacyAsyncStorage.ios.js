@@ -73,6 +73,8 @@ var LegacyAsyncStorage = {
   _immediate: (null: ?number),
 
   async migrateItems(items, { force = false } = {}) {
+    console.warn(`Expo.LegacyAsyncStorage is deprecated and will be removed in SDK 24`);
+
     // Skip if already migrated and not forcing
     if (!force && (await RCTAsyncStorage.isMigrationDone())) {
       return;
