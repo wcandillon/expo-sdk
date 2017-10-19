@@ -57,24 +57,16 @@ export function isLoading(name: string) {
 }
 
 export async function loadAsync(
-  nameOrMapOrArray: any,
+  nameOrMap: any,
   uriOrModuleOrAsset: any
 ): Promise<void> {
-  if (typeof nameOrMapOrArray === 'object') {
-    if (Array.isArray(nameOrMapOrArray)) {
-      const fontObjs = nameOrMapOrArray;
-      await Promise.all(fontObjs.map(fontObj => loadAsync(fontObj)));
-    } else {
-      const names = Object.keys(nameOrMapOrArray);
-      await Promise.all(
-        names.map(name => loadAsync(name, nameOrMapOrArray[name]))
-      );
-    }
-
+  if (typeof nameOrMap === 'object') {
+    const names = Object.keys(nameOrMap);
+    await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));
     return;
   }
 
-  let name = nameOrMapOrArray;
+  let name = nameOrMap;
   if (loaded[name]) {
   } else if (loading[name]) {
     await new Promise(resolve => {
