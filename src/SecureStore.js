@@ -70,33 +70,3 @@ function _isValidKey(key: string) {
 function _isValidValue(value: string) {
   return typeof value === 'string';
 }
-
-// Legacy aliases (remove in SDK 22)
-export const getValueWithKeyAsync = function getValueWithKeyAsync(
-  key: string,
-  options: SecureStoreOptions = {}
-) {
-  console.warn(
-    `SecureStore.getValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.setItemAsync(key, value, options) instead.`
-  );
-  return getItemAsync(key, options);
-};
-export const setValueWithKeyAsync = function setValueWithKeyAsync(
-  value: string,
-  key: string,
-  options: SecureStoreOptions = {}
-) {
-  console.warn(
-    `SecureStore.setValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.setItemAsync(key, options) instead.`
-  );
-  return setItemAsync(key, value, options);
-};
-export const deleteValueWithKeyAsync = function deleteValueWithKeyAsync(
-  key: string,
-  options: SecureStoreOptions = {}
-) {
-  console.warn(
-    `SecureStore.deleteValueWithKeyAsync is deprecated and will be removed in SDK 22. Use SecureStore.deleteItemAsync(key, options) instead.`
-  );
-  return deleteItemAsync(key, options);
-};

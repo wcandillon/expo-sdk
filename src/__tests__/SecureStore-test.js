@@ -93,9 +93,3 @@ it(`exports accessibility options on iOS`, () => {
     'WHEN_PASSCODE_SET_THIS_DEVICE_ONLY'
   );
 });
-
-it(`exports legacy methods`, async () => {
-  expect(SecureStore.setValueWithKeyAsync).toBeDefined();
-  expect(SecureStore.getValueWithKeyAsync).toBeDefined();
-  expect(SecureStore.deleteValueWithKeyAsync).toBeDefined();
-});
