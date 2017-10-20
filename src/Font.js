@@ -1,19 +1,17 @@
 // @flow
 
+import invariant from 'invariant';
 import { NativeModules } from 'react-native';
 
 import Asset from './Asset';
 import Constants from './Constants';
 
-function nativeName(name) {
-  return `${Constants.sessionId}-${name}`;
-}
+type FontSource = string | number | Asset;
 
 const loaded: { [name: string]: boolean } = {};
-const loading: { [name: string]: boolean } = {};
-const onLoadPromises: { [name: string]: Array<() => void> } = {};
+const loadPromises: { [name: string]: Promise<void> } = {};
 
-export function processFontFamily(name: ?string) {
+export function processFontFamily(name: ?string): ?string {
   if (!name || Constants.systemFonts.includes(name) || name === 'System') {
     return name;
   }
@@ -45,73 +43,93 @@ export function processFontFamily(name: ?string) {
     return 'System';
   }
 
-  return `ExponentFont-${nativeName(name)}`;
+  return `ExponentFont-${_getNativeFontName(name)}`;
 }
 
-export function isLoaded(name: string) {
-  return !!loaded[name];
+export function isLoaded(name: string): boolean {
+  return loaded.hasOwnProperty(name);
 }
 
-export function isLoading(name: string) {
-  return !!onLoadPromises[name];
+export function isLoading(name: string): boolean {
+  return loadPromises.hasOwnProperty(name);
 }
 
 export async function loadAsync(
-  nameOrMap: any,
-  uriOrModuleOrAsset: any
+  nameOrMap: string | { [string]: FontSource },
+  uriOrModuleOrAsset?: FontSource
 ): Promise<void> {
   if (typeof nameOrMap === 'object') {
-    const names = Object.keys(nameOrMap);
-    await Promise.all(names.map(name => loadAsync(name, nameOrMap[name])));
+    const fontMap = nameOrMap;
+    const names = Object.keys(fontMap);
+    await Promise.all(names.map(name => loadAsync(name, fontMap[name])));
     return;
   }
 
-  let name = nameOrMap;
+  const name = nameOrMap;
+
   if (loaded[name]) {
-  } else if (loading[name]) {
-    await new Promise(resolve => {
-      onLoadPromises[name].push(resolve);
-    });
-  } else {
-    loading[name] = true;
-    onLoadPromises[name] = [];
-
-    let asset;
-    if (typeof uriOrModuleOrAsset === 'string') {
-      // TODO(nikki): need to implement Asset.fromUri(...)
-      // asset = Asset.fromUri(uriOrModuleOrAsset);
-      throw new Error(
-        'Loading fonts from remote URIs is temporarily not supported. Please download the font file and load it using require. See: https://docs.getexponent.com/versions/v8.0.0/guides/using-custom-fonts.html#downloading-the-font'
-      );
-    } else if (typeof uriOrModuleOrAsset === 'number') {
-      asset = Asset.fromModule(uriOrModuleOrAsset);
-    } else {
-      asset = uriOrModuleOrAsset;
-    }
-
-    await asset.downloadAsync();
-    if (asset.downloaded) {
-      await NativeModules.ExponentFontLoader.loadAsync(
-        nativeName(name),
-        asset.localUri
-      );
-    } else {
-      throw new Error(`Couldn't download asset for font '${name}'`);
-    }
-
-    loaded[name] = true;
-    delete loading[name];
-    if (onLoadPromises[name]) {
-      onLoadPromises[name].forEach(resolve => resolve());
-      delete onLoadPromises[name];
-    }
+    return;
   }
+
+  if (loadPromises[name]) {
+    return loadPromises[name];
+  }
+
+  // Important: we want all callers that concurrently try to load the same font
+  // to await the same promise. If we're here, we haven't created the promise
+  // yet. To ensure we create only one promise in the program, we need to create
+  // the promise synchronously without yielding the event loop from this point.
+
+  invariant(uriOrModuleOrAsset, `No source from which to load font "${name}"`);
+  const asset = _getAssetForSource(uriOrModuleOrAsset);
+  loadPromises[name] = (async () => {
+    try {
+      await _loadSingleFontAsync(name, asset);
+      loaded[name] = true;
+    } finally {
+      delete loadPromises[name];
+    }
+  })();
+
+  await loadPromises[name];
 }
 
+function _getAssetForSource(uriOrModuleOrAsset: FontSource): Asset {
+  if (typeof uriOrModuleOrAsset === 'string') {
+    // TODO(nikki): need to implement Asset.fromUri(...)
+    // asset = Asset.fromUri(uriOrModuleOrAsset);
+    throw new Error(
+      'Loading fonts from remote URIs is temporarily not supported. Please download the font file and load it using require. See: https://docs.expo.io/versions/latest/guides/using-custom-fonts.html#downloading-the-font'
+    );
+  }
+
+  if (typeof uriOrModuleOrAsset === 'number') {
+    return Asset.fromModule(uriOrModuleOrAsset);
+  }
+
+  return uriOrModuleOrAsset;
+}
+
+async function _loadSingleFontAsync(name: string, asset: Asset): Promise<void> {
+  await asset.downloadAsync();
+  if (!asset.downloaded) {
+    throw new Error(`Failed to download asset for font "${name}"`);
+  }
+
+  await NativeModules.ExponentFontLoader.loadAsync(
+    _getNativeFontName(name),
+    asset.localUri
+  );
+}
+
+type StyleOptions = {
+  ignoreWarning?: boolean,
+};
+
 export function style(
-  name: string,
-  options: { ignoreWarning: boolean } = { ignoreWarning: false }
-) {
+  name: ?string,
+  options: StyleOptions = {}
+): { [string]: mixed } {
   if (!name) {
     return {
       fontFamily: undefined,
@@ -119,9 +137,13 @@ export function style(
   }
 
   if (!loaded[name] && !options.ignoreWarning) {
-    console.warn(`[Expo.Font] No font '${name}', or it hasn't been loaded yet`);
+    console.warn(`[Expo.Font] No font "${name}", or it hasn't been loaded yet`);
   }
   return {
-    fontFamily: `ExponentFont-${nativeName(name)}`,
+    fontFamily: `ExponentFont-${_getNativeFontName(name)}`,
   };
+}
+
+function _getNativeFontName(name: string): string {
+  return `${Constants.sessionId}-${name}`;
 }
