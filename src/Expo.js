@@ -1,5 +1,5 @@
 // @flow
-// These are done for the side effects
+import './environment/validate';
 import './Logs'; // set up Expo logging infra
 import './Location'; // polyfill navigator.geolocation
 
