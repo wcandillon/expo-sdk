@@ -55,7 +55,7 @@ export default class DeviceSensor<M> {
       this._nativeModule.stopObserving();
     }
 
-    return this._nativeEmitter.removeAllListeners(this._nativeEventName);
+    this._nativeEmitter.removeAllListeners(this._nativeEventName);
   }
 
   removeSubscription(subscription: Subscription): void {
@@ -65,7 +65,7 @@ export default class DeviceSensor<M> {
       }
     }
 
-    return this._nativeEmitter.removeSubscription(subscription);
+    this._nativeEmitter.removeSubscription(subscription);
   }
 
   setUpdateInterval(intervalMs: number): void {
