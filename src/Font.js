@@ -130,6 +130,10 @@ export function style(
   name: ?string,
   options: StyleOptions = {}
 ): { [string]: mixed } {
+  console.warn(
+    `Expo.Font.style() is deprecated and will be removed in SDK 24. After loading a font with a specified name with Font.loadAsync, you can just reference that font in the fontFamily of your component's style.`
+  );
+
   if (!name) {
     return {
       fontFamily: undefined,
