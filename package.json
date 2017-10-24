@@ -20,7 +20,13 @@
   },
   "eslintConfig": {
     "root": true,
-    "extends": "universe/native"
+    "extends": "universe/native",
+    "overrides": {
+      "files": "**/__tests__/*.js",
+      "env": {
+        "node": true
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -59,9 +65,10 @@
     "eslint": "^4.6.1",
     "eslint-config-universe": "^1.0.5",
     "flow-bin": "^0.57.3",
-    "jest-expo": "22.0.1-snapshot.2017.10.29",
+    "jest-expo": "22.0.1-SNAPSHOT.2017.10.31",
     "prettier": "^1.7.4",
     "react": "16.0.0-beta.5",
-    "react-native": "expo/react-native#sdk-22"
+    "react-native": "expo/react-native#sdk-22",
+    "react-test-renderer": "16.0.0-beta.5"
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 import './environment/validate';
-import './Logs'; // set up Expo logging infra
+import './environment/logging';
 import './Location'; // polyfill navigator.geolocation
 
 import { NativeModules } from 'react-native';
@@ -162,7 +162,7 @@ module.exports = {
     return require('./Location').default;
   },
   get Logs() {
-    return require('./Logs');
+    return require('./logs/Logs').default;
   },
   get Pedometer() {
     return require('./Pedometer');
