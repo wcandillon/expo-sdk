@@ -25,6 +25,8 @@ const CameraManager =
 // FIX: Define the prop types with Flow properly
 type Props = any;
 
+const EventThrottleMs = 500;
+
 export default class Camera extends React.Component<Props> {
   static Constants = {
     Type: CameraManager.Type,
@@ -32,6 +34,7 @@ export default class Camera extends React.Component<Props> {
     AutoFocus: CameraManager.AutoFocus,
     WhiteBalance: CameraManager.WhiteBalance,
     VideoQuality: CameraManager.VideoQuality,
+    BarCodeType: CameraManager.BarCodeType,
   };
 
   static propTypes = {
@@ -48,6 +51,8 @@ export default class Camera extends React.Component<Props> {
     focusDepth: PropTypes.number,
     zoom: PropTypes.number,
     whiteBalance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    barCodeTypes: PropTypes.array,
+    onBarCodeRead: PropTypes.func,
   };
 
   static defaultProps = {
@@ -58,6 +63,7 @@ export default class Camera extends React.Component<Props> {
     ratio: '4:3',
     zoom: 0,
     whiteBalance: CameraManager.WhiteBalance.auto,
+    barCodeTypes: Object.values(CameraManager.BarCodeType),
   };
 
   async takePictureAsync(options?: PictureOptions) {
@@ -105,16 +111,38 @@ export default class Camera extends React.Component<Props> {
     return this.getSupportedRatiosAsync();
   }
 
-  _nativeOnCameraReady = () => {
+  _onCameraReady = () => {
     if (this.props.onCameraReady) {
       this.props.onCameraReady();
+    }
+  };
+
+  _onBarCodeRead = ({ nativeEvent }) => {
+    if (
+      this._lastEvent &&
+      JSON.stringify(nativeEvent) === this._lastEvent &&
+      new Date() - this._lastEventTime < EventThrottleMs
+    ) {
+      return;
+    }
+
+    if (this.props.onBarCodeRead) {
+      this.props.onBarCodeRead(nativeEvent);
+      this._lastEvent = JSON.stringify(nativeEvent);
+      this._lastEventTime = new Date();
     }
   };
 
   render() {
     const nativeProps = this._convertNativeProps(this.props);
 
-    return <ExponentCamera {...nativeProps} />;
+    return (
+      <ExponentCamera
+        {...nativeProps}
+        onCameraRead={this._onCameraReady}
+        onBarCodeRead={this._onBarCodeRead}
+      />
+    );
   }
 
   _convertNativeProps(props: Props) {
@@ -135,7 +163,9 @@ export default class Camera extends React.Component<Props> {
       newProps.whiteBalance = Camera.Constants.WhiteBalance[props.whiteBalance];
     }
 
-    newProps.onCameraReadyNative = this._nativeOnCameraReady;
+    if (props.onBarCodeRead) {
+      newProps.barCodeScannerEnabled = true;
+    }
 
     if (Platform.OS === 'ios') {
       delete newProps.ratio;
@@ -149,6 +179,8 @@ export const Constants = Camera.Constants;
 
 const ExponentCamera = requireNativeComponent('ExponentCamera', Camera, {
   nativeOnly: {
-    onCameraReadyNative: true,
+    onCameraReady: true,
+    onBarCodeRead: true,
+    barCodeScannerEnabled: true,
   },
 });
