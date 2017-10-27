@@ -24,12 +24,7 @@ export default class BlurView extends React.Component<Props> {
   render() {
     let { style, ...props } = this.props;
 
-    return (
-      <NativeBlurView
-        {...props}
-        style={[style, { backgroundColor: 'transparent' }]}
-      />
-    );
+    return <NativeBlurView {...props} style={[style, { backgroundColor: 'transparent' }]} />;
   }
 }
 

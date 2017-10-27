@@ -75,10 +75,10 @@ export async function loadAsync(
     return loadPromises[name];
   }
 
-  // Important: we want all callers that concurrently try to load the same font
-  // to await the same promise. If we're here, we haven't created the promise
-  // yet. To ensure we create only one promise in the program, we need to create
-  // the promise synchronously without yielding the event loop from this point.
+  // Important: we want all callers that concurrently try to load the same font to await the same
+  // promise. If we're here, we haven't created the promise yet. To ensure we create only one
+  // promise in the program, we need to create the promise synchronously without yielding the event
+  // loop from this point.
 
   invariant(uriOrModuleOrAsset, `No source from which to load font "${name}"`);
   const asset = _getAssetForSource(uriOrModuleOrAsset);
@@ -116,20 +116,14 @@ async function _loadSingleFontAsync(name: string, asset: Asset): Promise<void> {
     throw new Error(`Failed to download asset for font "${name}"`);
   }
 
-  await NativeModules.ExponentFontLoader.loadAsync(
-    _getNativeFontName(name),
-    asset.localUri
-  );
+  await NativeModules.ExponentFontLoader.loadAsync(_getNativeFontName(name), asset.localUri);
 }
 
 type StyleOptions = {
   ignoreWarning?: boolean,
 };
 
-export function style(
-  name: ?string,
-  options: StyleOptions = {}
-): { [string]: mixed } {
+export function style(name: ?string, options: StyleOptions = {}): { [string]: mixed } {
   console.warn(
     `Expo.Font.style() is deprecated and will be removed in SDK 24. After loading a font with a specified name with Font.loadAsync, you can just reference that font in the fontFamily of your component's style.`
   );

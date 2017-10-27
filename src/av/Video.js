@@ -161,15 +161,11 @@ export default class Video extends Component<Props, State> {
     operation: (tag: number) => Promise<PlaybackStatus>
   ): Promise<PlaybackStatus> => {
     if (this._root) {
-      const status: PlaybackStatus = await operation(
-        findNodeHandle(this._root)
-      );
+      const status: PlaybackStatus = await operation(findNodeHandle(this._root));
       this._handleNewStatus(status);
       return status;
     } else {
-      throw new Error(
-        'Cannot complete operation because the Video component has not yet loaded.'
-      );
+      throw new Error('Cannot complete operation because the Video component has not yet loaded.');
     }
   };
 
@@ -203,9 +199,7 @@ export default class Video extends Component<Props, State> {
     );
   };
 
-  setOnPlaybackStatusUpdate = (
-    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void
-  ) => {
+  setOnPlaybackStatusUpdate = (onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void) => {
     this.setNativeProps({ onPlaybackStatusUpdate });
     this.getStatusAsync();
   };
@@ -217,10 +211,7 @@ export default class Video extends Component<Props, State> {
     initialStatus: PlaybackStatusToSet = {},
     downloadFirst: boolean = true
   ): Promise<PlaybackStatus> => {
-    const {
-      uri,
-      fullInitialStatus,
-    } = await _getURIAndFullInitialStatusForLoadAsync(
+    const { uri, fullInitialStatus } = await _getURIAndFullInitialStatusForLoadAsync(
       source,
       initialStatus,
       downloadFirst
@@ -239,9 +230,7 @@ export default class Video extends Component<Props, State> {
 
   // Set status API (only available while isLoaded = true)
 
-  setStatusAsync = async (
-    status: PlaybackStatusToSet
-  ): Promise<PlaybackStatus> => {
+  setStatusAsync = async (status: PlaybackStatusToSet): Promise<PlaybackStatus> => {
     _throwErrorIfValuesOutOfBoundsInStatus(status);
     return this._performOperationAndHandleStatusAsync((tag: number) =>
       NativeModules.ExponentAV.setStatusForVideo(tag, status)
@@ -254,16 +243,11 @@ export default class Video extends Component<Props, State> {
   pauseAsync: () => Promise<PlaybackStatus>;
   stopAsync: () => Promise<PlaybackStatus>;
   setPositionAsync: (positionMillis: number) => Promise<PlaybackStatus>;
-  setRateAsync: (
-    rate: number,
-    shouldCorrectPitch: boolean
-  ) => Promise<PlaybackStatus>;
+  setRateAsync: (rate: number, shouldCorrectPitch: boolean) => Promise<PlaybackStatus>;
   setVolumeAsync: (volume: number) => Promise<PlaybackStatus>;
   setIsMutedAsync: (isMuted: boolean) => Promise<PlaybackStatus>;
   setIsLoopingAsync: (isLooping: boolean) => Promise<PlaybackStatus>;
-  setProgressUpdateIntervalAsync: (
-    progressUpdateIntervalMillis: number
-  ) => Promise<PlaybackStatus>;
+  setProgressUpdateIntervalAsync: (progressUpdateIntervalMillis: number) => Promise<PlaybackStatus>;
 
   // ### Callback wrappers ###
 
@@ -299,9 +283,7 @@ export default class Video extends Component<Props, State> {
     }
   };
 
-  _nativeOnFullscreenUpdate = (event: {
-    nativeEvent: FullscreenUpdateEvent,
-  }) => {
+  _nativeOnFullscreenUpdate = (event: { nativeEvent: FullscreenUpdateEvent }) => {
     if (this.props.onIOSFullscreenUpdate) {
       this.props.onIOSFullscreenUpdate(event.nativeEvent);
     }
@@ -310,19 +292,15 @@ export default class Video extends Component<Props, State> {
   render() {
     const uri: ?string = _getURIFromSource(this.props.source);
 
-    let nativeResizeMode: Object =
-      NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
+    let nativeResizeMode: Object = NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
     if (this.props.resizeMode) {
       let resizeMode: ResizeMode = this.props.resizeMode;
       if (resizeMode === Video.RESIZE_MODE_STRETCH) {
-        nativeResizeMode =
-          NativeModules.UIManager.ExponentVideo.Constants.ScaleToFill;
+        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleToFill;
       } else if (resizeMode === Video.RESIZE_MODE_CONTAIN) {
-        nativeResizeMode =
-          NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFit;
+        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFit;
       } else if (resizeMode === Video.RESIZE_MODE_COVER) {
-        nativeResizeMode =
-          NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFill;
+        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFill;
       }
     }
 

@@ -79,8 +79,7 @@ function _processNotification(notification) {
     delete notification.count;
   }
 
-  // Delete any Android properties on iOS and merge the iOS properties on root
-  // notification object
+  // Delete any Android properties on iOS and merge the iOS properties on root notification object
   if (Platform.OS === 'ios') {
     if (notification.android) {
       delete notification.android;
@@ -92,8 +91,8 @@ function _processNotification(notification) {
     }
   }
 
-  // Delete any iOS properties on Android and merge the Android properties on
-  // root notification object
+  // Delete any iOS properties on Android and merge the Android properties on root notification
+  // object
   if (Platform.OS === 'android') {
     if (notification.ios) {
       delete notification.ios;
@@ -115,10 +114,7 @@ function _validateNotification(notification) {
       'Local notifications on iOS require both a title and a body'
     );
   } else if (Platform.OS === 'android') {
-    invariant(
-      !!notification.title,
-      'Local notifications on Android require a title'
-    );
+    invariant(!!notification.title, 'Local notifications on Android require a title');
   }
 }
 
@@ -137,9 +133,7 @@ export default {
   getDevicePushTokenAsync: ExponentNotifications.getDevicePushTokenAsync,
 
   /* Shows a notification instantly */
-  presentLocalNotificationAsync(
-    notification: LocalNotification
-  ): Promise<LocalNotificationId> {
+  presentLocalNotificationAsync(notification: LocalNotification): Promise<LocalNotificationId> {
     _validateNotification(notification);
     notification = _processNotification(notification);
 
@@ -155,8 +149,8 @@ export default {
       intervalMs?: number,
     } = {}
   ): Promise<LocalNotificationId> {
-    // set now at the beginning of the method, to prevent potential
-    // weird warnings when we validate options.time later on
+    // set now at the beginning of the method, to prevent potential weird warnings when we validate
+    // options.time later on
     const now = Date.now();
 
     // Validate and process the notification data
@@ -183,8 +177,8 @@ export default {
         );
       }
 
-      // If someone passes in a value that is too small, say, by an order of 1000
-      // (it's common to accidently pass seconds instead of ms), display a warning.
+      // If someone passes in a value that is too small, say, by an order of 1000 (it's common to
+      // accidently pass seconds instead of ms), display a warning.
       warning(
         timeAsDateObj >= now,
         `Provided value for "time" is before the current date. Did you possibly pass number of seconds since Unix Epoch instead of number of milliseconds?`
@@ -205,21 +199,12 @@ export default {
     }
 
     if (options.intervalMs != null && options.repeat != null) {
-      throw new Error(
-        `Pass either the "repeat" option or "intervalMs" option, not both`
-      );
+      throw new Error(`Pass either the "repeat" option or "intervalMs" option, not both`);
     }
 
     // Validate options.repeat
     if (options.repeat != null) {
-      const validOptions = new Set([
-        'minute',
-        'hour',
-        'day',
-        'week',
-        'month',
-        'year',
-      ]);
+      const validOptions = new Set(['minute', 'hour', 'day', 'week', 'month', 'year']);
       if (!validOptions.has(options.repeat)) {
         throw new Error(
           `Pass one of ['minute', 'hour', 'day', 'week', 'month', 'year'] as the value for the "repeat" option`
@@ -239,16 +224,11 @@ export default {
       }
     }
 
-    return ExponentNotifications.scheduleLocalNotification(
-      notification,
-      options
-    );
+    return ExponentNotifications.scheduleLocalNotification(notification, options);
   },
 
   /* Dismiss currently shown notification with ID (Android only) */
-  async dismissNotificationAsync(
-    notificationId: LocalNotificationId
-  ): Promise<void> {
+  async dismissNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
     if (Platform.OS === 'android') {
       return ExponentNotifications.dismissNotification(notificationId);
     } else {
@@ -266,9 +246,7 @@ export default {
   },
 
   /* Cancel scheduled notification notification with ID */
-  cancelScheduledNotificationAsync(
-    notificationId: LocalNotificationId
-  ): Promise<void> {
+  cancelScheduledNotificationAsync(notificationId: LocalNotificationId): Promise<void> {
     return ExponentNotifications.cancelScheduledNotification(notificationId);
   },
 

@@ -11,8 +11,7 @@ let isSendingLogs = false;
 let groupDepth = 0;
 
 export function enableXDELogging() {
-  // don't use level below info. only use debug for things that
-  // shouldn't be shown to the developer.
+  // don't use level below info. only use debug for things that shouldn't be shown to the developer.
   replaceConsoleFunction('log', 'info');
   replaceConsoleFunction('debug', 'info');
   replaceConsoleFunction('info', 'info');
@@ -151,11 +150,7 @@ async function queueRemoteLogAsync(level, additionalFields, args) {
   }
 
   //  note(brentvatne): react-native does the same thing internally for yellow-box :/
-  if (
-    args.length === 1 &&
-    typeof args[0] === 'string' &&
-    args[0].startsWith('Warning: ')
-  ) {
+  if (args.length === 1 && typeof args[0] === 'string' && args[0].startsWith('Warning: ')) {
     level = 'warn';
 
     // Remove the stacktrace from warning message, we will get our own
@@ -205,17 +200,10 @@ const LOG_FUNCTION_NAME = 'newConsoleFunc';
 async function _serializeLogArgsAsync(args, level) {
   let stringifiedArgs;
   let includesStack = false;
-  if (
-    level === 'warn' &&
-    _isUnhandledPromiseRejection(args[0]) &&
-    _stackTraceLogsSupported()
-  ) {
-    // Unhandled promise rejections are mangled and not so useful in their
-    // string form, so we take the string, pull the trace out and symbolicate.
-    let {
-      message,
-      stack,
-    } = await _symbolicateAndFormatUnhandledPromiseRejectionAsync(args[0]);
+  if (level === 'warn' && _isUnhandledPromiseRejection(args[0]) && _stackTraceLogsSupported()) {
+    // Unhandled promise rejections are mangled and not so useful in their string form, so we take
+    // the string, pull the trace out and symbolicate.
+    let { message, stack } = await _symbolicateAndFormatUnhandledPromiseRejectionAsync(args[0]);
     stringifiedArgs = [{ message, stack }];
     includesStack = true;
   } else if (
@@ -223,9 +211,8 @@ async function _serializeLogArgsAsync(args, level) {
     !(args.length === 1 && args[0] instanceof Error) &&
     _stackTraceLogsSupported()
   ) {
-    // For console.warn and console.error it is usually useful to know the
-    // stack that leads to the warning or error being called. So we provide
-    // this information to help out with debugging.
+    // For console.warn and console.error it is usually useful to know the stack that leads to the
+    // warning or error being called. So we provide this information to help out with debugging.
     let error;
     try {
       throw new Error(SENTINEL_ERROR);
@@ -243,10 +230,7 @@ async function _serializeLogArgsAsync(args, level) {
     // ["hello", "world"] becomes hello, world
     let argsString = (await _stringifyLogArgsAsync(args)).join(', ');
 
-    let { message, stack } = await _symbolicateAndFormatErrorAsync(
-      error,
-      argsString
-    );
+    let { message, stack } = await _symbolicateAndFormatErrorAsync(error, argsString);
     stringifiedArgs = [{ message, stack }];
     includesStack = true;
   } else {
@@ -254,11 +238,7 @@ async function _serializeLogArgsAsync(args, level) {
     // is an error, then we print its stack. If there is more than one
     // arg, then we don't include the stack because it's not easy to display this
     // nicely using our current UI.
-    if (
-      args.length === 1 &&
-      args[0] instanceof Error &&
-      _stackTraceLogsSupported()
-    ) {
+    if (args.length === 1 && args[0] instanceof Error && _stackTraceLogsSupported()) {
       includesStack = true;
     }
 
@@ -276,11 +256,7 @@ async function _stringifyLogArgsAsync(args) {
     args.map(async arg => {
       if (typeof arg === 'string') {
         return arg;
-      } else if (
-        arg instanceof Error &&
-        args.length === 1 &&
-        _stackTraceLogsSupported()
-      ) {
+      } else if (arg instanceof Error && args.length === 1 && _stackTraceLogsSupported()) {
         return await _symbolicateAndFormatErrorAsync(arg);
       } else {
         return prettyFormat(arg);
@@ -295,19 +271,11 @@ async function _stringifyLogArgsAsync(args) {
 // also don't support the stack trace logging format: log with `includesStack:bool`
 //  `msg:[{message: string, stack:string}]`.
 function _stackTraceLogsSupported() {
-  return !!(
-    Constants.manifest.developer &&
-    Constants.manifest.developer.projectRoot &&
-    __DEV__
-  );
+  return !!(Constants.manifest.developer && Constants.manifest.developer.projectRoot && __DEV__);
 }
 
 function _isUnhandledPromiseRejection(msg) {
-  return !!(
-    msg &&
-    msg.match &&
-    msg.match(/^Possible Unhandled Promise Rejection/)
-  );
+  return !!(msg && msg.match && msg.match(/^Possible Unhandled Promise Rejection/));
 }
 
 async function _symbolicateAndFormatUnhandledPromiseRejectionAsync(message) {
@@ -359,11 +327,7 @@ async function _symbolicateError(stack) {
 
 function _cleanStack(stack) {
   return stack
-    .filter(
-      (frame, i) =>
-        frame.file !== null &&
-        !(frame.file.includes('expo/src/Logs') && i === 0)
-    )
+    .filter((frame, i) => frame.file !== null && !(frame.file.includes('expo/src/Logs') && i === 0))
     .map(_removeProjectRoot);
 }
 
@@ -374,10 +338,7 @@ function _removeProjectRoot(frame) {
     frame.file &&
     frame.file.includes(Constants.manifest.developer.projectRoot)
   ) {
-    frame.file = frame.file.replace(
-      Constants.manifest.developer.projectRoot,
-      ''
-    );
+    frame.file = frame.file.replace(Constants.manifest.developer.projectRoot, '');
     if (frame.file[0] === '/' || frame.file[0] === '\\') {
       frame.file = frame.file.slice(1, frame.file.length);
     }
@@ -389,10 +350,7 @@ function _removeProjectRoot(frame) {
 
 function _formatStack(stack) {
   return stack
-    .map(
-      frame =>
-        `${frame.file}:${frame.lineNumber}:${frame.column} in ${frame.methodName}`
-    )
+    .map(frame => `${frame.file}:${frame.lineNumber}:${frame.column} in ${frame.methodName}`)
     .join('\n');
 }
 

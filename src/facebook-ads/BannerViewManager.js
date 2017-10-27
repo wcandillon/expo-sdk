@@ -19,8 +19,7 @@ const sizeForType = {
 /**
  * Gets size for a type (any value of `AdType` is allowed)
  */
-const getSizeForType = (type: AdType) =>
-  sizeForType[type] || sizeForType.standard;
+const getSizeForType = (type: AdType) => sizeForType[type] || sizeForType.standard;
 
 type BannerViewProps = {
   type: AdType,

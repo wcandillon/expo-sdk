@@ -10,11 +10,7 @@ let NativeModules;
 let Font;
 
 function applyMocks() {
-  mockProperty(
-    NativeModules.ExponentFontLoader,
-    'loadAsync',
-    jest.fn(async () => {})
-  );
+  mockProperty(NativeModules.ExponentFontLoader, 'loadAsync', jest.fn(async () => {}));
 }
 
 beforeEach(() => {
@@ -49,9 +45,7 @@ describe('loadAsync', () => {
       downloaded: false,
       downloadAsync: jest.fn(async () => {}),
     };
-    await expect(
-      Font.loadAsync('test-font', mockAsset)
-    ).rejects.toMatchSnapshot();
+    await expect(Font.loadAsync('test-font', mockAsset)).rejects.toMatchSnapshot();
 
     expect(mockAsset.downloaded).toBe(false);
     expect(NativeFontLoader.loadAsync).not.toHaveBeenCalled();
@@ -66,9 +60,7 @@ describe('loadAsync', () => {
     });
 
     const mockAsset = _createMockAsset();
-    await expect(
-      Font.loadAsync('test-font', mockAsset)
-    ).rejects.toMatchSnapshot();
+    await expect(Font.loadAsync('test-font', mockAsset)).rejects.toMatchSnapshot();
 
     expect(mockAsset.downloaded).toBe(true);
     expect(NativeFontLoader.loadAsync).toHaveBeenCalled();
@@ -296,9 +288,7 @@ describe('processFontFamily', () => {
     expect(Font.isLoaded(fontName)).toBe(true);
 
     const processedFontFamily = Font.processFontFamily(fontName);
-    expect(Font.processFontFamily(processedFontFamily)).toBe(
-      processedFontFamily
-    );
+    expect(Font.processFontFamily(processedFontFamily)).toBe(processedFontFamily);
   });
 });
 

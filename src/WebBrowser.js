@@ -13,9 +13,7 @@ type BrowserResult = {
   type: 'cancel' | 'dismissed',
 };
 
-async function openBrowserAsync(
-  url: string
-): Promise<{ type: 'cancel' | 'dismissed' }> {
+async function openBrowserAsync(url: string): Promise<{ type: 'cancel' | 'dismissed' }> {
   return ExponentWebBrowser.openBrowserAsync(url);
 }
 
@@ -25,10 +23,7 @@ function dismissBrowser(): void {
 
 type AuthSessionResult = RedirectResult | BrowserResult;
 
-async function openAuthSessionAsync(
-  url: string,
-  redirectUrl: string
-): Promise<AuthSessionResult> {
+async function openAuthSessionAsync(url: string, redirectUrl: string): Promise<AuthSessionResult> {
   if (_authSessionIsNativelySupported()) {
     return ExponentWebBrowser.openAuthSessionAsync(url, redirectUrl);
   } else {
@@ -67,10 +62,7 @@ async function _openAuthSessionPolyfillAsync(
   );
 
   try {
-    return await Promise.race([
-      openBrowserAsync(startUrl),
-      _waitForRedirectAsync(returnUrl),
-    ]);
+    return await Promise.race([openBrowserAsync(startUrl), _waitForRedirectAsync(returnUrl)]);
   } finally {
     dismissBrowser();
     Linking.removeEventListener('url', _redirectHandler);

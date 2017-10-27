@@ -2,12 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  NativeModules,
-  ViewPropTypes,
-  Platform,
-  requireNativeComponent,
-} from 'react-native';
+import { NativeModules, ViewPropTypes, Platform, requireNativeComponent } from 'react-native';
 
 type PictureOptions = {
   quality?: number,
@@ -19,8 +14,7 @@ type RecordingOptions = {
   quality?: number | string,
 };
 
-const CameraManager =
-  NativeModules.ExponentCameraManager || NativeModules.ExponentCameraModule;
+const CameraManager = NativeModules.ExponentCameraManager || NativeModules.ExponentCameraModule;
 
 // FIX: Define the prop types with Flow properly
 type Props = any;
@@ -43,11 +37,7 @@ export default class Camera extends React.Component<Props> {
     flashMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     ratio: PropTypes.string,
-    autoFocus: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool,
-      PropTypes.number,
-    ]),
+    autoFocus: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
     focusDepth: PropTypes.number,
     zoom: PropTypes.number,
     whiteBalance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -15,9 +15,8 @@ import Constants from './Constants';
 
 type Props = {
   /**
-   * Called when the OpenGL context is created, with the context object as a
-   * parameter. The context object has an API mirroring WebGL's
-   * WebGLRenderingContext.
+   * Called when the OpenGL context is created, with the context object as a parameter. The context
+   * object has an API mirroring WebGL's WebGLRenderingContext.
    */
   onContextCreate?: (gl: *) => void,
 
@@ -62,8 +61,8 @@ export default class GLView extends React.Component<Props> {
       ...viewProps
     } = this.props;
 
-    // NOTE: Removing `backgroundColor: 'transparent'` causes a performance
-    //       regression. Not sure why yet...
+    // NOTE: Removing `backgroundColor: 'transparent'` causes a performance regression. Not sure why
+    //       yet...
     return (
       <View {...viewProps}>
         <GLView.NativeView
@@ -95,9 +94,7 @@ export default class GLView extends React.Component<Props> {
   });
 
   startARSessionAsync() {
-    return NativeModules.ExponentGLViewManager.startARSessionAsync(
-      findNodeHandle(this.nativeRef)
-    );
+    return NativeModules.ExponentGLViewManager.startARSessionAsync(findNodeHandle(this.nativeRef));
   }
 }
 
@@ -114,9 +111,7 @@ class WebGLObject {
 
   constructor(id: WebGLObjectId) {
     if (idToObject[id]) {
-      throw new Error(
-        `WebGL object with underlying EXGLObjectId '${id}' already exists!`
-      );
+      throw new Error(`WebGL object with underlying EXGLObjectId '${id}' already exists!`);
     }
     this.id = id; // Native GL object id
   }
@@ -165,9 +160,8 @@ class WebGLShaderPrecisionFormat {
   }
 }
 
-// Many functions need wrapping/unwrapping of arguments and return value. We
-// handle each case specifically so we can write the tightest code for
-// better performance.
+// Many functions need wrapping/unwrapping of arguments and return value. We handle each case
+// specifically so we can write the tightest code for better performance.
 const wrapMethods = gl => {
   const wrap = (methodNames, wrapper) =>
     (Array.isArray(methodNames) ? methodNames : [methodNames]).forEach(
@@ -195,32 +189,22 @@ const wrapMethods = gl => {
   });
 
   // Buffers
-  wrap('bindBuffer', orig => (target, buffer) =>
-    orig.call(gl, target, buffer && buffer.id)
-  );
+  wrap('bindBuffer', orig => (target, buffer) => orig.call(gl, target, buffer && buffer.id));
   wrap('createBuffer', orig => () => wrapObject(WebGLBuffer, orig.call(gl)));
   wrap('deleteBuffer', orig => buffer => orig.call(gl, buffer && buffer.id));
-  wrap('isBuffer', orig => buffer =>
-    buffer instanceof WebGLBuffer && orig.call(gl, buffer.id)
-  );
+  wrap('isBuffer', orig => buffer => buffer instanceof WebGLBuffer && orig.call(gl, buffer.id));
 
   // Framebuffers
   wrap('bindFramebuffer', orig => (target, framebuffer) =>
     orig.call(gl, target, framebuffer && framebuffer.id)
   );
-  wrap('createFramebuffer', orig => () =>
-    wrapObject(WebGLFramebuffer, orig.call(gl))
-  );
-  wrap('deleteFramebuffer', orig => framebuffer =>
-    orig.call(gl, framebuffer && framebuffer.id)
-  );
+  wrap('createFramebuffer', orig => () => wrapObject(WebGLFramebuffer, orig.call(gl)));
+  wrap('deleteFramebuffer', orig => framebuffer => orig.call(gl, framebuffer && framebuffer.id));
   wrap('framebufferRenderbuffer', orig => (target, attachment, rbtarget, rb) =>
     orig.call(gl, target, attachment, rbtarget, rb && rb.id)
   );
-  wrap(
-    'framebufferTexture2D',
-    orig => (target, attachment, textarget, tex, level) =>
-      orig.call(gl, target, attachment, textarget, tex && tex.id, level)
+  wrap('framebufferTexture2D', orig => (target, attachment, textarget, tex, level) =>
+    orig.call(gl, target, attachment, textarget, tex && tex.id, level)
   );
   wrap('isFramebuffer', orig => framebuffer =>
     framebuffer instanceof WebGLFramebuffer && orig.call(gl, framebuffer.id)
@@ -230,9 +214,7 @@ const wrapMethods = gl => {
   wrap('bindRenderbuffer', orig => (target, renderbuffer) =>
     orig.call(gl, target, renderbuffer && renderbuffer.id)
   );
-  wrap('createRenderbuffer', orig => () =>
-    wrapObject(WebGLRenderbuffer, orig.call(gl))
-  );
+  wrap('createRenderbuffer', orig => () => wrapObject(WebGLRenderbuffer, orig.call(gl)));
   wrap('deleteRenderbuffer', orig => renderbuffer =>
     orig.call(gl, renderbuffer && renderbuffer.id)
   );
@@ -241,13 +223,9 @@ const wrapMethods = gl => {
   );
 
   // Textures
-  wrap('bindTexture', orig => (target, texture) =>
-    orig.call(gl, target, texture && texture.id)
-  );
+  wrap('bindTexture', orig => (target, texture) => orig.call(gl, target, texture && texture.id));
   wrap('createTexture', orig => () => wrapObject(WebGLTexture, orig.call(gl)));
-  wrap('deleteTexture', orig => texture =>
-    orig.call(gl, texture && texture.id)
-  );
+  wrap('deleteTexture', orig => texture => orig.call(gl, texture && texture.id));
   wrap('isTexture', orig => texture =>
     texture instanceof WebGLTexture && orig.call(gl, texture.id)
   );
@@ -261,12 +239,8 @@ const wrapMethods = gl => {
   );
   wrap('compileShader', orig => shader => orig.call(gl, shader && shader.id));
   wrap('createProgram', orig => () => wrapObject(WebGLProgram, orig.call(gl)));
-  wrap('createShader', orig => type =>
-    wrapObject(WebGLShader, orig.call(gl, type))
-  );
-  wrap('deleteProgram', orig => program =>
-    orig.call(gl, program && program.id)
-  );
+  wrap('createShader', orig => type => wrapObject(WebGLShader, orig.call(gl, type)));
+  wrap('deleteProgram', orig => program => orig.call(gl, program && program.id));
   wrap('deleteShader', orig => shader => orig.call(gl, shader && shader.id));
   wrap('detachShader', orig => (program, shader) =>
     orig.call(gl, program && program.id, shader && shader.id)
@@ -277,30 +251,18 @@ const wrapMethods = gl => {
   wrap('getProgramParameter', orig => (program, pname) =>
     orig.call(gl, program && program.id, pname)
   );
-  wrap('getProgramInfoLog', orig => program =>
-    orig.call(gl, program && program.id)
-  );
-  wrap('getShaderParameter', orig => (shader, pname) =>
-    orig.call(gl, shader && shader.id, pname)
-  );
+  wrap('getProgramInfoLog', orig => program => orig.call(gl, program && program.id));
+  wrap('getShaderParameter', orig => (shader, pname) => orig.call(gl, shader && shader.id, pname));
   wrap('getShaderPrecisionFormat', orig => (shadertype, precisiontype) =>
     new WebGLShaderPrecisionFormat(orig.call(gl, shadertype, precisiontype))
   );
-  wrap('getShaderInfoLog', orig => shader =>
-    orig.call(gl, shader && shader.id)
-  );
+  wrap('getShaderInfoLog', orig => shader => orig.call(gl, shader && shader.id));
   wrap('getShaderSource', orig => shader => orig.call(gl, shader && shader.id));
   wrap('linkProgram', orig => program => orig.call(gl, program && program.id));
-  wrap('shaderSource', orig => (shader, source) =>
-    orig.call(gl, shader && shader.id, source)
-  );
+  wrap('shaderSource', orig => (shader, source) => orig.call(gl, shader && shader.id, source));
   wrap('useProgram', orig => program => orig.call(gl, program && program.id));
-  wrap('validateProgram', orig => program =>
-    orig.call(gl, program && program.id)
-  );
-  wrap('isShader', orig => shader =>
-    shader instanceof WebGLShader && orig.call(gl, shader.id)
-  );
+  wrap('validateProgram', orig => program => orig.call(gl, program && program.id));
+  wrap('isShader', orig => shader => shader instanceof WebGLShader && orig.call(gl, shader.id));
   wrap('isProgram', orig => program =>
     program instanceof WebGLProgram && orig.call(gl, program.id)
   );
@@ -312,47 +274,31 @@ const wrapMethods = gl => {
   wrap('getActiveUniform', orig => (program, index) =>
     new WebGLActiveInfo(orig.call(gl, program && program.id, index))
   );
-  wrap('getAttribLocation', orig => (program, name) =>
-    orig.call(gl, program && program.id, name)
-  );
+  wrap('getAttribLocation', orig => (program, name) => orig.call(gl, program && program.id, name));
   wrap('getUniform', orig => (program, location) =>
     orig.call(gl, program && program.id, location && location.id)
   );
   wrap('getUniformLocation', orig => (program, name) =>
     new WebGLUniformLocation(orig.call(gl, program && program.id, name))
   );
-  wrap(['uniform1f', 'uniform1i'], orig => (loc, x) =>
-    orig.call(gl, loc && loc.id, x)
-  );
-  wrap(['uniform2f', 'uniform2i'], orig => (loc, x, y) =>
-    orig.call(gl, loc && loc.id, x, y)
-  );
-  wrap(['uniform3f', 'uniform3i'], orig => (loc, x, y, z) =>
-    orig.call(gl, loc && loc.id, x, y, z)
-  );
+  wrap(['uniform1f', 'uniform1i'], orig => (loc, x) => orig.call(gl, loc && loc.id, x));
+  wrap(['uniform2f', 'uniform2i'], orig => (loc, x, y) => orig.call(gl, loc && loc.id, x, y));
+  wrap(['uniform3f', 'uniform3i'], orig => (loc, x, y, z) => orig.call(gl, loc && loc.id, x, y, z));
   wrap(['uniform4f', 'uniform4i'], orig => (loc, x, y, z, w) =>
     orig.call(gl, loc && loc.id, x, y, z, w)
   );
-  wrap(
-    ['uniform1fv', 'uniform2fv', 'uniform3fv', 'uniform4fv'],
-    orig => (loc, val) => orig.call(gl, loc && loc.id, new Float32Array(val))
+  wrap(['uniform1fv', 'uniform2fv', 'uniform3fv', 'uniform4fv'], orig => (loc, val) =>
+    orig.call(gl, loc && loc.id, new Float32Array(val))
   );
-  wrap(
-    ['uniform1iv', 'uniform2iv', 'uniform3iv', 'uniform4iv'],
-    orig => (loc, val) => orig.call(gl, loc && loc.id, new Int32Array(val))
+  wrap(['uniform1iv', 'uniform2iv', 'uniform3iv', 'uniform4iv'], orig => (loc, val) =>
+    orig.call(gl, loc && loc.id, new Int32Array(val))
   );
   wrap(
     ['uniformMatrix2fv', 'uniformMatrix3fv', 'uniformMatrix4fv'],
-    orig => (loc, transpose, val) =>
-      orig.call(gl, loc && loc.id, transpose, new Float32Array(val))
+    orig => (loc, transpose, val) => orig.call(gl, loc && loc.id, transpose, new Float32Array(val))
   );
   wrap(
-    [
-      'vertexAttrib1fv',
-      'vertexAttrib2fv',
-      'vertexAttrib3fv',
-      'vertexAttrib4fv',
-    ],
+    ['vertexAttrib1fv', 'vertexAttrib2fv', 'vertexAttrib3fv', 'vertexAttrib4fv'],
     orig => (index, val) => orig.call(gl, index, new Float32Array(val))
   );
 };
@@ -365,8 +311,8 @@ const getGl = exglCtxId => {
   if (Object.setPrototypeOf) {
     Object.setPrototypeOf(gl, global.WebGLRenderingContext.prototype);
   } else {
-    // Delete this path when we are competely sure we're using modern JSC on
-    // Android. iOS 9+ supports Object.setPrototypeOf.
+    // Delete this path when we are competely sure we're using modern JSC on Android. iOS 9+
+    // supports Object.setPrototypeOf.
     gl.__proto__ = global.WebGLRenderingContext.prototype; // eslint-disable-line no-proto
   }
 

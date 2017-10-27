@@ -181,9 +181,7 @@ export const INTERRUPTION_MODE_ANDROID_DUCK_OTHERS = 2;
 
 let _enabled: boolean = true;
 let _recorderExists: boolean = false;
-const _DISABLED_ERROR: Error = new Error(
-  'Cannot complete operation because audio is not enabled.'
-);
+const _DISABLED_ERROR: Error = new Error('Cannot complete operation because audio is not enabled.');
 
 // Returns true if value is in validValues, and false if not.
 const _isValueValid = (value: any, validValues: Array<any>): boolean => {
@@ -191,10 +189,7 @@ const _isValueValid = (value: any, validValues: Array<any>): boolean => {
 };
 
 // Returns array of missing keys in object. Returns an empty array if no missing keys are found.
-const _findMissingKeys = (
-  object: Object,
-  requiredKeys: Array<any>
-): Array<any> => {
+const _findMissingKeys = (object: Object, requiredKeys: Array<any>): Array<any> => {
   return requiredKeys.filter(requiredKey => !(requiredKey in object));
 };
 
@@ -217,9 +212,7 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
   ]);
   if (missingKeys.length > 0) {
     throw new Error(
-      `Audio mode attempted to be set without the required keys: ${JSON.stringify(
-        missingKeys
-      )}`
+      `Audio mode attempted to be set without the required keys: ${JSON.stringify(missingKeys)}`
     );
   }
   if (
@@ -272,11 +265,7 @@ export class Sound {
   ): Promise<{ sound: Sound, status: PlaybackStatus }> => {
     const sound: Sound = new Sound();
     sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-    const status: PlaybackStatus = await sound.loadAsync(
-      source,
-      initialStatus,
-      downloadFirst
-    );
+    const status: PlaybackStatus = await sound.loadAsync(source, initialStatus, downloadFirst);
     return { sound, status };
   };
 
@@ -340,9 +329,7 @@ export class Sound {
     return status;
   };
 
-  setOnPlaybackStatusUpdate(
-    onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void
-  ) {
+  setOnPlaybackStatusUpdate(onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void) {
     this._onPlaybackStatusUpdate = onPlaybackStatusUpdate;
     this.getStatusAsync();
   }
@@ -363,10 +350,7 @@ export class Sound {
     if (!this._loaded) {
       this._loading = true;
 
-      const {
-        uri,
-        fullInitialStatus,
-      } = await _getURIAndFullInitialStatusForLoadAsync(
+      const { uri, fullInitialStatus } = await _getURIAndFullInitialStatusForLoadAsync(
         source,
         initialStatus,
         downloadFirst
@@ -379,10 +363,7 @@ export class Sound {
             this._key = key;
             this._loaded = true;
             this._loading = false;
-            NativeModules.ExponentAV.setErrorCallbackForSound(
-              this._key,
-              this._errorCallback
-            );
+            NativeModules.ExponentAV.setErrorCallbackForSound(this._key, this._errorCallback);
             this._setInternalStatusUpdateCallback();
             this._callOnPlaybackStatusUpdateForNewStatus(status);
             resolve(status);
@@ -391,12 +372,7 @@ export class Sound {
             this._loading = false;
             reject(new Error(error));
           };
-          NativeModules.ExponentAV.loadForSound(
-            uri,
-            fullInitialStatus,
-            loadSuccess,
-            loadError
-          );
+          NativeModules.ExponentAV.loadForSound(uri, fullInitialStatus, loadSuccess, loadError);
         }.bind(this)
       );
     } else {
@@ -432,16 +408,11 @@ export class Sound {
   pauseAsync: () => Promise<PlaybackStatus>;
   stopAsync: () => Promise<PlaybackStatus>;
   setPositionAsync: (positionMillis: number) => Promise<PlaybackStatus>;
-  setRateAsync: (
-    rate: number,
-    shouldCorrectPitch: boolean
-  ) => Promise<PlaybackStatus>;
+  setRateAsync: (rate: number, shouldCorrectPitch: boolean) => Promise<PlaybackStatus>;
   setVolumeAsync: (volume: number) => Promise<PlaybackStatus>;
   setIsMutedAsync: (isMuted: boolean) => Promise<PlaybackStatus>;
   setIsLoopingAsync: (isLooping: boolean) => Promise<PlaybackStatus>;
-  setProgressUpdateIntervalAsync: (
-    progressUpdateIntervalMillis: number
-  ) => Promise<PlaybackStatus>;
+  setProgressUpdateIntervalAsync: (progressUpdateIntervalMillis: number) => Promise<PlaybackStatus>;
 }
 
 Object.assign(Sound.prototype, _COMMON_AV_PLAYBACK_METHODS);
@@ -526,9 +497,7 @@ export class Recording {
       this._callOnRecordingStatusUpdateForNewStatus(status);
       return status;
     } else {
-      throw new Error(
-        'Cannot complete operation because this recorder is not ready to record.'
-      );
+      throw new Error('Cannot complete operation because this recorder is not ready to record.');
     }
   }
 
@@ -557,9 +526,7 @@ export class Recording {
     return status;
   };
 
-  setOnRecordingStatusUpdate(
-    onRecordingStatusUpdate: ?(status: RecordingStatus) => void
-  ) {
+  setOnRecordingStatusUpdate(onRecordingStatusUpdate: ?(status: RecordingStatus) => void) {
     this._onRecordingStatusUpdate = onRecordingStatusUpdate;
     if (onRecordingStatusUpdate == null) {
       this._disablePolling();
@@ -584,15 +551,11 @@ export class Recording {
     }
 
     if (_recorderExists) {
-      throw new Error(
-        'Only one Recording object can be prepared at a given time.'
-      );
+      throw new Error('Only one Recording object can be prepared at a given time.');
     }
 
     if (this._isDoneRecording) {
-      throw new Error(
-        'This Recording object is done recording; you must make a new one.'
-      );
+      throw new Error('This Recording object is done recording; you must make a new one.');
     }
 
     if (!options || !options.android || !options.ios) {
@@ -608,9 +571,7 @@ export class Recording {
       !extensionRegex.test(options.android.extension) ||
       !extensionRegex.test(options.ios.extension)
     ) {
-      throw new Error(
-        `Your file extensions must match ${extensionRegex.toString()}.`
-      );
+      throw new Error(`Your file extensions must match ${extensionRegex.toString()}.`);
     }
 
     if (!this._canRecord) {
@@ -654,13 +615,9 @@ export class Recording {
   async stopAndUnloadAsync(): Promise<RecordingStatus> {
     if (!this._canRecord) {
       if (this._isDoneRecording) {
-        throw new Error(
-          'Cannot unload a Recording that has already been unloaded.'
-        );
+        throw new Error('Cannot unload a Recording that has already been unloaded.');
       } else {
-        throw new Error(
-          'Cannot unload a Recording that has not been prepared.'
-        );
+        throw new Error('Cannot unload a Recording that has not been prepared.');
       }
     }
     // We perform a separate native API call so that the state of the Recording can be updated with
@@ -681,9 +638,7 @@ export class Recording {
     onPlaybackStatusUpdate: ?(status: PlaybackStatus) => void = null
   ): Promise<{ sound: Sound, status: PlaybackStatus }> {
     if (this._uri == null || !this._isDoneRecording) {
-      throw new Error(
-        'Cannot create sound when the Recording has not finished!'
-      );
+      throw new Error('Cannot create sound when the Recording has not finished!');
     }
     return Sound.create(
       // $FlowFixMe: Flow can't distinguish between this literal and Asset

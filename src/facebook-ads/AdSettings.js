@@ -4,13 +4,7 @@ import { NativeModules } from 'react-native';
 
 const { CTKAdSettingsManager } = NativeModules;
 
-type SDKLogLevel =
-  | 'none'
-  | 'debug'
-  | 'verbose'
-  | 'warning'
-  | 'error'
-  | 'notification';
+type SDKLogLevel = 'none' | 'debug' | 'verbose' | 'warning' | 'error' | 'notification';
 
 export default {
   /**

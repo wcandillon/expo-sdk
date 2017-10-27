@@ -21,15 +21,11 @@ export default class RootErrorBoundary extends React.Component<Props, State> {
   _appLoadingIsMounted = false;
 
   componentWillMount() {
-    // In production the app will just hard crash on errors, unless the developer
-    // decides to handle them by overriding the global error handler and swallowing
-    // the error, in which case they are responsible for determining how to recover
-    // from this state.
+    // In production the app will just hard crash on errors, unless the developer decides to handle
+    // them by overriding the global error handler and swallowing the error, in which case they are
+    // responsible for determining how to recover from this state.
     if (__DEV__) {
-      getAppLoadingLifecycleEmitter().once(
-        'componentDidMount',
-        this._subscribeToGlobalErrors
-      );
+      getAppLoadingLifecycleEmitter().once('componentDidMount', this._subscribeToGlobalErrors);
       getAppLoadingLifecycleEmitter().once(
         'componentWillUnmount',
         this._unsubscribeFromGlobalErrors
@@ -58,10 +54,9 @@ export default class RootErrorBoundary extends React.Component<Props, State> {
   };
 
   _unsubscribeFromGlobalErrors = () => {
-    // We don't remove the global error handler that we set here because
-    // it is conceivable that the user may add error handlers *after*
-    // we subscribe, and we don't want to override those, so instead we just
-    // gate call
+    // We don't remove the global error handler that we set here because it is conceivable that the
+    // user may add error handlers *after* we subscribe, and we don't want to override those, so
+    // instead we just gate call
     this._appLoadingIsMounted = false;
   };
 
@@ -89,9 +84,8 @@ export default class RootErrorBoundary extends React.Component<Props, State> {
             A fatal error was encountered while rendering the root component.
           </Text>
           <Text style={styles.paragraph}>
-            Review your application logs for more information, and reload the
-            app when the issue is resolved. In production, your app would have
-            crashed.
+            Review your application logs for more information, and reload the app when the issue is
+            resolved. In production, your app would have crashed.
           </Text>
         </View>
       );

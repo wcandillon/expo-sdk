@@ -15,8 +15,7 @@ export const WHEN_PASSCODE_SET_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY;
 export const ALWAYS_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.ALWAYS_THIS_DEVICE_ONLY;
-export const WHEN_UNLOCKED: KeychainAccessibilityConstant =
-  ExponentSecureStore.WHEN_UNLOCKED;
+export const WHEN_UNLOCKED: KeychainAccessibilityConstant = ExponentSecureStore.WHEN_UNLOCKED;
 export const WHEN_UNLOCKED_THIS_DEVICE_ONLY: KeychainAccessibilityConstant =
   ExponentSecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY;
 

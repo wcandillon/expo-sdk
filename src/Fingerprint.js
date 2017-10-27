@@ -5,9 +5,7 @@ import { NativeModules, Platform } from 'react-native';
 
 const { ExponentFingerprint } = NativeModules;
 
-type FingerprintAuthenticationResult =
-  | { success: true }
-  | { success: false, error: string };
+type FingerprintAuthenticationResult = { success: true } | { success: false, error: string };
 
 export function hasHardwareAsync(): Promise<boolean> {
   return ExponentFingerprint.hasHardwareAsync();

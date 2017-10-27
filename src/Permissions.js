@@ -26,15 +26,11 @@ type PermissionResponse = {
   android?: PermissionDetailsLocationAndroid,
 };
 
-export async function getAsync(
-  type: PermissionType
-): Promise<PermissionResponse> {
+export async function getAsync(type: PermissionType): Promise<PermissionResponse> {
   return Permissions.getAsync(type);
 }
 
-export async function askAsync(
-  type: PermissionType
-): Promise<PermissionResponse> {
+export async function askAsync(type: PermissionType): Promise<PermissionResponse> {
   return Permissions.askAsync(type);
 }
 

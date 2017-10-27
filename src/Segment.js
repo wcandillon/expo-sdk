@@ -5,10 +5,7 @@ import { NativeModules, Platform } from 'react-native';
 const { ExponentSegment } = NativeModules;
 
 export default {
-  initialize(options: {
-    androidWriteKey?: string,
-    iosWriteKey?: string,
-  }): void {
+  initialize(options: { androidWriteKey?: string, iosWriteKey?: string }): void {
     if (Platform.OS === 'android') {
       return ExponentSegment.initializeAndroid(options.androidWriteKey);
     } else if (Platform.OS === 'ios') {

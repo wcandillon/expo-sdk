@@ -25,8 +25,7 @@ function SQLiteDatabase(name) {
 }
 
 function dearrayifyRow(res) {
-  // use a compressed array format to send minimal data between
-  // native and web layers
+  // use a compressed array format to send minimal data between native and web layers
   var rawError = res[0];
   if (rawError) {
     return new SQLiteResult(massageError(res[0]));
@@ -71,10 +70,7 @@ SQLiteDatabase.prototype.exec = function exec(queries, readOnly, callback) {
     callback(massageError(err));
   }
 
-  ExponentSQLite.exec(this._name, map(queries, arrayifyQuery), readOnly).then(
-    onSuccess,
-    onError
-  );
+  ExponentSQLite.exec(this._name, map(queries, arrayifyQuery), readOnly).then(onSuccess, onError);
 };
 
 const openDB = customOpenDatabase(SQLiteDatabase);

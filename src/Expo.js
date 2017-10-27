@@ -10,14 +10,11 @@ if (typeof Constants.manifest.env === 'object') {
   Object.assign(process.env, Constants.manifest.env);
 }
 
-// NOTE(brentvatne): this is temporarily disabled until we can work out bugs
-// with ref and context
+// NOTE(brentvatne): this is temporarily disabled until we can work out bugs with ref and context
 //
-// Re-define the React Native modal to use our version of it, which plays
-// nicely with the Expo Menu on iOS
-// Object.defineProperty(ReactNative, 'Modal', {
-//   get() {
-//     return require('./modal/Modal').default;
+// Re-define the React Native modal to use our version of it, which plays nicely with the Expo Menu
+// on iOS Object.defineProperty(ReactNative, 'Modal', { get() { return
+// require('./modal/Modal').default;
 //   },
 // });
 

@@ -23,13 +23,11 @@ export default class AppLoading extends React.Component<Props> {
     this._isMounted = true;
     _emitEvent('componentDidMount');
 
-    // startAsync is optional, you can do this process manually if you prefer
-    // (this is mainly for backwards compatibility and it is not recommended)
+    // startAsync is optional, you can do this process manually if you prefer (this is mainly for
+    // backwards compatibility and it is not recommended)
     if (this.props.startAsync) {
       this._startLoadingAppResourcesAsync().catch(error => {
-        console.error(
-          `AppLoading threw an unexpected error when loading:\n${error.stack}`
-        );
+        console.error(`AppLoading threw an unexpected error when loading:\n${error.stack}`);
       });
     }
   }
@@ -41,9 +39,7 @@ export default class AppLoading extends React.Component<Props> {
 
   _startLoadingAppResourcesAsync = async () => {
     if (!this.props.onFinish) {
-      throw new Error(
-        'AppLoading onFinish prop is required if startAsync is provided'
-      );
+      throw new Error('AppLoading onFinish prop is required if startAsync is provided');
     }
 
     try {
@@ -59,8 +55,8 @@ export default class AppLoading extends React.Component<Props> {
     } finally {
       if (!this._isMounted) return;
 
-      // If we get to this point then we know that either there
-      // was no error, or the error was handled.
+      // If we get to this point then we know that either there was no error, or the error was
+      // handled.
       if (this.props.onFinish) {
         this.props.onFinish();
       }

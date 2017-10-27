@@ -73,10 +73,7 @@ export default class ModalImplementation extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener(
-      'hardwareBackPress',
-      this._handleHardwareBack
-    );
+    BackHandler.removeEventListener('hardwareBackPress', this._handleHardwareBack);
   }
 
   _handleHardwareBack = () => {
@@ -107,9 +104,7 @@ export default class ModalImplementation extends Component<Props, State> {
     return (
       <View style={styles.container} pointerEvents={visible ? 'auto' : 'none'}>
         {transparent ? null : (
-          <Animated.View
-            style={[styles.backdrop, styles.container, { opacity: visible }]}
-          />
+          <Animated.View style={[styles.backdrop, styles.container, { opacity: visible }]} />
         )}
         <Animated.View
           style={[

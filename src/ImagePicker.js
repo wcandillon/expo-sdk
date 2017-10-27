@@ -30,8 +30,6 @@ type CameraOptions = {
   quality?: number,
 };
 
-export async function launchCameraAsync(
-  options?: CameraOptions = {}
-): Promise<ImageResult> {
+export async function launchCameraAsync(options?: CameraOptions = {}): Promise<ImageResult> {
   return ExponentImagePicker.launchCameraAsync(options);
 }

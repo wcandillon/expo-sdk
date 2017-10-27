@@ -5,7 +5,4 @@ import ThreeAxisSensor from './ThreeAxisSensor';
 
 const { ExponentMagnetometer } = NativeModules;
 
-export default new ThreeAxisSensor(
-  ExponentMagnetometer,
-  'magnetometerDidUpdate'
-);
+export default new ThreeAxisSensor(ExponentMagnetometer, 'magnetometerDidUpdate');

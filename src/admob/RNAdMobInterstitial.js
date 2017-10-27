@@ -15,10 +15,7 @@ const eventHandlers = {
 const addEventListener = (type, handler) => {
   switch (type) {
     case 'interstitialDidLoad':
-      eventHandlers[type].set(
-        handler,
-        DeviceEventEmitter.addListener(type, handler)
-      );
+      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
       break;
     case 'interstitialDidFailToLoad':
       eventHandlers[type].set(
@@ -29,22 +26,13 @@ const addEventListener = (type, handler) => {
       );
       break;
     case 'interstitialDidOpen':
-      eventHandlers[type].set(
-        handler,
-        DeviceEventEmitter.addListener(type, handler)
-      );
+      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
       break;
     case 'interstitialDidClose':
-      eventHandlers[type].set(
-        handler,
-        DeviceEventEmitter.addListener(type, handler)
-      );
+      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
       break;
     case 'interstitialWillLeaveApplication':
-      eventHandlers[type].set(
-        handler,
-        DeviceEventEmitter.addListener(type, handler)
-      );
+      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
       break;
     default:
       console.log(`Event with type ${type} does not exist.`);
@@ -76,8 +64,6 @@ module.exports = {
   removeAllListeners,
   setAdUnitId: id => {
     RNAdMobInterstitial.setAdUnitID(id);
-    console.warn(
-      `setAdUnitId will be deprecated soon. Please use setAdUnitID instead.`
-    );
+    console.warn(`setAdUnitId will be deprecated soon. Please use setAdUnitID instead.`);
   },
 };

@@ -87,9 +87,7 @@ var LegacyAsyncStorage = {
     const newValuesArray = await AsyncStorage.multiGet(items);
     const newValuesMap = {};
     newValuesArray.forEach(([k, v]) => (newValuesMap[k] = v));
-    const valuesToSet = oldValuesArray.filter(
-      ([k, v]) => v !== null && newValuesMap[k] == null
-    );
+    const valuesToSet = oldValuesArray.filter(([k, v]) => v !== null && newValuesMap[k] == null);
 
     // Migrate!
     await AsyncStorage.multiSet(valuesToSet);
@@ -104,10 +102,7 @@ var LegacyAsyncStorage = {
    *    any error.
    * @returns A `Promise` object.
    */
-  getItem(
-    key: string,
-    callback?: ?(error: ?Error, result: ?string) => void
-  ): Promise {
+  getItem(key: string, callback?: ?(error: ?Error, result: ?string) => void): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiGet([key], function(errors, result) {
         // Unpack result to get value from [[key,value]]
@@ -131,9 +126,7 @@ var LegacyAsyncStorage = {
    *
    * Example: see the `multiGet` example.
    */
-  getAllKeys(
-    callback?: ?(error: ?Error, keys: ?Array<string>) => void
-  ): Promise {
+  getAllKeys(callback?: ?(error: ?Error, keys: ?Array<string>) => void): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.getAllKeys(function(error, keys) {
         callback && callback(convertError(error), keys);
