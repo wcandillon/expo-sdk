@@ -56,6 +56,9 @@ export default class Camera extends React.Component<Props> {
     barCodeTypes: Object.values(CameraManager.BarCodeType),
   };
 
+  _lastEvent: ?string;
+  _lastEventTime: ?Date;
+
   async takePictureAsync(options?: PictureOptions) {
     if (!options) {
       options = {};
@@ -107,10 +110,12 @@ export default class Camera extends React.Component<Props> {
     }
   };
 
+  // $FlowFixMe: event needs a type
   _onBarCodeRead = ({ nativeEvent }) => {
     if (
       this._lastEvent &&
       JSON.stringify(nativeEvent) === this._lastEvent &&
+      // $FlowFixMe: _lastEventTime is nullable
       new Date() - this._lastEventTime < EventThrottleMs
     ) {
       return;
