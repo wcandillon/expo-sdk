@@ -77,13 +77,6 @@ export default class Camera extends React.Component<Props> {
     }
   }
 
-  takePicture(options?: PictureOptions) {
-    console.warn(
-      `Call takePictureAsync instead of takePicture. This method will be removed in SDK 22.`
-    );
-    return this.takePictureAsync(options);
-  }
-
   async recordAsync(options?: RecordingOptions) {
     if (!options || typeof options !== 'object') {
       options = {};
@@ -95,13 +88,6 @@ export default class Camera extends React.Component<Props> {
 
   stopRecording() {
     CameraManager.stopRecording();
-  }
-
-  getSupportedRatios() {
-    console.warn(
-      `Call getSupportedRatiosAsync instead of getSupportedRatios. This method will be removed in SDK 22.`
-    );
-    return this.getSupportedRatiosAsync();
   }
 
   _onCameraReady = () => {
