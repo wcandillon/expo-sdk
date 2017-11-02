@@ -20,13 +20,7 @@ jest.mock('../LogSerialization', () => ({
   }),
 }));
 
-jest.mock(`../../Constants`, () => ({
-  deviceId: 'a01650bb-918d-40be-87be-cf376ab6189f',
-  deviceName: 'Test Phone',
-  manifest: {
-    logUrl: 'https://localhost:19001/logs',
-  },
-}));
+jest.mock(`../../Constants`, () => require('../../__mocks__/Constants-development.js'));
 
 let originalFetch;
 
@@ -49,14 +43,6 @@ it(`sends logs to the server`, async () => {
   expect(fetch.mock.calls[0][1].method).toMatch(/^POST$/i);
   expect(fetch.mock.calls[0][1].headers).toMatchSnapshot();
   expect(fetch.mock.calls[0][1].body).toMatchSnapshot();
-});
-
-it(`does nothing if there are no log data`, async () => {
-  await RemoteLogging.enqueueRemoteLogAsync('info', {});
-  await __waitForEmptyLogQueueAsync();
-
-  expect(LogSerialization.serializeLogDataAsync).not.toHaveBeenCalled();
-  expect(fetch).not.toHaveBeenCalled();
 });
 
 it(`limits network requests but eventually sends all logs`, async () => {

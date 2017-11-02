@@ -180,6 +180,22 @@ describe('with stack trace support in XDL', () => {
     let result = await LogSerialization.serializeLogDataAsync([mockError], 'info');
     expect(result).toMatchSnapshot();
   });
+
+  it(`doesn't fail if symbolication fails`, async () => {
+    symbolicateStackTrace.mockImplementationOnce(async () => {
+      throw new Error('Intentional symbolication error');
+    });
+
+    let mockError = _getMockError('Test error');
+    let result = await LogSerialization.serializeLogDataAsync([mockError], 'error');
+    expect(symbolicateStackTrace).toHaveBeenCalledTimes(1);
+
+    expect(Array.isArray(result.body)).toBe(true);
+    expect(result.body.length).toBe(1);
+    expect(result.body[0].message).toBe('Test error');
+    expect(result.body[0].stack).toMatchSnapshot();
+    expect(result.includesStack).toBe(true);
+  });
 });
 
 describe(`without stack trace support in XDL`, () => {

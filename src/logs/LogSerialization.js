@@ -102,7 +102,7 @@ async function _symbolicateErrorAsync(error: Error): Promise<Array<StackFrame>> 
   try {
     symbolicatedStack = await symbolicateStackTrace(parsedStack);
   } catch (error) {
-    return [];
+    return parsedStack;
   }
 
   // In this context an unsymbolicated stack is better than no stack

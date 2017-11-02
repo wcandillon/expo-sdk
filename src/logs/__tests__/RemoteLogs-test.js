@@ -5,16 +5,7 @@ jest.mock('react-native/Libraries/Core/Devtools/symbolicateStackTrace', () =>
   jest.fn(async stack => stack)
 );
 
-jest.mock(`../../Constants`, () => ({
-  deviceId: 'a01650bb-918d-40be-87be-cf376ab6189f',
-  deviceName: 'Test Phone',
-  manifest: {
-    developer: {
-      projectRoot: '/home/test/project',
-    },
-    logUrl: 'https://localhost:19001/logs',
-  },
-}));
+jest.mock(`../../Constants`, () => require('../../__mocks__/Constants-development.js'));
 
 let originalFetch;
 

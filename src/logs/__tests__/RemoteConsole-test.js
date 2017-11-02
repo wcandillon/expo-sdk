@@ -44,6 +44,37 @@ it(`uses a sentinel value to name custom console methods`, () => {
   }
 });
 
+describe(`asserting`, () => {
+  it(`does nothing when the test condition passes`, () => {
+    console.assert(true);
+    expect(RemoteLogging.enqueueRemoteLogAsync).not.toHaveBeenCalled();
+
+    console.assert(1);
+    expect(RemoteLogging.enqueueRemoteLogAsync).not.toHaveBeenCalled();
+
+    console.assert({});
+    expect(RemoteLogging.enqueueRemoteLogAsync).not.toHaveBeenCalled();
+  });
+
+  it(`reports failed assertions as errors`, () => {
+    console.assert(false);
+    expect(RemoteLogging.enqueueRemoteLogAsync).toHaveBeenCalledTimes(1);
+    expect(RemoteLogging.enqueueRemoteLogAsync.mock.calls[0][0]).toBe('error');
+  });
+
+  it(`formats string messages`, () => {
+    console.assert(false, 'oh no');
+    expect(RemoteLogging.enqueueRemoteLogAsync).toHaveBeenCalledTimes(1);
+    expect(RemoteLogging.enqueueRemoteLogAsync.mock.calls[0][2]).toMatchSnapshot();
+  });
+
+  it(`adds a failed assertion notice to non-string messages`, () => {
+    console.assert(false, {});
+    expect(RemoteLogging.enqueueRemoteLogAsync).toHaveBeenCalledTimes(1);
+    expect(RemoteLogging.enqueueRemoteLogAsync.mock.calls[0][2]).toMatchSnapshot();
+  });
+});
+
 describe('logging', () => {
   let data = ['hi', { a: 'b' }, [1, 2], null, false];
 

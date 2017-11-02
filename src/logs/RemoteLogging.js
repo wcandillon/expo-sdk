@@ -38,13 +38,9 @@ let _resolveCompletion: ?() => void;
 
 async function enqueueRemoteLogAsync(
   level: LogLevel,
-  additionalFields: LogEntryFields = {},
-  data?: Array<mixed>
+  additionalFields: LogEntryFields,
+  data: Array<mixed>
 ): Promise<void> {
-  if (!data) {
-    return;
-  }
-
   if (_isReactNativeWarning(data)) {
     // Remove the stack trace from the warning message since we'll capture our own
     invariant(data.length > 0, `Warnings must include log arguments`);
