@@ -34,6 +34,7 @@ export default class Camera extends React.Component<Props> {
   static propTypes = {
     ...ViewPropTypes,
     onCameraReady: PropTypes.func,
+    onMountError: PropTypes.func,
     flashMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     ratio: PropTypes.string,
@@ -96,6 +97,12 @@ export default class Camera extends React.Component<Props> {
     }
   };
 
+  _onMountError = () => {
+    if (this.props.onMountError) {
+      this.props.onMountError();
+    }
+  };
+
   // $FlowFixMe: event needs a type
   _onBarCodeRead = ({ nativeEvent }) => {
     if (
@@ -121,6 +128,7 @@ export default class Camera extends React.Component<Props> {
       <ExponentCamera
         {...nativeProps}
         onCameraRead={this._onCameraReady}
+        onMountError={this._onMountError}
         onBarCodeRead={this._onBarCodeRead}
       />
     );
@@ -161,6 +169,7 @@ export const Constants = Camera.Constants;
 const ExponentCamera = requireNativeComponent('ExponentCamera', Camera, {
   nativeOnly: {
     onCameraReady: true,
+    onMountError: true,
     onBarCodeRead: true,
     barCodeScannerEnabled: true,
   },
