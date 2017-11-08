@@ -1,4 +1,11 @@
-import { NativeModules } from 'react-native';
+import {
+  NativeModules,
+  // React Native's internal InitializeCore module sets up `window` but runs only when its React
+  // renderer is loaded. We can cause this by loading one of its dependents.
+  findNodeHandle, // eslint-disable-line no-unused-vars
+} from 'react-native';
+
+findNodeHandle; // eslint-disable-line no-unused-expressions
 
 if (!NativeModules.ExponentConstants) {
   throw new Error(
