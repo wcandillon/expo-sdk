@@ -241,7 +241,7 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
       '"allowsRecordingIOS", "playsInSilentModeIOS", and "shouldDuckAndroid" must be booleans.'
     );
   }
-  await NativeModules.ExponentAV.setAudioMode(mode);
+  return await NativeModules.ExponentAV.setAudioMode(mode);
 }
 
 export class Sound {

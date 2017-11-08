@@ -97,7 +97,7 @@ export const _getURIFromSource = (source: ?PlaybackSource): ?string => {
   return uri;
 };
 
-export const _throwErrorIfValuesOutOfBoundsInStatus = async (status: PlaybackStatusToSet) => {
+export const _throwErrorIfValuesOutOfBoundsInStatus = (status: PlaybackStatusToSet) => {
   if (typeof status.rate === 'number' && (status.rate < 0.0 || status.rate > 32.0)) {
     throw new Error('Rate value must be between 0.0 and 32.0.');
   }
