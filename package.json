@@ -56,14 +56,14 @@
     "react-native-branch": "2.0.0-beta.3",
     "react-native-gesture-handler": "1.0.0-alpha.28",
     "react-native-maps": "0.17.1",
-    "react-native-svg": "5.4.2",
+    "react-native-svg": "5.5.1",
     "uuid-js": "^0.7.5",
     "websql": "https://github.com/expo/node-websql/archive/18.0.0.tar.gz"
   },
   "devDependencies": {
     "@expo/npm-proofread": "^1.0.1",
     "eslint": "^4.10.0",
-    "eslint-config-universe": "^1.0.5",
+    "eslint-config-universe": "^1.0.6",
     "flow-bin": "^0.57.3",
     "jest-expo": "22.0.1-SNAPSHOT.2017.11.01",
     "prettier": "^1.7.4",
