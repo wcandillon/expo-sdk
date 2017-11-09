@@ -1,8 +1,10 @@
 // @flow
 
-import { Constants, WebBrowser } from 'expo';
 import { Platform } from 'react-native';
 import qs from 'qs';
+
+import Constants from './Constants';
+import WebBrowser from './WebBrowser';
 
 type AuthSessionOptions = {
   authUrl: string,
