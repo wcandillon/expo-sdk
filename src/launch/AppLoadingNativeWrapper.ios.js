@@ -5,7 +5,11 @@ import { NativeModules, requireNativeComponent } from 'react-native';
 
 export default class AppLoading extends React.Component<{}> {
   componentWillUnmount() {
-    NativeModules.ExponentAppLoadingManager.finishedAsync();
+    // Until we give more control over this, give the app 200ms to render
+    // something and prevent a white flash
+    setTimeout(() => {
+      NativeModules.ExponentAppLoadingManager.finishedAsync();
+    }, 200);
   }
 
   render() {
