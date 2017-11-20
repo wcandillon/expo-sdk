@@ -4,10 +4,10 @@ import React from 'react';
 import { requireNativeComponent } from 'react-native';
 import { EmitterSubscription } from 'fbemitter';
 import AdsManager from './NativeAdsManager';
-// $FlowFixMe: types.js is missing
-import type { NativeAd } from './types';
 
 const NativeAdView = requireNativeComponent('CTKNativeAd', null);
+
+type NativeAd = any;
 
 type NativeAdWrapperState = {
   ad: ?NativeAd,
