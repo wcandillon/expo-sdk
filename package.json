@@ -1,10 +1,11 @@
 {
   "name": "expo",
-  "version": "23.0.1",
+  "version": "23.0.3",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "files": [
     "src",
+    "flow",
     "tools",
     "AppEntry.js"
   ],
