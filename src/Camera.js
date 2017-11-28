@@ -97,9 +97,9 @@ export default class Camera extends React.Component<Props> {
     }
   };
 
-  _onMountError = () => {
+  _onMountError = ({ nativeEvent }) => {
     if (this.props.onMountError) {
-      this.props.onMountError();
+      this.props.onMountError(nativeEvent);
     }
   };
 
@@ -127,7 +127,7 @@ export default class Camera extends React.Component<Props> {
     return (
       <ExponentCamera
         {...nativeProps}
-        onCameraRead={this._onCameraReady}
+        onCameraReady={this._onCameraReady}
         onMountError={this._onMountError}
         onBarCodeRead={this._onBarCodeRead}
       />
