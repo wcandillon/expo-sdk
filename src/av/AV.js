@@ -153,6 +153,7 @@ export const _COMMON_AV_PLAYBACK_METHODS = {
   //   loadAsync
   //   unloadAsync
   //   setStatusAsync
+  //   replayAsync
 
   async playAsync(): Promise<PlaybackStatus> {
     return this.setStatusAsync({ shouldPlay: true });

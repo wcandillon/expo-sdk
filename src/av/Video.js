@@ -242,6 +242,20 @@ export default class Video extends Component<Props, State> {
     );
   };
 
+  replayAsync = async (status: PlaybackStatusToSet = {}): Promise<PlaybackStatus> => {
+    if (status.positionMillis && status.positionMillis !== 0) {
+      throw new Error('Requested position after replay has to be 0.');
+    }
+
+    return this._performOperationAndHandleStatusAsync((tag: number) =>
+      NativeModules.ExponentAV.replayVideo(tag, {
+        ...status,
+        positionMillis: 0,
+        shouldPlay: true,
+      })
+    );
+  };
+
   // Additional convenience methods on top of setStatusAsync are defined via _COMMON_AV_PLAYBACK_METHODS:
   playAsync: () => Promise<PlaybackStatus>;
   playFromPositionAsync: (positionMillis: number) => Promise<PlaybackStatus>;
