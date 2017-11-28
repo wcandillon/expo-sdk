@@ -97,7 +97,7 @@ export default class Camera extends React.Component<Props> {
     }
   };
 
-  _onMountError = ({ nativeEvent }) => {
+  _onMountError = ({ nativeEvent }: { nativeEvent: { message: string } }) => {
     if (this.props.onMountError) {
       this.props.onMountError(nativeEvent);
     }
