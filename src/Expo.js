@@ -96,6 +96,9 @@ module.exports = {
   get Camera() {
     return require('./Camera').default;
   },
+  get FaceDetector() {
+    return require('./FaceDetector').default;
+  },
   get KeepAwake() {
     return require('./KeepAwake').default;
   },
