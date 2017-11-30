@@ -29,6 +29,8 @@ export type PlaybackStatus =
       durationMillis?: number,
       positionMillis: number,
       playableDurationMillis?: number,
+      seekMillisToleranceBefore?: number,
+      seekMillisToleranceAfter?: number,
 
       shouldPlay: boolean,
       isPlaying: boolean,
@@ -158,8 +160,16 @@ export const _COMMON_AV_PLAYBACK_METHODS = {
   async playAsync(): Promise<PlaybackStatus> {
     return this.setStatusAsync({ shouldPlay: true });
   },
-  async playFromPositionAsync(positionMillis: number): Promise<PlaybackStatus> {
-    return this.setStatusAsync({ positionMillis, shouldPlay: true });
+  async playFromPositionAsync(
+    positionMillis: number,
+    tolerances: { toleranceMillisBefore?: number, toleranceMillisAfter?: number } = {}
+  ): Promise<PlaybackStatus> {
+    return this.setStatusAsync({
+      positionMillis,
+      shouldPlay: true,
+      seekMillisToleranceAfter: tolerances.toleranceMillisAfter,
+      seekMillisToleranceBefore: tolerances.toleranceMillisBefore,
+    });
   },
   async pauseAsync(): Promise<PlaybackStatus> {
     return this.setStatusAsync({ shouldPlay: false });
@@ -167,8 +177,15 @@ export const _COMMON_AV_PLAYBACK_METHODS = {
   async stopAsync(): Promise<PlaybackStatus> {
     return this.setStatusAsync({ positionMillis: 0, shouldPlay: false });
   },
-  async setPositionAsync(positionMillis: number): Promise<PlaybackStatus> {
-    return this.setStatusAsync({ positionMillis });
+  async setPositionAsync(
+    positionMillis: number,
+    tolerances: { toleranceMillisBefore?: number, toleranceMillisAfter?: number } = {}
+  ): Promise<PlaybackStatus> {
+    return this.setStatusAsync({
+      positionMillis,
+      seekMillisToleranceAfter: tolerances.toleranceMillisAfter,
+      seekMillisToleranceBefore: tolerances.toleranceMillisBefore,
+    });
   },
   async setRateAsync(rate: number, shouldCorrectPitch: boolean): Promise<PlaybackStatus> {
     return this.setStatusAsync({ rate, shouldCorrectPitch });
