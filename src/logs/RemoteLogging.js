@@ -63,9 +63,12 @@ async function enqueueRemoteLogAsync(
     ...additionalFields,
   });
 
-  // Send the logs asynchronously (system errors are emitted with transport error events)
-  // $FlowFixMe: done() is not declared
-  _sendRemoteLogsAsync().done();
+  // Send the logs asynchronously (system errors are emitted with transport error events) and throw an uncaught error
+  _sendRemoteLogsAsync().catch(error => {
+    setImmediate(() => {
+      throw error;
+    });
+  });
 }
 
 async function _sendRemoteLogsAsync(): Promise<void> {
