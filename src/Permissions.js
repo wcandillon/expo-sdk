@@ -1,6 +1,6 @@
 // @flow
 
-import { NativeModules } from 'react-native';
+import { Platform, NativeModules } from 'react-native';
 
 let { ExponentPermissions: Permissions } = NativeModules;
 
@@ -28,10 +28,20 @@ type PermissionResponse = {
 };
 
 export async function getAsync(type: PermissionType): Promise<PermissionResponse> {
+  // TODO: remove this when CAMERA_ROLL permission is supported on iOS
+  if (type === CAMERA_ROLL && Platform.OS === 'ios') {
+    return { status: 'granted', expires: 'never' };
+  }
+
   return Permissions.getAsync(type);
 }
 
 export async function askAsync(type: PermissionType): Promise<PermissionResponse> {
+  // TODO: remove this when CAMERA_ROLL permission is supported on iOS
+  if (type === CAMERA_ROLL && Platform.OS === 'ios') {
+    return { status: 'granted', expires: 'never' };
+  }
+
   return Permissions.askAsync(type);
 }
 
