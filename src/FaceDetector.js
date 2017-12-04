@@ -1,6 +1,6 @@
 // @flow
 
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 
 const faceDetectionDisabledMessage = 'Face detection has not been included in this build.';
 
