@@ -117,6 +117,13 @@ const _STYLES = StyleSheet.create({
     bottom: 0,
     resizeMode: 'contain',
   },
+  video: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+  },
 });
 
 export default class Video extends Component<Props, State> {
@@ -308,6 +315,11 @@ export default class Video extends Component<Props, State> {
     }
   };
 
+  _renderPoster = () =>
+    this.props.usePoster && this.state.showPoster ? (
+      <Image style={_STYLES.poster} source={this.props.posterSource} />
+    ) : null;
+
   render() {
     const uri: ?string = _getURIFromSource(this.props.source);
 
@@ -355,13 +367,11 @@ export default class Video extends Component<Props, State> {
       onFullscreenUpdateNative: this._nativeOnFullscreenUpdate,
     };
 
-    return this.props.usePoster && this.state.showPoster ? (
-      <View style={nativeProps.style}>
-        <ExponentVideo ref={this._assignRoot} {...nativeProps} />
-        <Image style={_STYLES.poster} source={this.props.posterSource} />
+    return (
+      <View style={nativeProps.style} pointerEvents="box-none">
+        <ExponentVideo ref={this._assignRoot} {...nativeProps} style={_STYLES.video} />
+        {this._renderPoster()}
       </View>
-    ) : (
-      <ExponentVideo ref={this._assignRoot} {...nativeProps} />
     );
   }
 }
