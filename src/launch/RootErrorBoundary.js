@@ -65,14 +65,14 @@ export default class RootErrorBoundary extends React.Component<Props, State> {
     if (this._appLoadingIsMounted) {
       NativeModules.ExponentAppLoadingManager &&
         NativeModules.ExponentAppLoadingManager.finishedAsync();
+
+      if (__DEV__) {
+        this.setState({ error });
+      }
     }
 
     // This will hard crash your app in production
     console.error(error);
-
-    if (__DEV__) {
-      this.setState({ error });
-    }
   }
 
   render() {
