@@ -179,9 +179,6 @@ module.exports = {
   get FacebookAds() {
     return require('./facebook-ads');
   },
-  get LegacyAsyncStorage() {
-    return require('./LegacyAsyncStorage');
-  },
   get IntentLauncherAndroid() {
     return require('./IntentLauncherAndroid');
   },
