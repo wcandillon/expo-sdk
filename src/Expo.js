@@ -158,6 +158,9 @@ module.exports = {
   get Icon() {
     return require('./Icon').default;
   },
+  get ImageManipulator() {
+    return require('./ImageManipulator');
+  },
   get ImagePicker() {
     return require('./ImagePicker');
   },
