@@ -1,6 +1,6 @@
 {
   "name": "expo",
-  "version": "23.0.6",
+  "version": "24.0.0-alpha.0",
   "description": "The Expo SDK",
   "main": "src/Expo.js",
   "files": [
@@ -69,7 +69,7 @@
     "jest-expo": "^23.0.0-rc.0",
     "prettier": "^1.7.4",
     "react": "16.0.0",
-    "react-native": "expo/react-native#sdk-23",
+    "react-native": "expo/react-native#sdk-24",
     "react-test-renderer": "16.0.0"
   }
 }

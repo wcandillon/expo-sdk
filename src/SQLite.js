@@ -87,25 +87,12 @@ SQLiteDatabase.prototype.exec = function exec(queries, readOnly, callback) {
 const openDB = customOpenDatabase(SQLiteDatabase);
 
 function openDatabase(
-  name: string | Object,
-  version: string | ?(db: *) => void,
-  description?: string,
-  size?: number,
-  callback?: ?(db: *) => void
+  name: string,
+  version: string,
+  description: string,
+  size: number,
+  callback: ?(db: *) => void
 ) {
-  if (name && typeof name === 'object') {
-    console.warn(
-      'Passing in an object to Expo.SQLite.openDatabase is deprecated and will be removed in SDK 24. Pass in the fields as separate arguments instead.'
-    );
-    // accept SQLite Plugin 1-style object here
-    if (typeof version !== 'string') {
-      callback = version;
-    }
-    size = name.size;
-    description = name.description;
-    version = name.version;
-    name = name.name;
-  }
   if (!size) {
     size = 1;
   }
