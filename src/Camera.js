@@ -141,9 +141,9 @@ export default class Camera extends React.Component<PropsType> {
     CameraManager.stopRecording();
   }
 
-  _onMountError = () => {
+  _onMountError = ({ nativeEvent }) => {
     if (this.props.onMountError) {
-      this.props.onMountError();
+      this.props.onMountError(nativeEvent);
     }
   };
 
@@ -155,7 +155,6 @@ export default class Camera extends React.Component<PropsType> {
 
   _onObjectDetected = (callback: ?Function) => ({ nativeEvent }: EventCallbackArgumentsType) => {
     const { type } = nativeEvent;
-
     if (
       this._lastEvents[type] &&
       this._lastEventsTimes[type] &&
@@ -178,8 +177,8 @@ export default class Camera extends React.Component<PropsType> {
     return (
       <ExponentCamera
         {...nativeProps}
+        onCameraReady={this._onCameraReady}
         onMountError={this._onMountError}
-        onCameraRead={this._onCameraReady}
         onBarCodeRead={this._onObjectDetected(this.props.onBarCodeRead)}
         onFacesDetected={this._onObjectDetected(this.props.onFacesDetected)}
       />
