@@ -24,6 +24,10 @@ type EventCallbackArgumentsType = {
   nativeEvent: Object,
 };
 
+type MountErrorNativeEventType = {
+  message: string,
+};
+
 type PropsType = ViewPropTypes & {
   zoom?: number,
   ratio?: string,
@@ -38,6 +42,7 @@ type PropsType = ViewPropTypes & {
   faceDetectionLandmarks?: number,
   autoFocus?: string | boolean | number,
   faceDetectionClassifications?: number,
+  onMountError?: MountErrorNativeEventType => void,
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
 };
 
@@ -141,7 +146,7 @@ export default class Camera extends React.Component<PropsType> {
     CameraManager.stopRecording();
   }
 
-  _onMountError = ({ nativeEvent }) => {
+  _onMountError = ({ nativeEvent }: { nativeEvent: MountErrorNativeEventType }) => {
     if (this.props.onMountError) {
       this.props.onMountError(nativeEvent);
     }
