@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import omit from 'lodash.omit';
 import {
   Image,
   findNodeHandle,
@@ -15,11 +16,12 @@ import {
 
 import {
   _COMMON_AV_PLAYBACK_METHODS,
-  _getURIFromSource,
-  _getURIAndFullInitialStatusForLoadAsync,
+  _getNativeSourceFromSource,
+  _getNativeSourceAndFullInitialStatusForLoadAsync,
   _throwErrorIfValuesOutOfBoundsInStatus,
   _getUnloadedStatus,
   type PlaybackSource,
+  type PlaybackNativeSource,
   type PlaybackStatus,
   type PlaybackStatusToSet,
 } from './AV';
@@ -84,7 +86,7 @@ type Props = {
 };
 
 type NativeProps = {
-  uri?: ?string,
+  source?: ?PlaybackNativeSource,
   nativeResizeMode?: Object,
   status?: PlaybackStatusToSet,
   onStatusUpdateNative?: (event: Object) => void,
@@ -250,13 +252,16 @@ export default class Video extends Component<Props, State> {
     initialStatus: PlaybackStatusToSet = {},
     downloadFirst: boolean = true
   ): Promise<PlaybackStatus> => {
-    const { uri, fullInitialStatus } = await _getURIAndFullInitialStatusForLoadAsync(
+    const {
+      nativeSource,
+      fullInitialStatus,
+    } = await _getNativeSourceAndFullInitialStatusForLoadAsync(
       source,
       initialStatus,
       downloadFirst
     );
     return this._performOperationAndHandleStatusAsync((tag: number) =>
-      NativeModules.ExponentAV.loadForVideo(tag, uri, fullInitialStatus)
+      NativeModules.ExponentAV.loadForVideo(tag, nativeSource, fullInitialStatus)
     );
   };
 
@@ -362,7 +367,7 @@ export default class Video extends Component<Props, State> {
     ) : null;
 
   render() {
-    const uri: ?string = _getURIFromSource(this.props.source);
+    const source: ?PlaybackNativeSource = _getNativeSourceFromSource(this.props.source);
 
     let nativeResizeMode: Object = NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
     if (this.props.resizeMode) {
@@ -396,8 +401,8 @@ export default class Video extends Component<Props, State> {
     // Replace selected native props (casting as Object to appease flow)
     const nativeProps: NativeProps = {
       style: _STYLES.base,
-      ...this.props,
-      uri,
+      ...omit(this.props, 'source'),
+      source,
       nativeResizeMode,
       status,
       onStatusUpdateNative: this._nativeOnPlaybackStatusUpdate,
@@ -424,6 +429,7 @@ Video.propTypes = {
   source: PropTypes.oneOfType([
     PropTypes.shape({
       uri: PropTypes.string,
+      overrideFileExtensionAndroid: PropTypes.string,
     }), // remote URI like { uri: 'http://foo/bar.mp4' }
     PropTypes.number, // asset module like require('./foo/bar.mp4')
   ]),
@@ -479,7 +485,7 @@ Video.propTypes = {
 
 const ExponentVideo = requireNativeComponent('ExponentVideo', Video, {
   nativeOnly: {
-    uri: true,
+    source: true,
     nativeResizeMode: true,
     onStatusUpdateNative: true,
     onLoadStartNative: true,

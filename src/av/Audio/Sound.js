@@ -4,7 +4,7 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 
 import {
   _COMMON_AV_PLAYBACK_METHODS,
-  _getURIAndFullInitialStatusForLoadAsync,
+  _getNativeSourceAndFullInitialStatusForLoadAsync,
   _throwErrorIfValuesOutOfBoundsInStatus,
   _getUnloadedStatus,
   type PlaybackSource,
@@ -142,7 +142,10 @@ export class Sound {
     if (!this._loaded) {
       this._loading = true;
 
-      const { uri, fullInitialStatus } = await _getURIAndFullInitialStatusForLoadAsync(
+      const {
+        nativeSource,
+        fullInitialStatus,
+      } = await _getNativeSourceAndFullInitialStatusForLoadAsync(
         source,
         initialStatus,
         downloadFirst
@@ -164,7 +167,12 @@ export class Sound {
             this._loading = false;
             reject(new Error(error));
           };
-          NativeModules.ExponentAV.loadForSound(uri, fullInitialStatus, loadSuccess, loadError);
+          NativeModules.ExponentAV.loadForSound(
+            nativeSource,
+            fullInitialStatus,
+            loadSuccess,
+            loadError
+          );
         }.bind(this)
       );
     } else {

@@ -11,7 +11,11 @@ import Asset from '../Asset';
 //  API to select stream type on Android
 //  subtitles API
 
-export type PlaybackSource = number | { uri: string } | Asset;
+export type PlaybackSource =
+  | number
+  | { uri: string, overrideFileExtensionAndroid?: string }
+  | Asset;
+export type PlaybackNativeSource = { uri: string, overridingExtension?: ?string };
 
 export type PlaybackStatus =
   | {
@@ -83,8 +87,10 @@ const _getAssetFromPlaybackSource = (source: ?PlaybackSource): ?Asset => {
   return asset;
 };
 
-export const _getURIFromSource = (source: ?PlaybackSource): ?string => {
+export const _getNativeSourceFromSource = (source: ?PlaybackSource): ?PlaybackNativeSource => {
   let uri: ?string = null;
+  let overridingExtension: ?string = null;
+
   let asset: ?Asset = _getAssetFromPlaybackSource(source);
   if (asset != null) {
     uri = asset.localUri || asset.uri;
@@ -96,7 +102,20 @@ export const _getURIFromSource = (source: ?PlaybackSource): ?string => {
   ) {
     uri = source.uri;
   }
-  return uri;
+
+  if (uri == null) {
+    return null;
+  }
+
+  if (
+    source != null &&
+    typeof source !== 'number' &&
+    'overrideFileExtensionAndroid' in source &&
+    typeof source.overrideFileExtensionAndroid === 'string'
+  ) {
+    overridingExtension = source.overrideFileExtensionAndroid;
+  }
+  return { uri, overridingExtension };
 };
 
 export const _throwErrorIfValuesOutOfBoundsInStatus = (status: PlaybackStatusToSet) => {
@@ -108,11 +127,14 @@ export const _throwErrorIfValuesOutOfBoundsInStatus = (status: PlaybackStatusToS
   }
 };
 
-export const _getURIAndFullInitialStatusForLoadAsync = async (
+export const _getNativeSourceAndFullInitialStatusForLoadAsync = async (
   source: ?PlaybackSource,
   initialStatus: ?PlaybackStatusToSet,
   downloadFirst: boolean
-): Promise<{ uri: string, fullInitialStatus: PlaybackStatusToSet }> => {
+): Promise<{
+  nativeSource: PlaybackNativeSource,
+  fullInitialStatus: PlaybackStatusToSet,
+}> => {
   // Download first if necessary.
   let asset: ?Asset = _getAssetFromPlaybackSource(source);
   if (downloadFirst && asset != null) {
@@ -120,9 +142,10 @@ export const _getURIAndFullInitialStatusForLoadAsync = async (
     await asset.downloadAsync();
   }
 
-  // Get the URI
-  const uri: ?string = _getURIFromSource(source);
-  if (uri == null) {
+  // Get the native source
+  const nativeSource: ?PlaybackNativeSource = _getNativeSourceFromSource(source);
+
+  if (nativeSource == null) {
     throw new Error('Cannot load null source!');
   }
 
@@ -136,7 +159,7 @@ export const _getURIAndFullInitialStatusForLoadAsync = async (
         };
   _throwErrorIfValuesOutOfBoundsInStatus(fullInitialStatus);
 
-  return { uri, fullInitialStatus };
+  return { nativeSource, fullInitialStatus };
 };
 
 export const _getUnloadedStatus = (error: ?string = null): PlaybackStatus => {
