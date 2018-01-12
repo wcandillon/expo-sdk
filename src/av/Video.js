@@ -54,6 +54,7 @@ type Props = {
   onLoad?: (status: PlaybackStatus) => void,
   onError?: (error: string) => void,
   onReadyForDisplay?: (event: ReadyForDisplayEvent) => void,
+  onFullscreenUpdate?: (event: FullscreenUpdateEvent) => void,
   onIOSFullscreenUpdate?: (event: FullscreenUpdateEvent) => void,
 
   // UI stuff
@@ -100,10 +101,15 @@ type State = {
   showPoster: boolean,
 };
 
-export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT = 0;
-export const IOS_FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = 1;
-export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = 2;
-export const IOS_FULLSCREEN_UPDATE_PLAYER_DID_DISMISS = 3;
+export const FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT = 0;
+export const FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = 1;
+export const FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = 2;
+export const FULLSCREEN_UPDATE_PLAYER_DID_DISMISS = 3;
+
+export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT = FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT;
+export const IOS_FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = FULLSCREEN_UPDATE_PLAYER_DID_PRESENT;
+export const IOS_FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS;
+export const IOS_FULLSCREEN_UPDATE_PLAYER_DID_DISMISS = FULLSCREEN_UPDATE_PLAYER_DID_DISMISS;
 
 const _STYLES = StyleSheet.create({
   base: {
@@ -135,6 +141,11 @@ export default class Video extends Component<Props, State> {
   static IOS_FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = IOS_FULLSCREEN_UPDATE_PLAYER_DID_PRESENT;
   static IOS_FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = IOS_FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS;
   static IOS_FULLSCREEN_UPDATE_PLAYER_DID_DISMISS = IOS_FULLSCREEN_UPDATE_PLAYER_DID_DISMISS;
+
+  static FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT = FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT;
+  static FULLSCREEN_UPDATE_PLAYER_DID_PRESENT = FULLSCREEN_UPDATE_PLAYER_DID_PRESENT;
+  static FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS = FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS;
+  static FULLSCREEN_UPDATE_PLAYER_DID_DISMISS = FULLSCREEN_UPDATE_PLAYER_DID_DISMISS;
 
   _root: ExponentVideo;
 
@@ -183,21 +194,37 @@ export default class Video extends Component<Props, State> {
 
   // ### iOS Fullscreening API ###
 
-  _setIOSFullscreen = async (value: boolean) => {
-    if (Platform.OS !== 'ios') {
-      throw new Error('Cannot call fullscreen method if the OS is not iOS!');
-    }
+  _setFullscreen = async (value: boolean) => {
     return this._performOperationAndHandleStatusAsync((tag: number) =>
       NativeModules.ExponentVideoManager.setFullscreen(tag, value)
     );
   };
 
-  presentIOSFullscreenPlayer = async () => {
-    return this._setIOSFullscreen(true);
+  presentFullscreenPlayer = async () => {
+    return this._setFullscreen(true);
   };
 
-  dismissIOSFullscreenPlayer = async () => {
-    return this._setIOSFullscreen(false);
+  presentIOSFullscreenPlayer = () => {
+    console.warn(
+      "You're using `presentIOSFullscreenPlayer`. Please migrate your code to use `presentFullscreenPlayer` instead."
+    );
+    return this.presentFullscreenPlayer();
+  };
+
+  presentFullscreenPlayerAsync = () =>
+    this._performOperationAndHandleStatusAsync((tag: number) =>
+      NativeModules.ExponentAV.presentFullscreenPlayer(tag)
+    );
+
+  dismissFullscreenPlayer = async () => {
+    return this._setFullscreen(false);
+  };
+
+  dismissIOSFullscreenPlayer = () => {
+    console.warn(
+      "You're using `dismissIOSFullscreenPlayer`. Please migrate your code to use `dismissFullscreenPlayer` instead."
+    );
+    this.dismissFullscreenPlayer();
   };
 
   // ### Unified playback API ### (consistent with Audio.js)
@@ -310,8 +337,22 @@ export default class Video extends Component<Props, State> {
   };
 
   _nativeOnFullscreenUpdate = (event: { nativeEvent: FullscreenUpdateEvent }) => {
+    if (this.props.onIOSFullscreenUpdate && this.props.onFullscreenUpdate) {
+      console.warn(
+        "You've supplied both `onIOSFullscreenUpdate` and `onFullscreenUpdate`. You're going to receive updates on both the callbacks."
+      );
+    } else if (this.props.onIOSFullscreenUpdate) {
+      console.warn(
+        "You're using `onIOSFullscreenUpdate`. Please migrate your code to use `onFullscreenUpdate` instead."
+      );
+    }
+
     if (this.props.onIOSFullscreenUpdate) {
       this.props.onIOSFullscreenUpdate(event.nativeEvent);
+    }
+
+    if (this.props.onFullscreenUpdate) {
+      this.props.onFullscreenUpdate(event.nativeEvent);
     }
   };
 
@@ -399,6 +440,7 @@ Video.propTypes = {
   onLoad: PropTypes.func,
   onError: PropTypes.func,
   onIOSFullscreenUpdate: PropTypes.func,
+  onFullscreenUpdate: PropTypes.func,
   onReadyForDisplay: PropTypes.func,
 
   // UI stuff
