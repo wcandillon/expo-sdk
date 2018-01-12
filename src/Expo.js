@@ -134,6 +134,9 @@ module.exports = {
   get Brightness() {
     return require('./Brightness');
   },
+  get Calendar() {
+    return require('./Calendar');
+  },
   get Constants() {
     return require('./Constants').default;
   },
