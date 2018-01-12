@@ -170,6 +170,9 @@ module.exports = {
   get Logs() {
     return require('./logs/Logs').default;
   },
+  get MailComposer() {
+    return require('./MailComposer');
+  },
   get Pedometer() {
     return require('./Pedometer');
   },
