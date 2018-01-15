@@ -209,7 +209,7 @@ export async function getEventsAsync(
 
 export async function getEventAsync(
   id: string,
-  { futureEvents = false, instanceStartDate = null }: RecurringEventOptions = {}
+  { futureEvents = false, instanceStartDate }: RecurringEventOptions = {}
 ): Promise<Event> {
   if (!id) {
     throw new Error('getEventAsync must be called with an id (string) of the target event');
