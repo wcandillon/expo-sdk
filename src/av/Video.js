@@ -134,6 +134,13 @@ const _STYLES = StyleSheet.create({
   },
 });
 
+// On a real device UIManager should be present,
+// however when running offline tests with jest-expo
+// we have to use the provided native module mock to access constants.
+const ExpoVideoManagerConstants = NativeModules.UIManager.ExponentVideo
+  ? NativeModules.UIManager.ExponentVideo.Constants
+  : NativeModules.ExponentVideoManager;
+
 export default class Video extends Component<Props, State> {
   static RESIZE_MODE_CONTAIN = 'contain';
   static RESIZE_MODE_COVER = 'cover';
@@ -369,15 +376,15 @@ export default class Video extends Component<Props, State> {
   render() {
     const source: ?PlaybackNativeSource = _getNativeSourceFromSource(this.props.source);
 
-    let nativeResizeMode: Object = NativeModules.UIManager.ExponentVideo.Constants.ScaleNone;
+    let nativeResizeMode: Object = ExpoVideoManagerConstants.ScaleNone;
     if (this.props.resizeMode) {
       let resizeMode: ResizeMode = this.props.resizeMode;
       if (resizeMode === Video.RESIZE_MODE_STRETCH) {
-        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleToFill;
+        nativeResizeMode = ExpoVideoManagerConstants.ScaleToFill;
       } else if (resizeMode === Video.RESIZE_MODE_CONTAIN) {
-        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFit;
+        nativeResizeMode = ExpoVideoManagerConstants.ScaleAspectFit;
       } else if (resizeMode === Video.RESIZE_MODE_COVER) {
-        nativeResizeMode = NativeModules.UIManager.ExponentVideo.Constants.ScaleAspectFill;
+        nativeResizeMode = ExpoVideoManagerConstants.ScaleAspectFill;
       }
     }
 
