@@ -16,7 +16,7 @@ type Calendar = {
   color?: string,
   entityType?: string, // iOS
   allowsModifications?: boolean,
-  allowedAvailabilities?: boolean,
+  allowedAvailabilities?: Array<string>,
   isPrimary?: boolean, // Android
   name?: string, // Android
   ownerAccount?: string, // Android
